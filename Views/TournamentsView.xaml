@@ -73,7 +73,7 @@
                                                 <Setter Property="Foreground" Value="#9AA5B5"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                        <Setter Property="Foreground" Value="#FFB300"/>
+                                                        <Setter Property="Foreground" Value="#FF6A00"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -85,15 +85,15 @@
                                         <Setter TargetName="Root" Property="Background">
                                             <Setter.Value>
                                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                    <GradientStop Color="#25FFB300" Offset="0"/>
-                                                    <GradientStop Color="#15FF7A00" Offset="1"/>
+                                                    <GradientStop Color="#25FF6A00" Offset="0"/>
+                                                    <GradientStop Color="#15D7261E" Offset="1"/>
                                                 </LinearGradientBrush>
                                             </Setter.Value>
                                         </Setter>
-                                        <Setter TargetName="Root" Property="BorderBrush" Value="#80FFB300"/>
+                                        <Setter TargetName="Root" Property="BorderBrush" Value="#80FF6A00"/>
                                     </DataTrigger>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Root" Property="BorderBrush" Value="#60FFB300"/>
+                                        <Setter TargetName="Root" Property="BorderBrush" Value="#60FF6A00"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -128,7 +128,7 @@
                                     </Setter>
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="BorderBrush" Value="#80FFB300"/>
+                                            <Setter Property="BorderBrush" Value="#80FF6A00"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -175,7 +175,7 @@
                                     </Rectangle>
 
                                     <Line X1="0" Y1="140" X2="400" Y2="0"
-                                          Stroke="#20FFB300" StrokeThickness="80"
+                                          Stroke="#20FF6A00" StrokeThickness="80"
                                           HorizontalAlignment="Left" VerticalAlignment="Top"
                                           IsHitTestVisible="False"/>
 
@@ -184,8 +184,8 @@
                                              IsHitTestVisible="False">
                                         <Ellipse.Fill>
                                             <RadialGradientBrush>
-                                                <GradientStop Color="#50FFB300" Offset="0"/>
-                                                <GradientStop Color="#00FFB300" Offset="1"/>
+                                                <GradientStop Color="#50FF6A00" Offset="0"/>
+                                                <GradientStop Color="#00FF6A00" Offset="1"/>
                                             </RadialGradientBrush>
                                         </Ellipse.Fill>
                                     </Ellipse>
@@ -282,13 +282,13 @@
 
                                     <!-- Countdown badge -->
                                     <Border CornerRadius="14" Padding="12,5"
-                                            Background="#CC0B0D12" BorderBrush="#60FFB300"
+                                            Background="#CC0B0D12" BorderBrush="#60FF6A00"
                                             BorderThickness="1"
                                             HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                             Margin="16,0,0,16">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE823;" FontFamily="Segoe MDL2 Assets"
-                                                       FontSize="11" Foreground="#FFB300"
+                                                       FontSize="11" Foreground="#FF6A00"
                                                        VerticalAlignment="Center" Margin="0,0,7,0"/>
                                             <TextBlock Text="{Binding CountdownLabel}" FontFamily="Segoe UI"
                                                        FontWeight="Black" FontSize="10"
@@ -327,7 +327,7 @@
                                             <TextBlock Text="PRÊMIO" FontFamily="Segoe UI" FontWeight="Black"
                                                        FontSize="9" Foreground="#5A6577" Margin="0,0,0,4"/>
                                             <TextBlock Text="{Binding Prize}" FontFamily="Segoe UI"
-                                                       FontWeight="Black" FontSize="20" Foreground="#FFB300"/>
+                                                       FontWeight="Black" FontSize="20" Foreground="#FF6A00"/>
                                         </StackPanel>
 
                                         <Rectangle Grid.Column="2" Fill="#1E232E" VerticalAlignment="Stretch"/>
@@ -364,8 +364,8 @@
                                                                         HorizontalAlignment="Left">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                                            <GradientStop Color="#FFB300" Offset="0"/>
-                                                                            <GradientStop Color="#FF7A00" Offset="1"/>
+                                                                            <GradientStop Color="#FF6A00" Offset="0"/>
+                                                                            <GradientStop Color="#D7261E" Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                 </Border>
@@ -419,8 +419,8 @@
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter TargetName="Root" Property="BorderBrush" Value="#80FFB300"/>
-                                                            <Setter TargetName="Root" Property="Background" Value="#10FFB300"/>
+                                                            <Setter TargetName="Root" Property="BorderBrush" Value="#80FF6A00"/>
+                                                            <Setter TargetName="Root" Property="Background" Value="#10FF6A00"/>
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
@@ -451,12 +451,12 @@
                                                     <Border x:Name="Root" CornerRadius="6">
                                                         <Border.Background>
                                                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                                <GradientStop Color="#FFB300" Offset="0"/>
-                                                                <GradientStop Color="#FF7A00" Offset="1"/>
+                                                                <GradientStop Color="#FF6A00" Offset="0"/>
+                                                                <GradientStop Color="#D7261E" Offset="1"/>
                                                             </LinearGradientBrush>
                                                         </Border.Background>
                                                         <Border.Effect>
-                                                            <DropShadowEffect Color="#FF9500" BlurRadius="18"
+                                                            <DropShadowEffect Color="#FF4D00" BlurRadius="18"
                                                                               ShadowDepth="0" Opacity="0.45"/>
                                                         </Border.Effect>
                                                         <ContentPresenter HorizontalAlignment="Center"

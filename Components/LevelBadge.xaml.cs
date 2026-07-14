@@ -64,12 +64,9 @@ public partial class LevelBadge : UserControl
         var tier = GetTier(lvl);
 
         LevelText.Text = lvl >= 1000 ? "999+" : lvl.ToString();
-        LevelText.FontSize = lvl >= 100 ? 32 : 42;
+        LevelText.FontSize = lvl >= 100 ? 20 : 26;
 
-        var primaryBrush = new SolidColorBrush(tier.Primary);
-        var secondaryBrush = new SolidColorBrush(tier.Secondary);
-
-        var frameGradient = new LinearGradientBrush(
+        Ring.Stroke = new LinearGradientBrush(
             new GradientStopCollection
             {
                 new GradientStop(tier.Secondary, 0),
@@ -77,26 +74,11 @@ public partial class LevelBadge : UserControl
             },
             new Point(0, 0), new Point(1, 1));
 
-        OuterFrame.Stroke = frameGradient;
-
-        OuterGlow.Fill = primaryBrush;
-        OuterGlow.Stroke = primaryBrush;
-        OuterGlow.StrokeThickness = 6;
-        OuterGlow.Opacity = tier.Name == "ELITE" ? 0.85 : 0.55;
-
         TierStrip.Visibility = ShowTier ? Visibility.Visible : Visibility.Collapsed;
-        TierStrip.Background = frameGradient;
+        TierStrip.Background = new SolidColorBrush(Color.FromArgb(0x22, tier.Primary.R, tier.Primary.G, tier.Primary.B));
+        TierStrip.BorderBrush = new SolidColorBrush(Color.FromArgb(0x55, tier.Primary.R, tier.Primary.G, tier.Primary.B));
+        TierText.Foreground = new SolidColorBrush(tier.Secondary);
         TierText.Text = tier.Name;
-
-        var litBrush = primaryBrush;
-        var unlitBrush = new SolidColorBrush(Color.FromRgb(0x2A, 0x2A, 0x35));
-
-        int litCount = GetLitPips(lvl, tier);
-        var pips = new[] { Pip0, Pip1, Pip2, Pip3, Pip4, Pip5 };
-        for (int i = 0; i < pips.Length; i++)
-        {
-            pips[i].Fill = i < litCount ? litBrush : unlitBrush;
-        }
     }
 
     private static Tier GetTier(int level)
@@ -104,14 +86,5 @@ public partial class LevelBadge : UserControl
         foreach (var t in Tiers)
             if (level >= t.Start && level <= t.End) return t;
         return Tiers[0];
-    }
-
-    private static int GetLitPips(int level, Tier tier)
-    {
-        if (tier.Name == "ELITE") return 6;
-        double span = tier.End - tier.Start + 1;
-        double progress = (level - tier.Start + 1) / span;
-        int lit = (int)Math.Ceiling(progress * 6);
-        return Math.Clamp(lit, 1, 6);
     }
 }

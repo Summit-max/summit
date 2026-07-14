@@ -113,7 +113,7 @@
                             <TextBlock Text="▲" FontSize="22" VerticalAlignment="Center"
                                        Margin="0,0,10,2" Foreground="{StaticResource BrushAccent}">
                                 <TextBlock.Effect>
-                                    <DropShadowEffect Color="#FFB300" BlurRadius="14" ShadowDepth="0" Opacity="0.55"/>
+                                    <DropShadowEffect Color="#FF6A00" BlurRadius="14" ShadowDepth="0" Opacity="0.55"/>
                                 </TextBlock.Effect>
                             </TextBlock>
                             <StackPanel VerticalAlignment="Center">
@@ -173,7 +173,7 @@
                                     <Border CornerRadius="19" Background="{StaticResource BrushGradientBrandD}">
                                         <TextBlock Text="{Binding UserNickname[0]}"
                                                    FontFamily="Segoe UI" FontWeight="Black" FontSize="15"
-                                                   Foreground="#0A0C10" HorizontalAlignment="Center"
+                                                   Foreground="White" HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
                                     </Border>
                                     <Ellipse>

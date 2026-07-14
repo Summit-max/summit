@@ -7,73 +7,49 @@
              Width="{Binding Size, ElementName=Root}"
              Height="{Binding Size, ElementName=Root}">
 
-        <Grid Width="128" Height="136" Background="Transparent">
+        <StackPanel Background="Transparent">
 
-            <!-- Outer hex glow (soft aura) -->
-            <Path x:Name="OuterGlow"
-                  Data="M 64,6 L 118,36 L 118,96 L 64,126 L 10,96 L 10,36 Z"
-                  Stroke="Transparent" StrokeThickness="0" Opacity="0.55">
-                <Path.Effect>
-                    <BlurEffect Radius="16"/>
-                </Path.Effect>
-            </Path>
+            <!-- Circular badge -->
+            <Grid Width="72" Height="72" HorizontalAlignment="Center">
 
-            <!-- Outer hex frame (tier-colored stroke) -->
-            <Path x:Name="OuterFrame"
-                  Data="M 64,6 L 118,36 L 118,96 L 64,126 L 10,96 L 10,36 Z"
-                  StrokeThickness="3"
-                  StrokeLineJoin="Round"/>
+                <!-- Tier ring -->
+                <Ellipse x:Name="Ring" StrokeThickness="3">
+                    <Ellipse.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#1E232E" Offset="0"/>
+                            <GradientStop Color="#0E1117" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
 
-            <!-- Inner hex (dark plate) -->
-            <Path Data="M 64,16 L 109,41 L 109,91 L 64,116 L 19,91 L 19,41 Z"
-                  StrokeThickness="1">
-                <Path.Fill>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#1E232E" Offset="0"/>
-                        <GradientStop Color="#0E1117" Offset="1"/>
-                    </LinearGradientBrush>
-                </Path.Fill>
-                <Path.Stroke>
-                    <SolidColorBrush Color="#262C39"/>
-                </Path.Stroke>
-            </Path>
+                <!-- Inner plate separator -->
+                <Ellipse Margin="7" Stroke="#262C39" StrokeThickness="1"/>
 
-            <!-- Tier pips: 6 diamonds, one per hex edge midpoint -->
-            <!-- idx 0 top-left, 1 top-right, 2 right, 3 bottom-right, 4 bottom-left, 5 left -->
-            <Path x:Name="Pip0" Data="M 37,18 L 41,22 L 37,26 L 33,22 Z"/>
-            <Path x:Name="Pip1" Data="M 91,18 L 95,22 L 91,26 L 87,22 Z"/>
-            <Path x:Name="Pip2" Data="M 118,62 L 122,66 L 118,70 L 114,66 Z"/>
-            <Path x:Name="Pip3" Data="M 91,110 L 95,114 L 91,118 L 87,114 Z"/>
-            <Path x:Name="Pip4" Data="M 37,110 L 41,114 L 37,118 L 33,114 Z"/>
-            <Path x:Name="Pip5" Data="M 10,62 L 14,66 L 10,70 L 6,66 Z"/>
+                <!-- Level number -->
+                <TextBlock x:Name="LevelText"
+                           FontFamily="Segoe UI"
+                           FontWeight="Black"
+                           FontSize="26"
+                           Foreground="#F2F5FA"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"/>
+            </Grid>
 
-            <!-- Level number -->
-            <TextBlock x:Name="LevelText"
-                       FontFamily="Segoe UI"
-                       FontWeight="Black"
-                       FontSize="42"
-                       Foreground="#F2F5FA"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Margin="0,-6,0,0"
-                       TextAlignment="Center"/>
-
-            <!-- Tier strip (bottom) -->
+            <!-- Tier chip (below) -->
             <Border x:Name="TierStrip"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Margin="0,0,0,0"
-                    CornerRadius="2"
-                    Padding="8,2"
-                    MinWidth="58">
+                    Margin="0,7,0,0"
+                    CornerRadius="8"
+                    Padding="9,3"
+                    BorderThickness="1">
                 <TextBlock x:Name="TierText"
                            FontFamily="Segoe UI"
                            FontWeight="Black"
                            FontSize="8"
-                           Foreground="White"
                            HorizontalAlignment="Center"
                            TextAlignment="Center"/>
             </Border>
-        </Grid>
+        </StackPanel>
     </Viewbox>
 </UserControl>

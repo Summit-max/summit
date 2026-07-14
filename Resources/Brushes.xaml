@@ -26,7 +26,7 @@
     <SolidColorBrush x:Key="BrushRankGold"      Color="{StaticResource RankGold}"/>
     <SolidColorBrush x:Key="BrushTransparent"   Color="Transparent"/>
 
-    <!-- Brand gradient (horizontal) — dourado campeão -->
+    <!-- Brand gradient (horizontal) — laranja→vermelho -->
     <LinearGradientBrush x:Key="BrushGradientBrand" StartPoint="0,0" EndPoint="1,0">
         <GradientStop Color="{StaticResource AccentAmber}" Offset="0"/>
         <GradientStop Color="{StaticResource AccentDeep}"  Offset="1"/>
@@ -59,8 +59,8 @@
 
     <!-- Subtle gold tint for active sidebar item -->
     <LinearGradientBrush x:Key="BrushSidebarActive" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#26FFB300" Offset="0"/>
-        <GradientStop Color="#00FFB300" Offset="1"/>
+        <GradientStop Color="#26FF6A00" Offset="0"/>
+        <GradientStop Color="#00FF6A00" Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Login panel gradient -->

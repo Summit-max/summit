@@ -23,8 +23,8 @@
             <Ellipse Width="500" Height="500" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Ellipse.Fill>
                     <RadialGradientBrush>
-                        <GradientStop Color="#14FF9500" Offset="0"/>
-                        <GradientStop Color="#00FF9500" Offset="1"/>
+                        <GradientStop Color="#14FF4D00" Offset="0"/>
+                        <GradientStop Color="#00FF4D00" Offset="1"/>
                     </RadialGradientBrush>
                 </Ellipse.Fill>
             </Ellipse>
@@ -70,7 +70,7 @@
                     <TextBlock Text="▲" FontSize="44" VerticalAlignment="Center" Margin="0,0,16,4"
                                Foreground="{StaticResource BrushAccent}">
                         <TextBlock.Effect>
-                            <DropShadowEffect Color="#FFB300" BlurRadius="24" ShadowDepth="0" Opacity="0.7"/>
+                            <DropShadowEffect Color="#FF6A00" BlurRadius="24" ShadowDepth="0" Opacity="0.7"/>
                         </TextBlock.Effect>
                     </TextBlock>
                     <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
@@ -112,8 +112,8 @@
                             Width="0" Height="2">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#FFB300" Offset="0"/>
-                                <GradientStop Color="#FF7A00" Offset="1"/>
+                                <GradientStop Color="#FF6A00" Offset="0"/>
+                                <GradientStop Color="#D7261E" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                         <Border.Triggers>

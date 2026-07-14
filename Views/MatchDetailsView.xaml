@@ -63,7 +63,7 @@
                     <TextBlock Grid.Column="6" Text="{Binding AdrText}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource BrushTextPrimary}"/>
                     <TextBlock Grid.Column="7" Text="{Binding HSText}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                               FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13" Foreground="#FFB300"/>
+                               FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13" Foreground="#FF6A00"/>
                     <TextBlock Grid.Column="8" Text="{Binding RatingText}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                FontFamily="Segoe UI" FontWeight="Black" FontSize="13" Foreground="#22C55E"/>
                 </Grid>
@@ -160,7 +160,7 @@
                                                     <Setter.Value>
                                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                                             <GradientStop Color="#FF9A3C" Offset="0"/>
-                                                            <GradientStop Color="#FF7A00" Offset="1"/>
+                                                            <GradientStop Color="#D7261E" Offset="1"/>
                                                         </LinearGradientBrush>
                                                     </Setter.Value>
                                                 </Setter>
@@ -181,7 +181,7 @@
                                                     <Setter.Value>
                                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                                             <GradientStop Color="#FF9A3C" Offset="0"/>
-                                                            <GradientStop Color="#FF7A00" Offset="1"/>
+                                                            <GradientStop Color="#D7261E" Offset="1"/>
                                                         </LinearGradientBrush>
                                                     </Setter.Value>
                                                 </Setter>
@@ -195,7 +195,7 @@
                             <Border CornerRadius="3" Padding="8,3" Background="#141821"
                                     BorderBrush="#262C39" BorderThickness="1" Margin="0,0,6,0">
                                 <TextBlock Text="{Binding Map}" FontFamily="Segoe UI" FontWeight="Black"
-                                           FontSize="10" Foreground="#FFB300"/>
+                                           FontSize="10" Foreground="#FF6A00"/>
                             </Border>
                             <Border CornerRadius="3" Padding="8,3" Background="#141821"
                                     BorderBrush="#262C39" BorderThickness="1">
@@ -244,7 +244,7 @@
                             </Grid.ColumnDefinitions>
                             <Border Grid.Column="0" Width="36" Margin="0,0,12,0"/>
                             <TextBlock Grid.Column="1" Text="{Binding Match.TeamAName}" FontFamily="Segoe UI" FontWeight="Black"
-                                       FontSize="13" Foreground="#FFB300" VerticalAlignment="Center"/>
+                                       FontSize="13" Foreground="#FF6A00" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" Text="K"  FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"/>
                             <TextBlock Grid.Column="3" Text="D"  FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"/>
                             <TextBlock Grid.Column="4" Text="A"  FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"/>
@@ -277,7 +277,7 @@
                             </Grid.ColumnDefinitions>
                             <Border Grid.Column="0" Width="36" Margin="0,0,12,0"/>
                             <TextBlock Grid.Column="1" Text="{Binding Match.TeamBName}" FontFamily="Segoe UI" FontWeight="Black"
-                                       FontSize="13" Foreground="#FFB300" VerticalAlignment="Center"/>
+                                       FontSize="13" Foreground="#FF6A00" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" Text="K"  FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"/>
                             <TextBlock Grid.Column="3" Text="D"  FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"/>
                             <TextBlock Grid.Column="4" Text="A"  FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"/>

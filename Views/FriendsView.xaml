@@ -72,7 +72,7 @@
                     BorderBrush="#1E232E" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="ADICIONAR POR NICK" FontFamily="Segoe UI" FontWeight="Black"
-                               FontSize="10" Foreground="#FFB300" Margin="0,0,0,10"/>
+                               FontSize="10" Foreground="#FF6A00" Margin="0,0,0,10"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -107,8 +107,8 @@
                     </Button.Background>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="AMIGOS  " VerticalAlignment="Center"/>
-                        <Border CornerRadius="8" Padding="7,2" Background="#30FFB300">
-                            <TextBlock Text="{Binding FriendsCountLabel}" Foreground="#FFB300" FontWeight="Black" FontSize="10"/>
+                        <Border CornerRadius="8" Padding="7,2" Background="#30FF6A00">
+                            <TextBlock Text="{Binding FriendsCountLabel}" Foreground="#FF6A00" FontWeight="Black" FontSize="10"/>
                         </Border>
                     </StackPanel>
                 </Button>
@@ -147,8 +147,8 @@
                     </Button.Background>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="CONVITES DE TIME  " VerticalAlignment="Center"/>
-                        <Border CornerRadius="8" Padding="7,2" Background="#30FFB300">
-                            <TextBlock Text="{Binding TeamInvitesCountLabel}" Foreground="#FFB300" FontWeight="Black" FontSize="10"/>
+                        <Border CornerRadius="8" Padding="7,2" Background="#30FF6A00">
+                            <TextBlock Text="{Binding TeamInvitesCountLabel}" Foreground="#FF6A00" FontWeight="Black" FontSize="10"/>
                         </Border>
                     </StackPanel>
                 </Button>
@@ -181,7 +181,7 @@
                                         <TextBlock Text="{Binding Nickname}" FontFamily="Segoe UI" FontWeight="Black"
                                                    FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding Rank}" FontFamily="Segoe UI" FontSize="11" Foreground="#FFB300" Margin="0,3,0,0"/>
+                                    <TextBlock Text="{Binding Rank}" FontFamily="Segoe UI" FontSize="11" Foreground="#FF6A00" Margin="0,3,0,0"/>
                                 </StackPanel>
                                 <Button Grid.Column="3" Command="{Binding DataContext.RemoveFriendCommand,
                                             RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -216,7 +216,7 @@
                                     <TextBlock Text="{Binding Requester.Nickname}" FontFamily="Segoe UI" FontWeight="Black"
                                                FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
                                     <TextBlock Text="{Binding Requester.Rank}" FontFamily="Segoe UI" FontSize="11"
-                                               Foreground="#FFB300" Margin="0,3,0,0"/>
+                                               Foreground="#FF6A00" Margin="0,3,0,0"/>
                                 </StackPanel>
                                 <Button Grid.Column="2" Style="{StaticResource SmallButton}"
                                         Command="{Binding DataContext.AcceptCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -283,8 +283,8 @@
                                 <Border Grid.Column="0" Width="44" Height="44" CornerRadius="6" Margin="0,0,14,0">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#FFB300" Offset="0"/>
-                                            <GradientStop Color="#FF7A00" Offset="1"/>
+                                            <GradientStop Color="#FF6A00" Offset="0"/>
+                                            <GradientStop Color="#D7261E" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                     <TextBlock Text="{Binding Team.Tag}" FontFamily="Segoe UI" FontWeight="Black"
@@ -295,7 +295,7 @@
                                     <TextBlock Text="{Binding Team.Name}" FontFamily="Segoe UI" FontWeight="Black"
                                                FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
                                     <TextBlock FontFamily="Segoe UI" FontSize="11" Foreground="#9AA5B5" Margin="0,3,0,0">
-                                        <Run Text="Convidado por "/><Run Text="{Binding InvitedBy.Nickname, Mode=OneWay}" FontWeight="Bold" Foreground="#FFB300"/>
+                                        <Run Text="Convidado por "/><Run Text="{Binding InvitedBy.Nickname, Mode=OneWay}" FontWeight="Bold" Foreground="#FF6A00"/>
                                     </TextBlock>
                                 </StackPanel>
                                 <Button Grid.Column="2" Style="{StaticResource SmallButton}"
