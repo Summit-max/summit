@@ -116,7 +116,10 @@ public class SteamAuthService
                 changed = true;
             }
             if (changed)
+            {
                 await _userRepository.UpdateAsync(user);
+                _userService.SetCurrentUser(user);
+            }
         }
         catch
         {

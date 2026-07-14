@@ -75,6 +75,15 @@ public class MainShellViewModel : BaseViewModel
         });
         CloseCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
+        App.UserService.CurrentUserChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(UserNickname));
+            OnPropertyChanged(nameof(UserRank));
+            OnPropertyChanged(nameof(UserLevel));
+            OnPropertyChanged(nameof(UserAvatarUrl));
+            OnPropertyChanged(nameof(HasAvatar));
+        };
+
         App.Navigation.CurrentViewChanged += (_, vm) =>
         {
             if (vm == null) return;

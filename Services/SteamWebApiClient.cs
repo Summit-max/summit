@@ -1,5 +1,6 @@
 using System.Net.Http;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace Summit.Services;
 
@@ -19,6 +20,12 @@ public class SteamWebApiClient
     };
 
     public async Task<SteamPlayerSummary?> GetPlayerSummaryAsync(string steamId64)
+    {
+        return await GetViaWebApiAsync(steamId64)
+            ?? await GetViaCommunityXmlAsync(steamId64);
+    }
+
+    private static async Task<SteamPlayerSummary?> GetViaWebApiAsync(string steamId64)
     {
         var apiKey = SteamConfig.GetApiKey();
         if (string.IsNullOrEmpty(apiKey))
@@ -47,6 +54,46 @@ public class SteamWebApiClient
                 PersonaName = p.TryGetProperty("personaname", out var n) ? n.GetString() ?? string.Empty : string.Empty,
                 AvatarUrl = p.TryGetProperty("avatarfull", out var a) ? a.GetString() ?? string.Empty : string.Empty,
                 ProfileUrl = p.TryGetProperty("profileurl", out var pr) ? pr.GetString() ?? string.Empty : string.Empty
+            };
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    // Fallback sem API key: perfil público XML da Steam Community.
+    // Só falha se o perfil for privado — nesse caso mantém o fallback Player_XXXX.
+    private static async Task<SteamPlayerSummary?> GetViaCommunityXmlAsync(string steamId64)
+    {
+        var url = $"https://steamcommunity.com/profiles/{steamId64}?xml=1";
+
+        try
+        {
+            using var resp = await _http.GetAsync(url);
+            if (!resp.IsSuccessStatusCode)
+                return null;
+
+            var xml = await resp.Content.ReadAsStringAsync();
+            var doc = XDocument.Parse(xml);
+            var root = doc.Root;
+            if (root == null || root.Name.LocalName != "profile")
+                return null;
+
+            var persona = root.Element("steamID")?.Value?.Trim() ?? string.Empty;
+            var avatar = root.Element("avatarFull")?.Value?.Trim()
+                      ?? root.Element("avatarMedium")?.Value?.Trim()
+                      ?? string.Empty;
+
+            if (string.IsNullOrEmpty(persona) && string.IsNullOrEmpty(avatar))
+                return null;
+
+            return new SteamPlayerSummary
+            {
+                SteamId = steamId64,
+                PersonaName = persona,
+                AvatarUrl = avatar,
+                ProfileUrl = $"https://steamcommunity.com/profiles/{steamId64}"
             };
         }
         catch
