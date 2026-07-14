@@ -1,0 +1,194 @@
+================================================================================
+  WALLBANG — PLANO DE CAMPEONATOS ON-DEMAND COM AWS
+  Data: 2026-04-23
+================================================================================
+
+CONTEXTO
+--------
+A plataforma Wallbang vai focar SOMENTE em campeonatos (não matchmaking
+casual 24/7 estilo Faceit/Gamers Club). Servidores de partida serão
+provisionados ON-DEMAND em cloud AWS — ligam quando o match começa,
+desligam sozinhos quando termina.
+
+Modelo de custo tradicional (Faceit/GC):
+  - Servidor dedicado 24/7 -> US$ 60-100/mês cada, idle 80% do tempo
+  - Precisa de pool grande para absorver pico
+
+Modelo Wallbang (efêmero):
+  - Provisiona EC2 só na hora do match
+  - c5.large spot em sa-east-1: ~US$ 0,03/h
+  - Partida BO1 CS2 = ~1h = ~R$ 0,15
+  - 200 partidas/mês = ~R$ 30 em compute (vs R$ 300 idle no modelo antigo)
+
+
+É BOA IDEIA? — SIM
+------------------
+- Como o foco é CAMPEONATOS (evento agendado), você JÁ SABE quando vai ter pico.
+  Isso permite pré-aquecer o pool — resolve o principal ponto fraco do
+  modelo efêmero, que é cold start.
+- Economia real comprovada (GameLift, Edgegap e até Riot usam esse modelo).
+- CS2 dedicated server é leve (~2GB RAM, 2 vCPUs já rodam liso).
+- Trade-off principal: cold start de 60-120s sem pool quente. Mitiga com:
+    * 1-2 servers "warm" dentro da janela de campeonato
+    * UX honesta no cliente ("Provisionando servidor... ~90s")
+
+
+ARQUITETURA DE ALTO NÍVEL
+-------------------------
+  [Cliente WPF Wallbang]
+         |
+         | REST/WebSocket
+         v
+  [Backend de matchmaking]  <-- ASP.NET Minimal API (Lambda ou t4g.nano)
+         |                      - Lobbies de campeonato
+         |                      - Brackets / chaveamento
+         |                      - Emite evento "criar match"
+         v
+  [Match Orchestrator] (Lambda ou worker)
+         |
+         | EC2 RunInstances / GameLift CreateGameSession
+         v
+  [Server efêmero CS2]  <-- srcds em EC2 com Launch Template
+         |                  - Baixa match config de S3
+         |                  - Roda match, grava demo em S3
+         |                  - Ao fim do match: auto-terminate
+         v
+  [Webhook de resultado] -> backend atualiza bracket
+
+
+OPÇÕES DE PLATAFORMA
+--------------------
+1) AWS GameLift (caminho canônico)
+   + Fleet management automático
+   + FlexMatch (matchmaking)
+   + Escalonamento / warm pool nativo
+   + Billing unificado
+   - Curva de aprendizado maior
+   - Custo ~15-20% acima de EC2 cru
+
+2) EC2 + Launch Template próprio (MVP barato)
+   + Controle total
+   + Mais barato
+   - Mais código de plumbing (instance lifecycle, health checks, IP, etc)
+
+3) ECS Fargate
+   + Sem gerenciar VMs
+   - Historicamente fraco com UDP (CS2 precisa UDP 27015)
+   - Menos comum pra game servers
+
+RECOMENDAÇÃO: começa com EC2 cru pra entender o ciclo, migra pra GameLift
+quando passar de ~50 matches simultâneos.
+
+
+FASES DE EXECUÇÃO
+-----------------
+
+FASE 0 — Decisão de plataforma (1 dia)
+  - Definir: EC2 cru vs GameLift
+  - Criar conta AWS + IAM role com permissões mínimas (EC2, S3, Lambda)
+  - Definir região: sa-east-1 (obrigatório para ping decente no BR)
+
+FASE 1 — POC de servidor efêmero (1-2 semanas)
+  - Criar AMI com CS2 dedicated server (srcds) pré-instalado
+    * Configs: gamemode_competitive_server.cfg, warmup, knife round,
+      plugins básicos (SourceMod + MatchZy ou Get5)
+  - Gerar GSLT (Game Server Login Token) via API Steam
+  - Criar Launch Template com user-data que:
+    1. Baixa match config de S3 (gerada pelo backend: times, map, tokens)
+    2. Inicia srcds com +sv_setsteamaccount <GSLT> +exec match.cfg
+    3. Monitora log do srcds (match end)
+    4. Faz upload da demo (.dem) pra S3
+    5. Chama aws ec2 terminate-instances em si próprio
+  - Testar ciclo manual:
+    aws ec2 run-instances --launch-template ... -> IP -> steam://connect/IP -> jogar -> auto-terminate
+
+FASE 2 — Backend de matchmaking (2-3 semanas)
+  - Stack: ASP.NET Minimal API
+  - Hospedagem:
+    * Lambda (via AWSLambdaASPNetCoreServer) — pay-per-use, ótimo pra baixo volume
+    * OU t4g.nano fixo (~R$ 20/mês) — mais simples pra desenvolver/debugar
+  - Endpoints essenciais:
+    POST   /tournaments                 — criar campeonato (admin)
+    POST   /tournaments/{id}/register   — inscrever time
+    GET    /tournaments/{id}/bracket    — estado do chaveamento
+    POST   /matches                     — orchestrator cria server,
+                                          retorna { ip, port, connectToken }
+    POST   /matches/{id}/result         — webhook chamado pelo srcds
+    GET    /matches/{id}                — status: provisioning/ready/live/finished
+  - Worker de lifecycle:
+    * CloudWatch Event agendado a cada 1min durante janelas de campeonato
+    * Mantém pool warm (N instâncias prontas)
+    * Fora da janela: pool = 0
+  - Persistência:
+    * RDS Postgres (ou SQLite no t4g.nano pra MVP single-node)
+    * Reusa EF Core que já está no Wallbang (DbContext compartilhável)
+
+FASE 3 — Integração cliente WPF (1-2 semanas)
+  - Remover TODA UI de matchmaking casual (Home atual "Encontrar partida")
+  - Fluxo novo:
+    1. Usuário inscreve time em campeonato (tela Campeonatos)
+    2. Backend gera bracket quando max times atingido
+    3. Na hora do match, cliente faz polling em GET /matches/{id}
+    4. status=ready -> cliente abre steam://connect/IP:PORT/PASSWORD
+    5. Pós-match, resultado automaticamente atualiza bracket
+  - Visualizações novas:
+    * Tela de detalhes de campeonato (prize pool, times, bracket)
+    * Bracket viewer single/double elim (Canvas + Path)
+    * Live match card (enquanto está ao vivo)
+
+FASE 4 — Stats, demos e polish
+  - Parser de demo .dem (ex: demoinfocs-golang OU DemoFile.NET em C#)
+  - Extrai: kills, rounds, ADR, entry frags, clutches por round
+  - Popula banco pra alimentar perfil/stats/ranking
+  - ELO/ranking por campeonato
+  - GOTV opcional (porta UDP 27020) pra viewers
+
+
+PONTOS CRÍTICOS DE PRODUÇÃO
+---------------------------
+1) Região obrigatória: sa-east-1 (São Paulo) pra ping decente no BR
+2) GSLT (Game Server Login Token):
+   - Cada server precisa de um token da Steam
+   - Gera via API, rotaciona, revoga após uso
+   - Sem GSLT valido: VAC não liga
+3) Firewall (Security Group):
+   - UDP 27015 aberto (match)
+   - UDP 27020 se usar GOTV
+   - TCP 27015 (RCON) apenas de IP do backend
+4) Anticheat:
+   - VAC liga sozinho com GSLT válido
+   - Para campeonato sério, considerar FACEIT AC (licenciado) ou AEQUILIBRIUM
+5) DDoS:
+   - Elastic IP + AWS Shield Standard (grátis)
+   - Shield Advanced só se virar alvo real
+6) Cold start na UX:
+   - Cliente WPF precisa tela honesta: "Provisionando servidor... ~90s"
+   - Frustração vem de silêncio, não de espera
+   - Pool warm de 1-2 servers reduz pra <10s no caso feliz
+7) Custos escondidos:
+   - Transferência de dados AWS -> internet (~R$ 0,50/GB)
+   - Snapshots de AMI (~R$ 0,50/GB/mês)
+   - Elastic IPs parados (cobram se não estiverem anexados)
+
+
+ESTIMATIVA DE CUSTO MENSAL (MVP pequeno)
+----------------------------------------
+  Backend t4g.nano                ~ R$  20
+  RDS Postgres t4g.micro          ~ R$  50
+  S3 (demos + configs, 20GB)      ~ R$   5
+  EC2 c5.large spot (200 matches) ~ R$  30
+  Data transfer (~50GB)           ~ R$  25
+  Lambda (orchestrator)           ~ R$  10
+  ------------------------------------------
+  TOTAL                           ~ R$ 140/mês
+
+
+PRÓXIMOS PASSOS IMEDIATOS
+-------------------------
+1. [FRONTEND] Remover UI de matchmaking casual; deixar só campeonatos
+2. [FRONTEND] Desenhar telas: lista campeonatos, detalhes, bracket (em andamento)
+3. [BACKEND]  Subir projeto ASP.NET com os endpoints do MVP
+4. [DEVOPS]   POC manual: AMI com srcds, launch template, teste de ciclo
+5. [DATA]     Schema de Tournament, Match, Bracket, Result
+
+================================================================================

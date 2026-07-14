@@ -1,0 +1,111 @@
+<UserControl x:Class="Wallbang.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent" Opacity="0">
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     From="0" To="1" Duration="0:0:0.22"/>
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                     From="12" To="0" Duration="0:0:0.22">
+                        <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <UserControl.RenderTransform><TranslateTransform/></UserControl.RenderTransform>
+
+    <Grid Margin="32,28,32,32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="CONFIGURAÇÕES" FontFamily="Segoe UI" FontWeight="Black"
+                   FontSize="34" Foreground="{StaticResource BrushTextPrimary}"/>
+
+        <!-- Account section -->
+        <Border Grid.Row="2" Style="{StaticResource Card}" MaxWidth="560" HorizontalAlignment="Left">
+            <StackPanel>
+                <TextBlock Text="CONTA" FontFamily="Segoe UI" FontWeight="Bold"
+                           FontSize="9" Foreground="#FF6A00" Margin="0,0,0,20"/>
+
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Nickname" FontFamily="Segoe UI"
+                               FontSize="13" Foreground="#9999AA" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Nickname}" FontFamily="Segoe UI"
+                               FontWeight="SemiBold" FontSize="13"
+                               Foreground="{StaticResource BrushTextPrimary}" VerticalAlignment="Center"/>
+                </Grid>
+
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Steam ID" FontFamily="Segoe UI"
+                               FontSize="13" Foreground="#9999AA" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding SteamId}" FontFamily="Consolas"
+                               FontSize="12" Foreground="#55555F" VerticalAlignment="Center"/>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Versão" FontFamily="Segoe UI"
+                               FontSize="13" Foreground="#9999AA" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding AppVersion}" FontFamily="Consolas"
+                               FontSize="12" Foreground="#55555F" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Logout -->
+        <Border Grid.Row="4" MaxWidth="560" HorizontalAlignment="Left" CornerRadius="8"
+                Background="#1A0808" BorderBrush="#EF444430" BorderThickness="1" Padding="20,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="Encerrar sessão" FontFamily="Segoe UI" FontWeight="SemiBold"
+                               FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
+                    <TextBlock Text="Você será redirecionado para a tela de login." FontFamily="Segoe UI"
+                               FontSize="12" Foreground="#9999AA" Margin="0,3,0,0"/>
+                </StackPanel>
+                <Button Grid.Column="1" Command="{Binding LogoutCommand}" Cursor="Hand"
+                        VerticalAlignment="Center">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Root" CornerRadius="6" Padding="16,8"
+                                    Background="#2A1010" BorderBrush="#EF444450" BorderThickness="1">
+                                <TextBlock Text="SAIR" FontFamily="Segoe UI" FontWeight="Bold"
+                                           FontSize="12" Foreground="#EF4444"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Root" Property="Background" Value="#3A1010"/>
+                                    <Setter TargetName="Root" Property="BorderBrush" Value="#EF4444"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
