@@ -40,7 +40,7 @@
         <TextBlock Grid.Row="0" Text="TORNEIOS" FontFamily="Segoe UI" FontWeight="Black"
                    FontSize="36" Foreground="{StaticResource BrushTextPrimary}"/>
         <TextBlock Grid.Row="2" Text="Encontre um campeonato, inscreva seu time e compita."
-                   FontFamily="Segoe UI" FontSize="13" Foreground="#9999AA"/>
+                   FontFamily="Segoe UI" FontSize="13" Foreground="#9AA5B5"/>
 
         <!-- Filter pills -->
         <ItemsControl Grid.Row="4" ItemsSource="{Binding Filters}">
@@ -61,8 +61,8 @@
                                         SnapsToDevicePixels="True">
                                     <Border.Style>
                                         <Style TargetType="Border">
-                                            <Setter Property="Background" Value="#13131A"/>
-                                            <Setter Property="BorderBrush" Value="#22222A"/>
+                                            <Setter Property="Background" Value="#12151B"/>
+                                            <Setter Property="BorderBrush" Value="#1E232E"/>
                                             <Setter Property="BorderThickness" Value="1"/>
                                         </Style>
                                     </Border.Style>
@@ -70,10 +70,10 @@
                                                FontWeight="Bold" FontSize="12">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="#9999AA"/>
+                                                <Setter Property="Foreground" Value="#9AA5B5"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                        <Setter Property="Foreground" Value="#FF6A00"/>
+                                                        <Setter Property="Foreground" Value="#FFB300"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -85,15 +85,15 @@
                                         <Setter TargetName="Root" Property="Background">
                                             <Setter.Value>
                                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                    <GradientStop Color="#25FF6A00" Offset="0"/>
-                                                    <GradientStop Color="#15D7261E" Offset="1"/>
+                                                    <GradientStop Color="#25FFB300" Offset="0"/>
+                                                    <GradientStop Color="#15FF7A00" Offset="1"/>
                                                 </LinearGradientBrush>
                                             </Setter.Value>
                                         </Setter>
-                                        <Setter TargetName="Root" Property="BorderBrush" Value="#FF6A0080"/>
+                                        <Setter TargetName="Root" Property="BorderBrush" Value="#80FFB300"/>
                                     </DataTrigger>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Root" Property="BorderBrush" Value="#FF6A0060"/>
+                                        <Setter TargetName="Root" Property="BorderBrush" Value="#60FFB300"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -114,12 +114,12 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Width="380" Margin="0,0,20,20" CornerRadius="12"
-                                Background="#13131A" ClipToBounds="True"
+                                Background="#12151B" ClipToBounds="True"
                                 Cursor="Hand" RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform><ScaleTransform/></Border.RenderTransform>
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="BorderBrush" Value="#22222A"/>
+                                    <Setter Property="BorderBrush" Value="#1E232E"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Setter Property="Effect">
                                         <Setter.Value>
@@ -128,7 +128,7 @@
                                     </Setter>
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="BorderBrush" Value="#FF6A0080"/>
+                                            <Setter Property="BorderBrush" Value="#80FFB300"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -175,7 +175,7 @@
                                     </Rectangle>
 
                                     <Line X1="0" Y1="140" X2="400" Y2="0"
-                                          Stroke="#20FF6A00" StrokeThickness="80"
+                                          Stroke="#20FFB300" StrokeThickness="80"
                                           HorizontalAlignment="Left" VerticalAlignment="Top"
                                           IsHitTestVisible="False"/>
 
@@ -184,8 +184,8 @@
                                              IsHitTestVisible="False">
                                         <Ellipse.Fill>
                                             <RadialGradientBrush>
-                                                <GradientStop Color="#50FF6A00" Offset="0"/>
-                                                <GradientStop Color="#00FF6A00" Offset="1"/>
+                                                <GradientStop Color="#50FFB300" Offset="0"/>
+                                                <GradientStop Color="#00FFB300" Offset="1"/>
                                             </RadialGradientBrush>
                                         </Ellipse.Fill>
                                     </Ellipse>
@@ -198,8 +198,8 @@
                                     <Rectangle VerticalAlignment="Bottom" Height="40">
                                         <Rectangle.Fill>
                                             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                <GradientStop Color="#0013131A" Offset="0"/>
-                                                <GradientStop Color="#13131A" Offset="1"/>
+                                                <GradientStop Color="#0012151B" Offset="0"/>
+                                                <GradientStop Color="#12151B" Offset="1"/>
                                             </LinearGradientBrush>
                                         </Rectangle.Fill>
                                     </Rectangle>
@@ -211,20 +211,20 @@
                                         <Border.Style>
                                             <Style TargetType="Border">
                                                 <Setter Property="Background" Value="#15361F"/>
-                                                <Setter Property="BorderBrush" Value="#22C55E60"/>
+                                                <Setter Property="BorderBrush" Value="#6022C55E"/>
                                                 <Setter Property="BorderThickness" Value="1"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding Status}" Value="InProgress">
                                                         <Setter Property="Background" Value="#3A2A0A"/>
-                                                        <Setter Property="BorderBrush" Value="#FACC1560"/>
+                                                        <Setter Property="BorderBrush" Value="#60FACC15"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding Status}" Value="Upcoming">
                                                         <Setter Property="Background" Value="#14233A"/>
-                                                        <Setter Property="BorderBrush" Value="#38BDF860"/>
+                                                        <Setter Property="BorderBrush" Value="#6038BDF8"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding Status}" Value="Finished">
-                                                        <Setter Property="Background" Value="#1A1A22"/>
-                                                        <Setter Property="BorderBrush" Value="#44444E"/>
+                                                        <Setter Property="Background" Value="#141821"/>
+                                                        <Setter Property="BorderBrush" Value="#434D5F"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -243,7 +243,7 @@
                                                                 <Setter Property="Fill" Value="#38BDF8"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding Status}" Value="Finished">
-                                                                <Setter Property="Fill" Value="#55555F"/>
+                                                                <Setter Property="Fill" Value="#5A6577"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -262,7 +262,7 @@
                                                                 <Setter Property="Foreground" Value="#38BDF8"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding Status}" Value="Finished">
-                                                                <Setter Property="Foreground" Value="#9999AA"/>
+                                                                <Setter Property="Foreground" Value="#9AA5B5"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -273,7 +273,7 @@
 
                                     <!-- Game tag -->
                                     <Border CornerRadius="4" Padding="8,4"
-                                            Background="#0D0D11" BorderBrush="#2A2A35" BorderThickness="1"
+                                            Background="#0B0D12" BorderBrush="#262C39" BorderThickness="1"
                                             HorizontalAlignment="Right" VerticalAlignment="Top"
                                             Margin="0,16,16,0">
                                         <TextBlock Text="{Binding Game}" FontFamily="Segoe UI"
@@ -282,17 +282,17 @@
 
                                     <!-- Countdown badge -->
                                     <Border CornerRadius="14" Padding="12,5"
-                                            Background="#CC0D0D11" BorderBrush="#FF6A0060"
+                                            Background="#CC0B0D12" BorderBrush="#60FFB300"
                                             BorderThickness="1"
                                             HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                             Margin="16,0,0,16">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE823;" FontFamily="Segoe MDL2 Assets"
-                                                       FontSize="11" Foreground="#FF6A00"
+                                                       FontSize="11" Foreground="#FFB300"
                                                        VerticalAlignment="Center" Margin="0,0,7,0"/>
                                             <TextBlock Text="{Binding CountdownLabel}" FontFamily="Segoe UI"
                                                        FontWeight="Black" FontSize="10"
-                                                       Foreground="#F5F5F5" VerticalAlignment="Center"/>
+                                                       Foreground="#F2F5FA" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Border>
                                 </Grid>
@@ -306,11 +306,11 @@
 
                                     <StackPanel Orientation="Horizontal" Margin="0,5,0,18">
                                         <TextBlock Text="{Binding Format}" FontFamily="Segoe UI"
-                                                   FontSize="11" Foreground="#9999AA"/>
+                                                   FontSize="11" Foreground="#9AA5B5"/>
                                         <TextBlock Text="  ·  " FontFamily="Segoe UI" FontSize="11"
-                                                   Foreground="#44444E"/>
+                                                   Foreground="#434D5F"/>
                                         <TextBlock Text="{Binding Organizer}" FontFamily="Segoe UI"
-                                                   FontSize="11" Foreground="#9999AA"/>
+                                                   FontSize="11" Foreground="#9AA5B5"/>
                                     </StackPanel>
 
                                     <!-- Stats row: prize | slots+progress -->
@@ -325,12 +325,12 @@
 
                                         <StackPanel Grid.Column="0">
                                             <TextBlock Text="PRÊMIO" FontFamily="Segoe UI" FontWeight="Black"
-                                                       FontSize="9" Foreground="#55555F" Margin="0,0,0,4"/>
+                                                       FontSize="9" Foreground="#5A6577" Margin="0,0,0,4"/>
                                             <TextBlock Text="{Binding Prize}" FontFamily="Segoe UI"
-                                                       FontWeight="Black" FontSize="20" Foreground="#FF6A00"/>
+                                                       FontWeight="Black" FontSize="20" Foreground="#FFB300"/>
                                         </StackPanel>
 
-                                        <Rectangle Grid.Column="2" Fill="#22222A" VerticalAlignment="Stretch"/>
+                                        <Rectangle Grid.Column="2" Fill="#1E232E" VerticalAlignment="Stretch"/>
 
                                         <StackPanel Grid.Column="4">
                                             <Grid Margin="0,0,0,6">
@@ -340,17 +340,17 @@
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Grid.Column="0" Text="VAGAS"
                                                            FontFamily="Segoe UI" FontWeight="Black"
-                                                           FontSize="9" Foreground="#55555F"/>
+                                                           FontSize="9" Foreground="#5A6577"/>
                                                 <TextBlock Grid.Column="1" FontFamily="Segoe UI"
                                                            FontWeight="Black" FontSize="11" Foreground="#CCCCD4">
                                                     <Run Text="{Binding RegisteredTeams, Mode=OneWay}"/>
-                                                    <Run Text="/" Foreground="#44444E"/>
-                                                    <Run Text="{Binding MaxTeams, Mode=OneWay}" Foreground="#9999AA"/>
+                                                    <Run Text="/" Foreground="#434D5F"/>
+                                                    <Run Text="{Binding MaxTeams, Mode=OneWay}" Foreground="#9AA5B5"/>
                                                 </TextBlock>
                                             </Grid>
 
                                             <Grid Height="6">
-                                                <Border CornerRadius="3" Background="#1A1A22"/>
+                                                <Border CornerRadius="3" Background="#141821"/>
                                                 <ProgressBar Value="{Binding RegisteredTeams, Mode=OneWay}"
                                                              Maximum="{Binding MaxTeams, Mode=OneWay}"
                                                              BorderThickness="0" Background="Transparent"
@@ -364,8 +364,8 @@
                                                                         HorizontalAlignment="Left">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                                            <GradientStop Color="#FF6A00" Offset="0"/>
-                                                                            <GradientStop Color="#D7261E" Offset="1"/>
+                                                                            <GradientStop Color="#FFB300" Offset="0"/>
+                                                                            <GradientStop Color="#FF7A00" Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                 </Border>
@@ -384,10 +384,10 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="&#xE787;" FontFamily="Segoe MDL2 Assets"
-                                                   FontSize="12" Foreground="#55555F"
+                                                   FontSize="12" Foreground="#5A6577"
                                                    VerticalAlignment="Center" Margin="0,0,8,0"/>
                                         <TextBlock Grid.Column="1" FontFamily="Segoe UI" FontSize="12"
-                                                   Foreground="#9999AA" VerticalAlignment="Center">
+                                                   Foreground="#9AA5B5" VerticalAlignment="Center">
                                             <Run Text="Início em "/>
                                             <Run Text="{Binding StartDate, StringFormat={}{0:dd MMM yyyy}, Mode=OneWay}"
                                                  FontWeight="SemiBold" Foreground="#CCCCD4"/>
@@ -409,7 +409,7 @@
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">
                                                     <Border x:Name="Root" CornerRadius="6"
-                                                            Background="Transparent" BorderBrush="#2A2A35"
+                                                            Background="Transparent" BorderBrush="#262C39"
                                                             BorderThickness="1">
                                                         <TextBlock Text="DETALHES" FontFamily="Segoe UI"
                                                                    FontWeight="Black" FontSize="11"
@@ -419,8 +419,8 @@
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter TargetName="Root" Property="BorderBrush" Value="#FF6A0080"/>
-                                                            <Setter TargetName="Root" Property="Background" Value="#10FF6A00"/>
+                                                            <Setter TargetName="Root" Property="BorderBrush" Value="#80FFB300"/>
+                                                            <Setter TargetName="Root" Property="Background" Value="#10FFB300"/>
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
@@ -451,12 +451,12 @@
                                                     <Border x:Name="Root" CornerRadius="6">
                                                         <Border.Background>
                                                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                                                <GradientStop Color="#D7261E" Offset="1"/>
+                                                                <GradientStop Color="#FFB300" Offset="0"/>
+                                                                <GradientStop Color="#FF7A00" Offset="1"/>
                                                             </LinearGradientBrush>
                                                         </Border.Background>
                                                         <Border.Effect>
-                                                            <DropShadowEffect Color="#FF4D00" BlurRadius="18"
+                                                            <DropShadowEffect Color="#FF9500" BlurRadius="18"
                                                                               ShadowDepth="0" Opacity="0.45"/>
                                                         </Border.Effect>
                                                         <ContentPresenter HorizontalAlignment="Center"

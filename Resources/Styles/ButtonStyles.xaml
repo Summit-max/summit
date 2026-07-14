@@ -20,9 +20,9 @@
                     <Border x:Name="Root" CornerRadius="6" Background="{StaticResource BrushGradientBrand}"
                             SnapsToDevicePixels="True">
                         <Border.Effect>
-                            <DropShadowEffect Color="#FF6A00" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
+                            <DropShadowEffect Color="#FFB300" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
                         </Border.Effect>
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -52,15 +52,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Root" CornerRadius="6" Background="#232328"
+                    <Border x:Name="Root" CornerRadius="6" Background="#1A1E26"
                             BorderBrush="{StaticResource BrushBorderSubtle}" BorderThickness="1"
                             SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#2D2D35"/>
-                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrushOrangeHot}"/>
+                            <Setter TargetName="Root" Property="Background" Value="#252B38"/>
+                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Root" Property="Opacity" Value="0.75"/>
@@ -81,12 +81,12 @@
                     <Border x:Name="Root" CornerRadius="8" SnapsToDevicePixels="True">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FFB300" Offset="0"/>
+                                <GradientStop Color="#FF7A00" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                         <Border.Effect>
-                            <DropShadowEffect Color="#FF4D00" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/>
+                            <DropShadowEffect Color="#FF9500" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/>
                         </Border.Effect>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Margin="{TemplateBinding Padding}"/>
@@ -117,11 +117,11 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Root" CornerRadius="6" Background="{TemplateBinding Background}"
                             SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#282830"/>
+                            <Setter TargetName="Root" Property="Background" Value="#202632"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Root" Property="Opacity" Value="0.7"/>
@@ -144,11 +144,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Root" Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#2A2A32"/>
+                            <Setter TargetName="Root" Property="Background" Value="#202531"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -161,7 +161,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Root" Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -194,7 +194,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="#1E1E25"/>
+                            <Setter TargetName="Root" Property="Background" Value="#181D26"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Root" Property="Opacity" Value="0.75"/>
@@ -219,7 +219,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Root" CornerRadius="4" Background="{StaticResource BrushGradientBrand}"
                             SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

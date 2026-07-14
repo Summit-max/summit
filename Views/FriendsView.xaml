@@ -14,7 +14,7 @@
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="#9999AA"/>
+            <Setter Property="Foreground" Value="#9AA5B5"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontWeight" Value="Black"/>
             <Setter Property="FontSize" Value="11"/>
@@ -27,7 +27,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="B" Property="Background" Value="#1A1A22"/>
+                                <Setter TargetName="B" Property="Background" Value="#141821"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -68,11 +68,11 @@
                        FontSize="32" Foreground="{StaticResource BrushTextPrimary}"/>
 
             <!-- Add friend box -->
-            <Border Grid.Row="2" CornerRadius="10" Padding="18,14" Background="#13131A"
-                    BorderBrush="#22222A" BorderThickness="1">
+            <Border Grid.Row="2" CornerRadius="10" Padding="18,14" Background="#12151B"
+                    BorderBrush="#1E232E" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="ADICIONAR POR NICK" FontFamily="Segoe UI" FontWeight="Black"
-                               FontSize="10" Foreground="#FF6A00" Margin="0,0,0,10"/>
+                               FontSize="10" Foreground="#FFB300" Margin="0,0,0,10"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -91,7 +91,7 @@
                         </Button>
                     </Grid>
                     <TextBlock Text="{Binding SearchMessage}" FontFamily="Segoe UI" FontSize="11"
-                               Foreground="#9999AA" Margin="0,8,0,0"/>
+                               Foreground="#9AA5B5" Margin="0,8,0,0"/>
                 </StackPanel>
             </Border>
 
@@ -101,14 +101,14 @@
                     <Button.Background>
                         <Binding Path="IsFriendsTab">
                             <Binding.Converter>
-                                <h:BoolToBrushConverter TrueBrush="#1E1E28" FalseBrush="Transparent"/>
+                                <h:BoolToBrushConverter TrueBrush="#1D222C" FalseBrush="Transparent"/>
                             </Binding.Converter>
                         </Binding>
                     </Button.Background>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="AMIGOS  " VerticalAlignment="Center"/>
-                        <Border CornerRadius="8" Padding="7,2" Background="#FF6A0030">
-                            <TextBlock Text="{Binding FriendsCountLabel}" Foreground="#FF6A00" FontWeight="Black" FontSize="10"/>
+                        <Border CornerRadius="8" Padding="7,2" Background="#30FFB300">
+                            <TextBlock Text="{Binding FriendsCountLabel}" Foreground="#FFB300" FontWeight="Black" FontSize="10"/>
                         </Border>
                     </StackPanel>
                 </Button>
@@ -116,13 +116,13 @@
                     <Button.Background>
                         <Binding Path="IsIncomingTab">
                             <Binding.Converter>
-                                <h:BoolToBrushConverter TrueBrush="#1E1E28" FalseBrush="Transparent"/>
+                                <h:BoolToBrushConverter TrueBrush="#1D222C" FalseBrush="Transparent"/>
                             </Binding.Converter>
                         </Binding>
                     </Button.Background>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="PEDIDOS  " VerticalAlignment="Center"/>
-                        <Border CornerRadius="8" Padding="7,2" Background="#FACC1530">
+                        <Border CornerRadius="8" Padding="7,2" Background="#30FACC15">
                             <TextBlock Text="{Binding IncomingCountLabel}" Foreground="#FACC15" FontWeight="Black" FontSize="10"/>
                         </Border>
                     </StackPanel>
@@ -131,7 +131,7 @@
                     <Button.Background>
                         <Binding Path="IsOutgoingTab">
                             <Binding.Converter>
-                                <h:BoolToBrushConverter TrueBrush="#1E1E28" FalseBrush="Transparent"/>
+                                <h:BoolToBrushConverter TrueBrush="#1D222C" FalseBrush="Transparent"/>
                             </Binding.Converter>
                         </Binding>
                     </Button.Background>
@@ -141,14 +141,14 @@
                     <Button.Background>
                         <Binding Path="IsTeamInvitesTab">
                             <Binding.Converter>
-                                <h:BoolToBrushConverter TrueBrush="#1E1E28" FalseBrush="Transparent"/>
+                                <h:BoolToBrushConverter TrueBrush="#1D222C" FalseBrush="Transparent"/>
                             </Binding.Converter>
                         </Binding>
                     </Button.Background>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="CONVITES DE TIME  " VerticalAlignment="Center"/>
-                        <Border CornerRadius="8" Padding="7,2" Background="#FF6A0030">
-                            <TextBlock Text="{Binding TeamInvitesCountLabel}" Foreground="#FF6A00" FontWeight="Black" FontSize="10"/>
+                        <Border CornerRadius="8" Padding="7,2" Background="#30FFB300">
+                            <TextBlock Text="{Binding TeamInvitesCountLabel}" Foreground="#FFB300" FontWeight="Black" FontSize="10"/>
                         </Border>
                     </StackPanel>
                 </Button>
@@ -160,7 +160,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,0,8" Padding="16,14" CornerRadius="8"
-                                Background="#13131A" BorderBrush="#22222A" BorderThickness="1" Cursor="Hand">
+                                Background="#12151B" BorderBrush="#1E232E" BorderThickness="1" Cursor="Hand">
                             <Border.InputBindings>
                                 <MouseBinding MouseAction="LeftClick"
                                               Command="{Binding DataContext.ViewPlayerCommand,
@@ -181,7 +181,7 @@
                                         <TextBlock Text="{Binding Nickname}" FontFamily="Segoe UI" FontWeight="Black"
                                                    FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding Rank}" FontFamily="Segoe UI" FontSize="11" Foreground="#FF6A00" Margin="0,3,0,0"/>
+                                    <TextBlock Text="{Binding Rank}" FontFamily="Segoe UI" FontSize="11" Foreground="#FFB300" Margin="0,3,0,0"/>
                                 </StackPanel>
                                 <Button Grid.Column="3" Command="{Binding DataContext.RemoveFriendCommand,
                                             RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -203,7 +203,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,0,8" Padding="16,14" CornerRadius="8"
-                                Background="#13131A" BorderBrush="#22222A" BorderThickness="1">
+                                Background="#12151B" BorderBrush="#1E232E" BorderThickness="1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -216,7 +216,7 @@
                                     <TextBlock Text="{Binding Requester.Nickname}" FontFamily="Segoe UI" FontWeight="Black"
                                                FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
                                     <TextBlock Text="{Binding Requester.Rank}" FontFamily="Segoe UI" FontSize="11"
-                                               Foreground="#FF6A00" Margin="0,3,0,0"/>
+                                               Foreground="#FFB300" Margin="0,3,0,0"/>
                                 </StackPanel>
                                 <Button Grid.Column="2" Style="{StaticResource SmallButton}"
                                         Command="{Binding DataContext.AcceptCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -242,7 +242,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,0,8" Padding="16,14" CornerRadius="8"
-                                Background="#13131A" BorderBrush="#22222A" BorderThickness="1">
+                                Background="#12151B" BorderBrush="#1E232E" BorderThickness="1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -256,7 +256,7 @@
                                     <TextBlock Text="Aguardando resposta…" FontFamily="Segoe UI" FontSize="11"
                                                Foreground="#FACC15" Margin="0,3,0,0"/>
                                 </StackPanel>
-                                <Border Grid.Column="2" CornerRadius="4" Padding="10,4" Background="#22222A">
+                                <Border Grid.Column="2" CornerRadius="4" Padding="10,4" Background="#1E232E">
                                     <TextBlock Text="PENDENTE" FontFamily="Segoe UI" FontWeight="Black"
                                                FontSize="10" Foreground="#FACC15"/>
                                 </Border>
@@ -272,7 +272,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,0,8" Padding="16,14" CornerRadius="8"
-                                Background="#13131A" BorderBrush="#22222A" BorderThickness="1">
+                                Background="#12151B" BorderBrush="#1E232E" BorderThickness="1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -283,8 +283,8 @@
                                 <Border Grid.Column="0" Width="44" Height="44" CornerRadius="6" Margin="0,0,14,0">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#FF6A00" Offset="0"/>
-                                            <GradientStop Color="#D7261E" Offset="1"/>
+                                            <GradientStop Color="#FFB300" Offset="0"/>
+                                            <GradientStop Color="#FF7A00" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                     <TextBlock Text="{Binding Team.Tag}" FontFamily="Segoe UI" FontWeight="Black"
@@ -294,8 +294,8 @@
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Team.Name}" FontFamily="Segoe UI" FontWeight="Black"
                                                FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
-                                    <TextBlock FontFamily="Segoe UI" FontSize="11" Foreground="#9999AA" Margin="0,3,0,0">
-                                        <Run Text="Convidado por "/><Run Text="{Binding InvitedBy.Nickname, Mode=OneWay}" FontWeight="Bold" Foreground="#FF6A00"/>
+                                    <TextBlock FontFamily="Segoe UI" FontSize="11" Foreground="#9AA5B5" Margin="0,3,0,0">
+                                        <Run Text="Convidado por "/><Run Text="{Binding InvitedBy.Nickname, Mode=OneWay}" FontWeight="Bold" Foreground="#FFB300"/>
                                     </TextBlock>
                                 </StackPanel>
                                 <Button Grid.Column="2" Style="{StaticResource SmallButton}"

@@ -245,13 +245,13 @@ public class SteamAuthService
     private const string SuccessHtml = @"<!doctype html>
 <html><head><meta charset='utf-8'><title>Summit</title>
 <style>
-  body{margin:0;background:#0E0E10;color:#F5F5F5;font-family:Segoe UI,system-ui,sans-serif;
+  body{margin:0;background:#0A0C10;color:#F2F5FA;font-family:Segoe UI,system-ui,sans-serif;
        display:flex;align-items:center;justify-content:center;height:100vh}
-  .card{padding:40px 48px;border-radius:14px;border:1px solid #2A2A35;
-        background:linear-gradient(135deg,#1E1208,#17171A);text-align:center;max-width:420px}
-  h1{margin:0 0 10px;font-size:28px;background:linear-gradient(90deg,#FF6A00,#D7261E);
+  .card{padding:40px 48px;border-radius:14px;border:1px solid #262C39;
+        background:linear-gradient(135deg,#1E1208,#12151B);text-align:center;max-width:420px}
+  h1{margin:0 0 10px;font-size:28px;background:linear-gradient(90deg,#FFB300,#FF7A00);
      -webkit-background-clip:text;color:transparent;font-weight:900;letter-spacing:-.5px}
-  p{color:#9999AA;font-size:14px;line-height:1.5}
+  p{color:#9AA5B5;font-size:14px;line-height:1.5}
 </style></head><body><div class='card'>
 <h1>SUMMIT</h1>
 <p>Autenticação concluída. Você já pode voltar para o app.</p>
@@ -259,7 +259,7 @@ public class SteamAuthService
 
     private const string FailureHtml = @"<!doctype html>
 <html><head><meta charset='utf-8'><title>Summit</title></head>
-<body style='background:#0E0E10;color:#EF4444;font-family:Segoe UI'>
+<body style='background:#0A0C10;color:#EF4444;font-family:Segoe UI'>
 <div style='padding:40px;text-align:center'><h1>Falha na autenticação</h1></div>
 </body></html>";
 }

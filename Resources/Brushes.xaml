@@ -5,67 +5,68 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Solids -->
-    <SolidColorBrush x:Key="BrushBgDark"       Color="{StaticResource BgDark}"/>
-    <SolidColorBrush x:Key="BrushBgMid"        Color="{StaticResource BgMid}"/>
-    <SolidColorBrush x:Key="BrushBgCard"       Color="{StaticResource BgCard}"/>
-    <SolidColorBrush x:Key="BrushBgCardHover"  Color="{StaticResource BgCardHover}"/>
-    <SolidColorBrush x:Key="BrushBgSidebar"    Color="{StaticResource BgSidebar}"/>
-    <SolidColorBrush x:Key="BrushBgInput"      Color="{StaticResource BgInput}"/>
-    <SolidColorBrush x:Key="BrushTextPrimary"  Color="{StaticResource TextPrimary}"/>
+    <SolidColorBrush x:Key="BrushBgDark"        Color="{StaticResource BgDark}"/>
+    <SolidColorBrush x:Key="BrushBgMid"         Color="{StaticResource BgMid}"/>
+    <SolidColorBrush x:Key="BrushBgCard"        Color="{StaticResource BgCard}"/>
+    <SolidColorBrush x:Key="BrushBgCardHover"   Color="{StaticResource BgCardHover}"/>
+    <SolidColorBrush x:Key="BrushBgSidebar"     Color="{StaticResource BgSidebar}"/>
+    <SolidColorBrush x:Key="BrushBgInput"       Color="{StaticResource BgInput}"/>
+    <SolidColorBrush x:Key="BrushTextPrimary"   Color="{StaticResource TextPrimary}"/>
     <SolidColorBrush x:Key="BrushTextSecondary" Color="{StaticResource TextSecondary}"/>
-    <SolidColorBrush x:Key="BrushTextMuted"    Color="{StaticResource TextMuted}"/>
-    <SolidColorBrush x:Key="BrushBorderSubtle" Color="{StaticResource BorderSubtle}"/>
-    <SolidColorBrush x:Key="BrushBorderAccent" Color="{StaticResource BorderAccent}"/>
-    <SolidColorBrush x:Key="BrushSuccess"      Color="{StaticResource Success}"/>
-    <SolidColorBrush x:Key="BrushWarning"      Color="{StaticResource Warning}"/>
-    <SolidColorBrush x:Key="BrushError"        Color="{StaticResource ErrorColor}"/>
-    <SolidColorBrush x:Key="BrushInfo"         Color="{StaticResource Info}"/>
-    <SolidColorBrush x:Key="BrushOrangeHot"    Color="{StaticResource OrangeHot}"/>
-    <SolidColorBrush x:Key="BrushRedDeep"      Color="{StaticResource RedDeep}"/>
-    <SolidColorBrush x:Key="BrushRankGold"     Color="{StaticResource RankGold}"/>
-    <SolidColorBrush x:Key="BrushTransparent"  Color="Transparent"/>
+    <SolidColorBrush x:Key="BrushTextMuted"     Color="{StaticResource TextMuted}"/>
+    <SolidColorBrush x:Key="BrushBorderSubtle"  Color="{StaticResource BorderSubtle}"/>
+    <SolidColorBrush x:Key="BrushBorderAccent"  Color="{StaticResource BorderAccent}"/>
+    <SolidColorBrush x:Key="BrushSuccess"       Color="{StaticResource Success}"/>
+    <SolidColorBrush x:Key="BrushWarning"       Color="{StaticResource Warning}"/>
+    <SolidColorBrush x:Key="BrushError"         Color="{StaticResource ErrorColor}"/>
+    <SolidColorBrush x:Key="BrushInfo"          Color="{StaticResource Info}"/>
+    <SolidColorBrush x:Key="BrushLive"          Color="{StaticResource Live}"/>
+    <SolidColorBrush x:Key="BrushAccent"        Color="{StaticResource AccentGold}"/>
+    <SolidColorBrush x:Key="BrushAccentDeep"    Color="{StaticResource AccentDeep}"/>
+    <SolidColorBrush x:Key="BrushRankGold"      Color="{StaticResource RankGold}"/>
+    <SolidColorBrush x:Key="BrushTransparent"   Color="Transparent"/>
 
-    <!-- Brand gradient (horizontal) -->
+    <!-- Brand gradient (horizontal) — dourado campeão -->
     <LinearGradientBrush x:Key="BrushGradientBrand" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="{StaticResource OrangeHot}" Offset="0"/>
-        <GradientStop Color="{StaticResource RedDeep}"   Offset="1"/>
+        <GradientStop Color="{StaticResource AccentAmber}" Offset="0"/>
+        <GradientStop Color="{StaticResource AccentDeep}"  Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Brand gradient (vertical) -->
     <LinearGradientBrush x:Key="BrushGradientBrandV" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="{StaticResource OrangeHot}" Offset="0"/>
-        <GradientStop Color="{StaticResource RedDeep}"   Offset="1"/>
+        <GradientStop Color="{StaticResource AccentAmber}" Offset="0"/>
+        <GradientStop Color="{StaticResource AccentDeep}"  Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Brand gradient (diagonal) -->
     <LinearGradientBrush x:Key="BrushGradientBrandD" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="{StaticResource OrangeHot}" Offset="0"/>
-        <GradientStop Color="{StaticResource RedDeep}"   Offset="1"/>
+        <GradientStop Color="{StaticResource AccentAmber}" Offset="0"/>
+        <GradientStop Color="{StaticResource AccentDeep}"  Offset="1"/>
     </LinearGradientBrush>
 
-    <!-- Dark background gradient -->
+    <!-- Dark background gradient — leve tom frio no horizonte -->
     <LinearGradientBrush x:Key="BrushGradientBg" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="#0E0E10" Offset="0"/>
-        <GradientStop Color="#1A0B06" Offset="0.5"/>
-        <GradientStop Color="#0E0E10" Offset="1"/>
+        <GradientStop Color="#0A0C10" Offset="0"/>
+        <GradientStop Color="#12141F" Offset="0.5"/>
+        <GradientStop Color="#0A0C10" Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Card gradient -->
     <LinearGradientBrush x:Key="BrushGradientCard" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#252528" Offset="0"/>
-        <GradientStop Color="#1E1E23" Offset="1"/>
+        <GradientStop Color="#1B2029" Offset="0"/>
+        <GradientStop Color="#171B22" Offset="1"/>
     </LinearGradientBrush>
 
-    <!-- Subtle orange tint for active sidebar item -->
+    <!-- Subtle gold tint for active sidebar item -->
     <LinearGradientBrush x:Key="BrushSidebarActive" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#20FF6A00" Offset="0"/>
-        <GradientStop Color="#00FF6A00" Offset="1"/>
+        <GradientStop Color="#26FFB300" Offset="0"/>
+        <GradientStop Color="#00FFB300" Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Login panel gradient -->
     <LinearGradientBrush x:Key="BrushLoginPanel" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#181820" Offset="0"/>
-        <GradientStop Color="#121218" Offset="1"/>
+        <GradientStop Color="#12161E" Offset="0"/>
+        <GradientStop Color="#0E1117" Offset="1"/>
     </LinearGradientBrush>
 
 </ResourceDictionary>

@@ -35,7 +35,7 @@
         <Border Grid.Row="2" Style="{StaticResource Card}" MaxWidth="560" HorizontalAlignment="Left">
             <StackPanel>
                 <TextBlock Text="CONTA" FontFamily="Segoe UI" FontWeight="Bold"
-                           FontSize="9" Foreground="#FF6A00" Margin="0,0,0,20"/>
+                           FontSize="9" Foreground="#FFB300" Margin="0,0,0,20"/>
 
                 <Grid Margin="0,0,0,14">
                     <Grid.ColumnDefinitions>
@@ -43,7 +43,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Nickname" FontFamily="Segoe UI"
-                               FontSize="13" Foreground="#9999AA" VerticalAlignment="Center"/>
+                               FontSize="13" Foreground="#9AA5B5" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="1" Text="{Binding Nickname}" FontFamily="Segoe UI"
                                FontWeight="SemiBold" FontSize="13"
                                Foreground="{StaticResource BrushTextPrimary}" VerticalAlignment="Center"/>
@@ -55,9 +55,9 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Steam ID" FontFamily="Segoe UI"
-                               FontSize="13" Foreground="#9999AA" VerticalAlignment="Center"/>
+                               FontSize="13" Foreground="#9AA5B5" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="1" Text="{Binding SteamId}" FontFamily="Consolas"
-                               FontSize="12" Foreground="#55555F" VerticalAlignment="Center"/>
+                               FontSize="12" Foreground="#5A6577" VerticalAlignment="Center"/>
                 </Grid>
 
                 <Grid>
@@ -66,16 +66,16 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Versão" FontFamily="Segoe UI"
-                               FontSize="13" Foreground="#9999AA" VerticalAlignment="Center"/>
+                               FontSize="13" Foreground="#9AA5B5" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="1" Text="{Binding AppVersion}" FontFamily="Consolas"
-                               FontSize="12" Foreground="#55555F" VerticalAlignment="Center"/>
+                               FontSize="12" Foreground="#5A6577" VerticalAlignment="Center"/>
                 </Grid>
             </StackPanel>
         </Border>
 
         <!-- Logout -->
         <Border Grid.Row="4" MaxWidth="560" HorizontalAlignment="Left" CornerRadius="8"
-                Background="#1A0808" BorderBrush="#EF444430" BorderThickness="1" Padding="20,16">
+                Background="#1A0808" BorderBrush="#30EF4444" BorderThickness="1" Padding="20,16">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -85,14 +85,14 @@
                     <TextBlock Text="Encerrar sessão" FontFamily="Segoe UI" FontWeight="SemiBold"
                                FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
                     <TextBlock Text="Você será redirecionado para a tela de login." FontFamily="Segoe UI"
-                               FontSize="12" Foreground="#9999AA" Margin="0,3,0,0"/>
+                               FontSize="12" Foreground="#9AA5B5" Margin="0,3,0,0"/>
                 </StackPanel>
                 <Button Grid.Column="1" Command="{Binding LogoutCommand}" Cursor="Hand"
                         VerticalAlignment="Center">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="Root" CornerRadius="6" Padding="16,8"
-                                    Background="#2A1010" BorderBrush="#EF444450" BorderThickness="1">
+                                    Background="#2A1010" BorderBrush="#50EF4444" BorderThickness="1">
                                 <TextBlock Text="SAIR" FontFamily="Segoe UI" FontWeight="Bold"
                                            FontSize="12" Foreground="#EF4444"/>
                             </Border>

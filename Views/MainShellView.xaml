@@ -3,196 +3,250 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:Summit.ViewModels"
         Title="Summit"
-        Width="1280" Height="800"
-        MinWidth="1100" MinHeight="680"
+        Width="1360" Height="850"
+        MinWidth="1140" MinHeight="700"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
 
+    <Window.Resources>
+        <!-- Sidebar nav item -->
+        <DataTemplate x:Key="NavItemTemplate" DataType="{x:Type vm:SidebarItem}">
+            <Button Command="{Binding Command}" Style="{StaticResource SidebarNavButton}">
+                <Grid>
+                    <!-- Active left bar -->
+                    <Border Width="3" HorizontalAlignment="Left" CornerRadius="0,2,2,0"
+                            Margin="-12,0,0,0" Background="{StaticResource BrushGradientBrandV}">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <!-- Active bg -->
+                    <Border CornerRadius="6">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource BrushSidebarActive}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <!-- Icon + label -->
+                    <StackPanel Orientation="Horizontal" Margin="12,0">
+                        <TextBlock Text="{Binding Icon}"
+                                   FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                   VerticalAlignment="Center" Margin="0,0,12,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource BrushTextMuted}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource BrushAccent}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Text="{Binding Label}" VerticalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="12" FontWeight="SemiBold">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource BrushTextSecondary}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource BrushTextPrimary}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </DataTemplate>
+
+        <!-- Section header -->
+        <Style x:Key="NavSectionHeader" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource BrushTextMuted}"/>
+            <Setter Property="Margin" Value="22,18,0,6"/>
+        </Style>
+    </Window.Resources>
+
     <Border CornerRadius="12" ClipToBounds="True">
         <Grid Background="{StaticResource BrushBgDark}">
             <Grid.ColumnDefinitions>
                 <!-- Sidebar -->
-                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="236"/>
                 <!-- Main content -->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- ═══════════════════════════════════════════ SIDEBAR -->
             <Border Grid.Column="0" Background="{StaticResource BrushBgSidebar}"
-                    BorderBrush="#1A1A22" BorderThickness="0,0,1,0">
+                    BorderBrush="#141821" BorderThickness="0,0,1,0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="72"/>
+                        <RowDefinition Height="76"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Logo -->
-                    <Border Grid.Row="0" Padding="20,0" BorderBrush="#1A1A22" BorderThickness="0,0,0,1">
+                    <Border Grid.Row="0" Padding="22,0" BorderBrush="#141821" BorderThickness="0,0,0,1">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border Width="5" Height="28" CornerRadius="2" Margin="0,0,10,0">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#FF6A00" Offset="0"/>
-                                        <GradientStop Color="#D7261E" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-                            <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black"
-                                       FontSize="18" Foreground="{StaticResource BrushTextPrimary}"
-                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="▲" FontSize="22" VerticalAlignment="Center"
+                                       Margin="0,0,10,2" Foreground="{StaticResource BrushAccent}">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#FFB300" BlurRadius="14" ShadowDepth="0" Opacity="0.55"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black"
+                                           FontSize="19" Foreground="{StaticResource BrushTextPrimary}"/>
+                                <TextBlock Text="CS2 · CAMPEONATOS" FontFamily="Segoe UI" FontWeight="Bold"
+                                           FontSize="8.5" Foreground="{StaticResource BrushTextMuted}"
+                                           Margin="1,1,0,0"/>
+                            </StackPanel>
                         </StackPanel>
                     </Border>
 
                     <!-- Nav items -->
-                    <ScrollViewer Grid.Row="1" Margin="0,12,0,0" VerticalScrollBarVisibility="Hidden">
-                        <ItemsControl ItemsSource="{Binding NavItems}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type vm:SidebarItem}">
-                                    <Button Command="{Binding Command}"
-                                            Style="{StaticResource SidebarNavButton}">
-                                        <Grid>
-                                            <!-- Active left bar -->
-                                            <Border Width="3" HorizontalAlignment="Left" CornerRadius="0,2,2,0"
-                                                    Margin="-12,0,0,0">
-                                                <Border.Background>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                        <GradientStop Color="#FF6A00" Offset="0"/>
-                                                        <GradientStop Color="#D7261E" Offset="1"/>
-                                                    </LinearGradientBrush>
-                                                </Border.Background>
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                <Setter Property="Visibility" Value="Visible"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                            </Border>
+                    <ScrollViewer Grid.Row="1" Margin="0,4,0,0" VerticalScrollBarVisibility="Hidden">
+                        <StackPanel>
+                            <TextBlock Text="COMPETIR" Style="{StaticResource NavSectionHeader}"/>
+                            <ItemsControl ItemsSource="{Binding NavCompete}"
+                                          ItemTemplate="{StaticResource NavItemTemplate}"/>
 
-                                            <!-- Active bg -->
-                                            <Border CornerRadius="6">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="Background" Value="Transparent"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                <Setter Property="Background" Value="{StaticResource BrushSidebarActive}"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                            </Border>
+                            <TextBlock Text="COMUNIDADE" Style="{StaticResource NavSectionHeader}"/>
+                            <ItemsControl ItemsSource="{Binding NavCommunity}"
+                                          ItemTemplate="{StaticResource NavItemTemplate}"/>
 
-                                            <!-- Icon + label -->
-                                            <StackPanel Orientation="Horizontal" Margin="12,0">
-                                                <TextBlock Text="{Binding Icon}"
-                                                           FontFamily="Segoe MDL2 Assets" FontSize="16"
-                                                           VerticalAlignment="Center" Margin="0,0,12,0">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Setter Property="Foreground" Value="{StaticResource BrushTextSecondary}"/>
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                    <Setter Property="Foreground" Value="{StaticResource BrushOrangeHot}"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                                <TextBlock Text="{Binding Label}" VerticalAlignment="Center"
-                                                           FontFamily="Segoe UI" FontSize="12" FontWeight="SemiBold">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Setter Property="Foreground" Value="{StaticResource BrushTextSecondary}"/>
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                    <Setter Property="Foreground" Value="{StaticResource BrushTextPrimary}"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Grid>
-                                    </Button>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                            <TextBlock Text="VOCÊ" Style="{StaticResource NavSectionHeader}"/>
+                            <ItemsControl ItemsSource="{Binding NavYou}"
+                                          ItemTemplate="{StaticResource NavItemTemplate}"/>
+                        </StackPanel>
                     </ScrollViewer>
 
-                    <!-- User card at bottom -->
-                    <Border Grid.Row="2" Margin="12,0,12,16" CornerRadius="8"
-                            Background="#1A1A22" BorderBrush="#22222A" BorderThickness="1" Padding="12">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                    <!-- User card at bottom (clicável → perfil) -->
+                    <StackPanel Grid.Row="2">
+                        <Button Command="{Binding OpenProfileCommand}" Cursor="Hand"
+                                Margin="12,0,12,6" Padding="0" Background="Transparent">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Root" CornerRadius="8" Padding="12"
+                                            Background="#141821" BorderBrush="#1E232E" BorderThickness="1">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Root" Property="Background" Value="#181D26"/>
+                                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <!-- Avatar placeholder -->
-                            <Border Width="36" Height="36" CornerRadius="18" Margin="0,0,10,0"
-                                    VerticalAlignment="Center">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#FF6A00" Offset="0"/>
-                                        <GradientStop Color="#D7261E" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <TextBlock Text="{Binding UserNickname[0]}"
-                                           FontFamily="Segoe UI" FontWeight="Black" FontSize="15"
-                                           Foreground="White" HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-                            </Border>
+                                <!-- Avatar: foto Steam se existir, senão inicial -->
+                                <Grid Width="38" Height="38" Margin="0,0,10,0" VerticalAlignment="Center">
+                                    <Border CornerRadius="19" Background="{StaticResource BrushGradientBrandD}">
+                                        <TextBlock Text="{Binding UserNickname[0]}"
+                                                   FontFamily="Segoe UI" FontWeight="Black" FontSize="15"
+                                                   Foreground="#0A0C10" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <Ellipse>
+                                        <Ellipse.Style>
+                                            <Style TargetType="Ellipse">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasAvatar}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Ellipse.Style>
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding UserAvatarUrl}" Stretch="UniformToFill"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </Grid>
 
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding UserNickname}" FontFamily="Segoe UI"
-                                           FontWeight="Bold" FontSize="13"
-                                           Foreground="{StaticResource BrushTextPrimary}"
-                                           TextTrimming="CharacterEllipsis"/>
-                                <TextBlock Text="{Binding UserRank}" FontFamily="Segoe UI"
-                                           FontSize="10" Foreground="{StaticResource BrushTextMuted}"
-                                           TextTrimming="CharacterEllipsis"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding UserNickname}" FontFamily="Segoe UI"
+                                               FontWeight="Bold" FontSize="13"
+                                               Foreground="{StaticResource BrushTextPrimary}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding UserRank}" FontFamily="Segoe UI"
+                                               FontSize="10" Foreground="{StaticResource BrushTextMuted}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="2" Text="&#xE76C;" FontFamily="Segoe MDL2 Assets"
+                                           FontSize="10" VerticalAlignment="Center"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+                            </Grid>
+                        </Button>
+                        <TextBlock Text="SUMMIT ALPHA · v0.2" FontFamily="Segoe UI" FontSize="9"
+                                   Foreground="#3A4252" HorizontalAlignment="Center" Margin="0,2,0,12"/>
+                    </StackPanel>
                 </Grid>
             </Border>
 
             <!-- ═══════════════════════════════════════════ CONTENT AREA -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="48"/>
+                    <RowDefinition Height="52"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <!-- Topbar -->
                 <Border Grid.Row="0" Background="{StaticResource BrushBgSidebar}"
-                        BorderBrush="#1A1A22" BorderThickness="0,0,0,1"
+                        BorderBrush="#141821" BorderThickness="0,0,0,1"
                         MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-                    <Grid Margin="24,0">
-                        <TextBlock Text="{Binding PageTitle}" VerticalAlignment="Center"
-                                   FontFamily="Segoe UI" FontWeight="Black" FontSize="13"
-                                   Foreground="{StaticResource BrushTextSecondary}"
-/>
+                    <Grid Margin="24,0,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="6" Height="6" CornerRadius="3" Margin="0,1,10,0"
+                                    Background="{StaticResource BrushAccent}"/>
+                            <TextBlock Text="{Binding PageTitle}" VerticalAlignment="Center"
+                                       FontFamily="Segoe UI" FontWeight="Black" FontSize="13"
+                                       Foreground="{StaticResource BrushTextPrimary}"/>
+                        </StackPanel>
 
                         <!-- Window controls -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                                     VerticalAlignment="Center">
                             <Button Style="{StaticResource TitleBarButton}" Command="{Binding MinimizeCommand}">
-                                <TextBlock Text="—" FontSize="12" Foreground="#9999AA"/>
+                                <TextBlock Text="&#xE921;" FontFamily="Segoe MDL2 Assets"
+                                           FontSize="10" Foreground="#9AA5B5"/>
                             </Button>
                             <Button Style="{StaticResource TitleBarButton}" Command="{Binding MaximizeCommand}">
                                 <TextBlock Text="&#xE922;" FontFamily="Segoe MDL2 Assets"
-                                           FontSize="10" Foreground="#9999AA"/>
+                                           FontSize="10" Foreground="#9AA5B5"/>
                             </Button>
                             <Button Style="{StaticResource TitleBarButtonClose}" Command="{Binding CloseCommand}">
-                                <TextBlock Text="✕" FontSize="11"/>
+                                <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10"/>
                             </Button>
                         </StackPanel>
                     </Grid>

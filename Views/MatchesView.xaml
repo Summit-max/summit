@@ -35,17 +35,17 @@
 
             <TextBlock Grid.Row="0" Text="PARTIDAS" FontFamily="Segoe UI" FontWeight="Black"
                        FontSize="32" Foreground="{StaticResource BrushTextPrimary}"/>
-            <TextBlock Grid.Row="2" FontFamily="Segoe UI" FontSize="13" Foreground="#9999AA">
+            <TextBlock Grid.Row="2" FontFamily="Segoe UI" FontSize="13" Foreground="#9AA5B5">
                 <Run Text="{Binding TotalCount, Mode=OneWay}"/><Run Text=" partidas jogadas — clique numa para ver o scoreboard"/>
             </TextBlock>
 
             <!-- MATCH LIST -->
-            <Border Grid.Row="4" CornerRadius="10" Background="#13131A"
-                    BorderBrush="#22222A" BorderThickness="1">
+            <Border Grid.Row="4" CornerRadius="10" Background="#12151B"
+                    BorderBrush="#1E232E" BorderThickness="1">
                 <ItemsControl ItemsSource="{Binding Items}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="#1C1C24" BorderThickness="0,0,0,1" Cursor="Hand">
+                            <Border BorderBrush="#1D222C" BorderThickness="0,0,0,1" Cursor="Hand">
                                 <Border.InputBindings>
                                     <MouseBinding MouseAction="LeftClick"
                                                   Command="{Binding DataContext.OpenMatchCommand,
@@ -56,7 +56,7 @@
                                     <Style TargetType="Border">
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#17171F"/>
+                                                <Setter Property="Background" Value="#171B22"/>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -104,7 +104,7 @@
 
                                     <TextBlock Grid.Column="2" Text="{Binding Map}"
                                                FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13"
-                                               Foreground="#9999AA" VerticalAlignment="Center"/>
+                                               Foreground="#9AA5B5" VerticalAlignment="Center"/>
 
                                     <TextBlock Grid.Column="3" Text="{Binding Score}"
                                                FontFamily="Segoe UI" FontWeight="Black" FontSize="18"
@@ -112,17 +112,17 @@
 
                                     <StackPanel Grid.Column="4" VerticalAlignment="Center">
                                         <TextBlock FontFamily="Segoe UI" FontSize="13">
-                                            <Run Text="{Binding TeamATag, Mode=OneWay}" FontWeight="Bold" Foreground="#F5F5F5"/>
-                                            <Run Text=" vs " Foreground="#44444E"/>
-                                            <Run Text="{Binding TeamBTag, Mode=OneWay}" FontWeight="Bold" Foreground="#F5F5F5"/>
+                                            <Run Text="{Binding TeamATag, Mode=OneWay}" FontWeight="Bold" Foreground="#F2F5FA"/>
+                                            <Run Text=" vs " Foreground="#434D5F"/>
+                                            <Run Text="{Binding TeamBTag, Mode=OneWay}" FontWeight="Bold" Foreground="#F2F5FA"/>
                                         </TextBlock>
                                         <TextBlock Text="{Binding TournamentName}" FontFamily="Segoe UI"
-                                                   FontSize="10" Foreground="#FF6A00" Margin="0,3,0,0"/>
+                                                   FontSize="10" Foreground="#FFB300" Margin="0,3,0,0"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="5" VerticalAlignment="Center" Margin="0,0,16,0">
                                         <TextBlock Text="K/D/A" FontFamily="Segoe UI" FontWeight="Black"
-                                                   FontSize="9" Foreground="#55555F" HorizontalAlignment="Right"/>
+                                                   FontSize="9" Foreground="#5A6577" HorizontalAlignment="Right"/>
                                         <TextBlock Text="{Binding KDA}" FontFamily="Segoe UI" FontWeight="Black"
                                                    FontSize="13" Foreground="{StaticResource BrushTextPrimary}"
                                                    HorizontalAlignment="Right" Margin="0,3,0,0"/>
@@ -130,18 +130,18 @@
 
                                     <StackPanel Grid.Column="6" VerticalAlignment="Center">
                                         <TextBlock Text="ADR" FontFamily="Segoe UI" FontWeight="Black"
-                                                   FontSize="9" Foreground="#55555F" HorizontalAlignment="Right"/>
+                                                   FontSize="9" Foreground="#5A6577" HorizontalAlignment="Right"/>
                                         <TextBlock Text="{Binding AdrLabel}" FontFamily="Segoe UI" FontWeight="Black"
                                                    FontSize="13" Foreground="{StaticResource BrushTextPrimary}"
                                                    HorizontalAlignment="Right" Margin="0,3,0,0"/>
                                     </StackPanel>
 
                                     <TextBlock Grid.Column="7" Text="{Binding DateLabel}"
-                                               FontFamily="Segoe UI" FontSize="11" Foreground="#55555F"
+                                               FontFamily="Segoe UI" FontSize="11" Foreground="#5A6577"
                                                HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
                                     <TextBlock Grid.Column="8" Text="&#xE76C;" FontFamily="Segoe MDL2 Assets"
-                                               FontSize="12" Foreground="#44444E" VerticalAlignment="Center"
+                                               FontSize="12" Foreground="#434D5F" VerticalAlignment="Center"
                                                Margin="16,0,0,0"/>
                                 </Grid>
                             </Border>

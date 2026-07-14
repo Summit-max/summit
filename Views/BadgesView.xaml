@@ -39,7 +39,7 @@
             <TextBlock Grid.Row="0" Text="BADGES &amp; CONQUISTAS" FontFamily="Segoe UI" FontWeight="Black"
                        FontSize="34" Foreground="{StaticResource BrushTextPrimary}"/>
 
-            <TextBlock Grid.Row="2" FontFamily="Segoe UI" FontSize="13" Foreground="#9999AA">
+            <TextBlock Grid.Row="2" FontFamily="Segoe UI" FontSize="13" Foreground="#9AA5B5">
                 <Run Text="{Binding UnlockedCount, Mode=OneWay}"/>
                 <Run Text=" de "/>
                 <Run Text="{Binding TotalCount, Mode=OneWay}"/>
@@ -59,15 +59,15 @@
                                 Cursor="Hand">
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="Background" Value="#1E1E23"/>
-                                    <Setter Property="BorderBrush" Value="#2A2A35"/>
+                                    <Setter Property="Background" Value="#171B22"/>
+                                    <Setter Property="BorderBrush" Value="#262C39"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
-                                            <Setter Property="BorderBrush" Value="#FF6A0060"/>
+                                            <Setter Property="BorderBrush" Value="#60FFB300"/>
                                         </DataTrigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#272730"/>
+                                            <Setter Property="Background" Value="#262C39"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -91,7 +91,7 @@
                                         HorizontalAlignment="Left">
                                     <Border.Style>
                                         <Style TargetType="Border">
-                                            <Setter Property="Background" Value="#2A2A35"/>
+                                            <Setter Property="Background" Value="#262C39"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
                                                     <Setter Property="Background">
@@ -111,10 +111,10 @@
                                                VerticalAlignment="Center">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="#44444E"/>
+                                                <Setter Property="Foreground" Value="#434D5F"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
-                                                        <Setter Property="Foreground" Value="#FF6A00"/>
+                                                        <Setter Property="Foreground" Value="#FFB300"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -127,7 +127,7 @@
                                            FontWeight="Black" FontSize="14">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="#44444E"/>
+                                            <Setter Property="Foreground" Value="#434D5F"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
                                                     <Setter Property="Foreground" Value="{StaticResource BrushTextPrimary}"/>
@@ -142,10 +142,10 @@
                                            FontWeight="Bold" FontSize="10">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="#2A2A35"/>
+                                            <Setter Property="Foreground" Value="#262C39"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Rarity}" Value="Common">
-                                                    <Setter Property="Foreground" Value="#9999AA"/>
+                                                    <Setter Property="Foreground" Value="#9AA5B5"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Rarity}" Value="Uncommon">
                                                     <Setter Property="Foreground" Value="#22C55E"/>
@@ -169,10 +169,10 @@
                                            FontSize="11" TextWrapping="Wrap">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="#2A2A35"/>
+                                            <Setter Property="Foreground" Value="#262C39"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
-                                                    <Setter Property="Foreground" Value="#55555F"/>
+                                                    <Setter Property="Foreground" Value="#5A6577"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>

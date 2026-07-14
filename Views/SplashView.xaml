@@ -12,9 +12,9 @@
             <Rectangle>
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#0E0E10" Offset="0"/>
+                        <GradientStop Color="#0A0C10" Offset="0"/>
                         <GradientStop Color="#180A04" Offset="0.5"/>
-                        <GradientStop Color="#0E0E10" Offset="1"/>
+                        <GradientStop Color="#0A0C10" Offset="1"/>
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
@@ -23,8 +23,8 @@
             <Ellipse Width="500" Height="500" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Ellipse.Fill>
                     <RadialGradientBrush>
-                        <GradientStop Color="#14FF4D00" Offset="0"/>
-                        <GradientStop Color="#00FF4D00" Offset="1"/>
+                        <GradientStop Color="#14FF9500" Offset="0"/>
+                        <GradientStop Color="#00FF9500" Offset="1"/>
                     </RadialGradientBrush>
                 </Ellipse.Fill>
             </Ellipse>
@@ -67,24 +67,19 @@
                     </StackPanel.RenderTransform>
                     <StackPanel.RenderTransformOrigin>0.5,0.5</StackPanel.RenderTransformOrigin>
 
-                    <Border Width="6" Height="52" CornerRadius="3" Margin="0,0,14,0">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                        <Border.Effect>
-                            <DropShadowEffect Color="#FF6A00" BlurRadius="20" ShadowDepth="0" Opacity="0.7"/>
-                        </Border.Effect>
-                    </Border>
+                    <TextBlock Text="▲" FontSize="44" VerticalAlignment="Center" Margin="0,0,16,4"
+                               Foreground="{StaticResource BrushAccent}">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#FFB300" BlurRadius="24" ShadowDepth="0" Opacity="0.7"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
                     <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
-                               Foreground="#F5F5F5" VerticalAlignment="Center"/>
+                               Foreground="#F2F5FA" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Tagline -->
                 <TextBlock Text="A ARENA DOS MELHORES" FontFamily="Segoe UI" FontWeight="SemiBold"
-                           FontSize="11" Foreground="#55555F" HorizontalAlignment="Center"
+                           FontSize="11" Foreground="#5A6577" HorizontalAlignment="Center"
                            Margin="0,10,0,36" x:Name="Tagline" Opacity="0">
                     <TextBlock.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
@@ -100,7 +95,7 @@
                 </TextBlock>
 
                 <!-- Loading bar container -->
-                <Border Width="220" Height="2" CornerRadius="1" Background="#1E1E25"
+                <Border Width="220" Height="2" CornerRadius="1" Background="#181D26"
                         x:Name="BarContainer" Opacity="0">
                     <Border.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
@@ -117,8 +112,8 @@
                             Width="0" Height="2">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FFB300" Offset="0"/>
+                                <GradientStop Color="#FF7A00" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                         <Border.Triggers>
@@ -140,8 +135,8 @@
                 </Border>
 
                 <!-- Version -->
-                <TextBlock Text="v0.1.0 MVP" FontFamily="Consolas" FontSize="9"
-                           Foreground="#2A2A35" HorizontalAlignment="Center" Margin="0,12,0,0"/>
+                <TextBlock Text="SUMMIT ALPHA · v0.2" FontFamily="Consolas" FontSize="9"
+                           Foreground="#262C39" HorizontalAlignment="Center" Margin="0,12,0,0"/>
             </StackPanel>
         </Grid>
     </Border>

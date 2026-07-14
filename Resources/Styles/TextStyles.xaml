@@ -49,7 +49,7 @@
         <Setter Property="FontFamily" Value="{StaticResource FontPrimary}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeXS}"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{StaticResource BrushOrangeHot}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushAccent}"/>
     </Style>
 
     <!-- Big stat number -->
@@ -72,7 +72,7 @@
         <Setter Property="FontFamily" Value="{StaticResource FontPrimary}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeMD}"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{StaticResource BrushOrangeHot}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushAccent}"/>
     </Style>
 
     <!-- Icon glyph style -->
@@ -84,7 +84,7 @@
     </Style>
 
     <Style x:Key="TextIconAccent" TargetType="TextBlock" BasedOn="{StaticResource TextIcon}">
-        <Setter Property="Foreground" Value="{StaticResource BrushOrangeHot}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushAccent}"/>
     </Style>
 
 </ResourceDictionary>

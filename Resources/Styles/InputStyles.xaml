@@ -8,8 +8,8 @@
     <Style x:Key="DarkTextBox" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource BrushBgInput}"/>
         <Setter Property="Foreground" Value="{StaticResource BrushTextPrimary}"/>
-        <Setter Property="CaretBrush" Value="{StaticResource BrushOrangeHot}"/>
-        <Setter Property="SelectionBrush" Value="{StaticResource BrushOrangeHot}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource BrushAccent}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource BrushAccent}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSubtle}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontFamily" Value="{StaticResource FontPrimary}"/>
@@ -27,7 +27,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrushOrangeHot}"/>
+                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Root" Property="BorderBrush" Value="#44444E"/>

@@ -43,7 +43,7 @@
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="#2A1008" Offset="0"/>
-                    <GradientStop Color="#17171A" Offset="1"/>
+                    <GradientStop Color="#12151B" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
@@ -51,8 +51,8 @@
                          VerticalAlignment="Center" Margin="0,0,-160,0">
                     <Ellipse.Fill>
                         <RadialGradientBrush>
-                            <GradientStop Color="#30FF4D00" Offset="0"/>
-                            <GradientStop Color="#00FF4D00" Offset="1"/>
+                            <GradientStop Color="#30FF9500" Offset="0"/>
+                            <GradientStop Color="#00FF9500" Offset="1"/>
                         </RadialGradientBrush>
                     </Ellipse.Fill>
                 </Ellipse>
@@ -70,10 +70,10 @@
                                    Foreground="{StaticResource BrushTextPrimary}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
                             <TextBlock Text="{Binding UserRank}" FontFamily="Segoe UI"
-                                       FontWeight="Bold" FontSize="13" Foreground="#FF6A00"/>
-                            <Rectangle Width="1" Height="12" Fill="#33333A" Margin="12,0"/>
+                                       FontWeight="Bold" FontSize="13" Foreground="#FFB300"/>
+                            <Rectangle Width="1" Height="12" Fill="#2E3543" Margin="12,0"/>
                             <TextBlock Text="{Binding TeamName}" FontFamily="Segoe UI"
-                                       FontSize="13" Foreground="#9999AA"/>
+                                       FontSize="13" Foreground="#9AA5B5"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -88,12 +88,12 @@
                                 <Border CornerRadius="8" x:Name="B">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#FF6A00" Offset="0"/>
-                                            <GradientStop Color="#D7261E" Offset="1"/>
+                                            <GradientStop Color="#FFB300" Offset="0"/>
+                                            <GradientStop Color="#FF7A00" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                     <Border.Effect>
-                                        <DropShadowEffect Color="#FF4D00" BlurRadius="22"
+                                        <DropShadowEffect Color="#FF9500" BlurRadius="22"
                                                           ShadowDepth="0" Opacity="0.55"/>
                                     </Border.Effect>
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -119,8 +119,8 @@
         </Border>
 
         <!-- STATS STRIP (inline, sem cards individuais) -->
-        <Border Grid.Row="2" CornerRadius="10" Padding="0" Background="#13131A"
-                BorderBrush="#22222A" BorderThickness="1">
+        <Border Grid.Row="2" CornerRadius="10" Padding="0" Background="#12151B"
+                BorderBrush="#1E232E" BorderThickness="1">
             <Grid Height="78">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -134,40 +134,40 @@
 
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="WINRATE" FontFamily="Segoe UI" FontWeight="Bold"
-                               FontSize="10" Foreground="#55555F" HorizontalAlignment="Center"
+                               FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"
                                Margin="0,0,0,6"/>
                     <TextBlock Text="{Binding WinRateText}" FontFamily="Segoe UI" FontWeight="Black"
                                FontSize="26" Foreground="{StaticResource BrushTextPrimary}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
-                <Rectangle Grid.Column="1" Fill="#22222A"/>
+                <Rectangle Grid.Column="1" Fill="#1E232E"/>
 
                 <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="K/D" FontFamily="Segoe UI" FontWeight="Bold"
-                               FontSize="10" Foreground="#55555F" HorizontalAlignment="Center"
+                               FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"
                                Margin="0,0,0,6"/>
                     <TextBlock Text="{Binding KDText}" FontFamily="Segoe UI" FontWeight="Black"
                                FontSize="26" Foreground="{StaticResource BrushTextPrimary}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
-                <Rectangle Grid.Column="3" Fill="#22222A"/>
+                <Rectangle Grid.Column="3" Fill="#1E232E"/>
 
                 <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="HEADSHOT" FontFamily="Segoe UI" FontWeight="Bold"
-                               FontSize="10" Foreground="#55555F" HorizontalAlignment="Center"
+                               FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"
                                Margin="0,0,0,6"/>
                     <TextBlock Text="{Binding HSText}" FontFamily="Segoe UI" FontWeight="Black"
                                FontSize="26" Foreground="{StaticResource BrushTextPrimary}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
-                <Rectangle Grid.Column="5" Fill="#22222A"/>
+                <Rectangle Grid.Column="5" Fill="#1E232E"/>
 
                 <StackPanel Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="TIME" FontFamily="Segoe UI" FontWeight="Bold"
-                               FontSize="10" Foreground="#55555F" HorizontalAlignment="Center"
+                               FontSize="10" Foreground="#5A6577" HorizontalAlignment="Center"
                                Margin="0,0,0,6"/>
                     <TextBlock Text="{Binding TeamName}" FontFamily="Segoe UI" FontWeight="Black"
-                               FontSize="16" Foreground="#FF6A00"
+                               FontSize="16" Foreground="#FFB300"
                                HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"
                                Margin="0,4,0,0"/>
                 </StackPanel>
@@ -191,8 +191,8 @@
                     <Border Width="3" Height="18" CornerRadius="2" Margin="0,0,12,0">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FFB300" Offset="0"/>
+                                <GradientStop Color="#FF7A00" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                     </Border>
@@ -201,7 +201,7 @@
                                VerticalAlignment="Center"/>
                 </StackPanel>
                 <TextBlock Grid.Column="1" Text="VER TODOS" FontFamily="Segoe UI"
-                           FontWeight="Bold" FontSize="11" Foreground="#FF6A00"
+                           FontWeight="Bold" FontSize="11" Foreground="#FFB300"
                            VerticalAlignment="Center" Cursor="Hand"/>
             </Grid>
 
@@ -209,14 +209,14 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,0,8" Padding="20,16" CornerRadius="8"
-                                Background="#13131A" BorderBrush="#22222A" BorderThickness="1"
+                                Background="#12151B" BorderBrush="#1E232E" BorderThickness="1"
                                 Cursor="Hand">
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="BorderBrush" Value="#FF6A0060"/>
-                                            <Setter Property="Background" Value="#17171F"/>
+                                            <Setter Property="BorderBrush" Value="#60FFB300"/>
+                                            <Setter Property="Background" Value="#171B22"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -233,8 +233,8 @@
                                         Margin="0,0,18,0">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#FF6A00" Offset="0"/>
-                                            <GradientStop Color="#D7261E" Offset="1"/>
+                                            <GradientStop Color="#FFB300" Offset="0"/>
+                                            <GradientStop Color="#FF7A00" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                 </Border>
@@ -245,9 +245,9 @@
                                                Foreground="{StaticResource BrushTextPrimary}"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                         <TextBlock Text="{Binding StatusLabel}" FontFamily="Segoe UI"
-                                                   FontWeight="Bold" FontSize="10" Foreground="#FF6A00"/>
-                                        <Rectangle Width="1" Height="10" Fill="#33333A" Margin="10,0"/>
-                                        <TextBlock FontFamily="Segoe UI" FontSize="11" Foreground="#9999AA">
+                                                   FontWeight="Bold" FontSize="10" Foreground="#FFB300"/>
+                                        <Rectangle Width="1" Height="10" Fill="#2E3543" Margin="10,0"/>
+                                        <TextBlock FontFamily="Segoe UI" FontSize="11" Foreground="#9AA5B5">
                                             <Run Text="{Binding SlotsRemaining, Mode=OneWay}"/>
                                             <Run Text="/"/>
                                             <Run Text="{Binding MaxTeams, Mode=OneWay}"/>
@@ -259,16 +259,16 @@
                                 <StackPanel Grid.Column="2" VerticalAlignment="Center"
                                             Margin="0,0,24,0">
                                     <TextBlock Text="PREMIAÇÃO" FontFamily="Segoe UI" FontWeight="Bold"
-                                               FontSize="9" Foreground="#55555F"
+                                               FontSize="9" Foreground="#5A6577"
                                                HorizontalAlignment="Right"/>
                                     <TextBlock Text="{Binding Prize}" FontFamily="Segoe UI"
-                                               FontWeight="Black" FontSize="16" Foreground="#FF6A00"
+                                               FontWeight="Black" FontSize="16" Foreground="#FFB300"
                                                HorizontalAlignment="Right" Margin="0,2,0,0"/>
                                 </StackPanel>
 
                                 <TextBlock Grid.Column="3" Text="&#xE76C;"
                                            FontFamily="Segoe MDL2 Assets" FontSize="14"
-                                           Foreground="#55555F" VerticalAlignment="Center"/>
+                                           Foreground="#5A6577" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -288,8 +288,8 @@
                 <Border Width="3" Height="18" CornerRadius="2" Margin="0,0,12,0">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#FF6A00" Offset="0"/>
-                            <GradientStop Color="#D7261E" Offset="1"/>
+                            <GradientStop Color="#FFB300" Offset="0"/>
+                            <GradientStop Color="#FF7A00" Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
                 </Border>
@@ -298,17 +298,17 @@
                            VerticalAlignment="Center"/>
             </StackPanel>
 
-            <Border Grid.Row="2" CornerRadius="8" Background="#13131A"
-                    BorderBrush="#22222A" BorderThickness="1">
+            <Border Grid.Row="2" CornerRadius="8" Background="#12151B"
+                    BorderBrush="#1E232E" BorderThickness="1">
                 <ItemsControl ItemsSource="{Binding RecentMatches}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="#1C1C24" BorderThickness="0,0,0,1" Cursor="Hand">
+                            <Border BorderBrush="#1D222C" BorderThickness="0,0,0,1" Cursor="Hand">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#17171F"/>
+                                                <Setter Property="Background" Value="#171B22"/>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -355,7 +355,7 @@
 
                                     <TextBlock Grid.Column="2" Text="{Binding Map}"
                                                FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13"
-                                               Foreground="#9999AA" VerticalAlignment="Center"/>
+                                               Foreground="#9AA5B5" VerticalAlignment="Center"/>
 
                                     <StackPanel Grid.Column="3" Orientation="Horizontal"
                                                 VerticalAlignment="Center">
@@ -364,7 +364,7 @@
                                                    Foreground="{StaticResource BrushTextPrimary}"
                                                    VerticalAlignment="Center"/>
                                         <TextBlock Text=" vs " FontFamily="Segoe UI" FontSize="11"
-                                                   Foreground="#44444E" VerticalAlignment="Center"/>
+                                                   Foreground="#434D5F" VerticalAlignment="Center"/>
                                         <TextBlock Text="{Binding TeamBTag}" FontFamily="Segoe UI"
                                                    FontWeight="Bold" FontSize="13"
                                                    Foreground="{StaticResource BrushTextPrimary}"
@@ -379,15 +379,15 @@
                                     <StackPanel Grid.Column="5" VerticalAlignment="Center"
                                                 HorizontalAlignment="Right">
                                         <TextBlock Text="K/D" FontFamily="Segoe UI" FontWeight="Bold"
-                                                   FontSize="9" Foreground="#55555F"
+                                                   FontSize="9" Foreground="#5A6577"
                                                    HorizontalAlignment="Right"/>
                                         <TextBlock FontFamily="Segoe UI" FontWeight="Black"
                                                    FontSize="13" HorizontalAlignment="Right"
                                                    Foreground="{StaticResource BrushTextPrimary}"
                                                    Margin="0,2,0,0">
                                             <Run Text="{Binding Kills, Mode=OneWay}"/>
-                                            <Run Text="/" Foreground="#44444E"/>
-                                            <Run Text="{Binding Deaths, Mode=OneWay}" Foreground="#9999AA"/>
+                                            <Run Text="/" Foreground="#434D5F"/>
+                                            <Run Text="{Binding Deaths, Mode=OneWay}" Foreground="#9AA5B5"/>
                                         </TextBlock>
                                     </StackPanel>
                                 </Grid>

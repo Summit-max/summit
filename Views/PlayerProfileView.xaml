@@ -44,9 +44,9 @@
                     <ControlTemplate TargetType="Button">
                         <StackPanel Orientation="Horizontal" Background="Transparent">
                             <TextBlock Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="12"
-                                       Foreground="#9999AA" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                       Foreground="#9AA5B5" Margin="0,0,6,0" VerticalAlignment="Center"/>
                             <TextBlock Text="VOLTAR" FontFamily="Segoe UI" FontWeight="Bold"
-                                       FontSize="10" Foreground="#9999AA" VerticalAlignment="Center"/>
+                                       FontSize="10" Foreground="#9AA5B5" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ControlTemplate>
                 </Button.Template>
@@ -54,12 +54,12 @@
 
             <!-- HEADER -->
             <Border Grid.Row="2" CornerRadius="12" Padding="28,22" ClipToBounds="True"
-                    BorderBrush="#24242E" BorderThickness="1">
+                    BorderBrush="#232937" BorderThickness="1">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                         <GradientStop Color="#1A0906" Offset="0"/>
-                        <GradientStop Color="#1A1A22" Offset="0.4"/>
-                        <GradientStop Color="#1A1A22" Offset="1"/>
+                        <GradientStop Color="#141821" Offset="0.4"/>
+                        <GradientStop Color="#141821" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
 
@@ -81,14 +81,14 @@
                                 Visibility="{Binding HasAvatar, Converter={StaticResource InverseBoolToVisibility}}">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#FF6A00" Offset="0"/>
-                                    <GradientStop Color="#D7261E" Offset="1"/>
+                                    <GradientStop Color="#FFB300" Offset="0"/>
+                                    <GradientStop Color="#FF7A00" Offset="1"/>
                                 </LinearGradientBrush>
                             </Border.Background>
                             <TextBlock Text="{Binding InitialLetter}" FontFamily="Segoe UI" FontWeight="Black"
                                        FontSize="36" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <Ellipse Stroke="#FF6A00" StrokeThickness="2" Opacity="0.6" IsHitTestVisible="False"/>
+                        <Ellipse Stroke="#FFB300" StrokeThickness="2" Opacity="0.6" IsHitTestVisible="False"/>
                     </Grid>
 
                     <!-- Info -->
@@ -98,24 +98,24 @@
                             <TextBlock Text="{Binding User.Nickname}" FontFamily="Segoe UI" FontWeight="Black"
                                        FontSize="28" Foreground="{StaticResource BrushTextPrimary}"/>
                         </StackPanel>
-                        <TextBlock FontFamily="Segoe UI" FontSize="12" Foreground="#9999AA" Margin="0,4,0,10">
-                            <Run Text="Steam ID: "/><Run Text="{Binding User.SteamId, Mode=OneWay}" FontFamily="Consolas" Foreground="#55555F"/>
+                        <TextBlock FontFamily="Segoe UI" FontSize="12" Foreground="#9AA5B5" Margin="0,4,0,10">
+                            <Run Text="Steam ID: "/><Run Text="{Binding User.SteamId, Mode=OneWay}" FontFamily="Consolas" Foreground="#5A6577"/>
                         </TextBlock>
                         <StackPanel Orientation="Horizontal">
-                            <Border CornerRadius="4" Padding="10,4" Background="#22222A"
-                                    BorderBrush="#2A2A35" BorderThickness="1" Margin="0,0,8,0">
+                            <Border CornerRadius="4" Padding="10,4" Background="#1E232E"
+                                    BorderBrush="#262C39" BorderThickness="1" Margin="0,0,8,0">
                                 <TextBlock Text="{Binding User.PrimaryRole}" FontFamily="Segoe UI" FontSize="11"
                                            Foreground="{StaticResource BrushTextPrimary}"/>
                             </Border>
-                            <Border CornerRadius="4" Padding="10,4" Background="#22222A"
-                                    BorderBrush="#2A2A35" BorderThickness="1" Margin="0,0,8,0">
+                            <Border CornerRadius="4" Padding="10,4" Background="#1E232E"
+                                    BorderBrush="#262C39" BorderThickness="1" Margin="0,0,8,0">
                                 <TextBlock Text="{Binding User.Rank}" FontFamily="Segoe UI" FontSize="11"
-                                           Foreground="#FF6A00" FontWeight="Bold"/>
+                                           Foreground="#FFB300" FontWeight="Bold"/>
                             </Border>
-                            <Border CornerRadius="4" Padding="10,4" Background="#22222A"
-                                    BorderBrush="#2A2A35" BorderThickness="1">
+                            <Border CornerRadius="4" Padding="10,4" Background="#1E232E"
+                                    BorderBrush="#262C39" BorderThickness="1">
                                 <TextBlock Text="{Binding TeamLabel}" FontFamily="Segoe UI" FontSize="11"
-                                           Foreground="#9999AA"/>
+                                           Foreground="#9AA5B5"/>
                             </Border>
                         </StackPanel>
                     </StackPanel>
@@ -149,7 +149,7 @@
                         </Button>
 
                         <Border CornerRadius="5" Padding="14,8" Background="#162D17"
-                                BorderBrush="#22C55E44" BorderThickness="1"
+                                BorderBrush="#4422C55E" BorderThickness="1"
                                 Visibility="{Binding IsAlreadyFriend, Converter={StaticResource BoolToVisibility}}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="11"
@@ -159,53 +159,53 @@
                             </StackPanel>
                         </Border>
 
-                        <Border CornerRadius="5" Padding="14,8" Background="#1E1F2A"
-                                BorderBrush="#2A2A35" BorderThickness="1"
+                        <Border CornerRadius="5" Padding="14,8" Background="#1E232E"
+                                BorderBrush="#262C39" BorderThickness="1"
                                 Visibility="{Binding HasOutgoing, Converter={StaticResource BoolToVisibility}}">
                             <TextBlock Text="PEDIDO PENDENTE" FontFamily="Segoe UI" FontWeight="Black"
                                        FontSize="11" Foreground="#FACC15"/>
                         </Border>
 
-                        <Border CornerRadius="5" Padding="14,8" Background="#1E1F2A"
-                                BorderBrush="#FF6A0060" BorderThickness="1"
+                        <Border CornerRadius="5" Padding="14,8" Background="#1E232E"
+                                BorderBrush="#60FFB300" BorderThickness="1"
                                 Visibility="{Binding HasIncoming, Converter={StaticResource BoolToVisibility}}">
                             <TextBlock Text="PEDIU PRA TE ADICIONAR" FontFamily="Segoe UI" FontWeight="Black"
-                                       FontSize="10" Foreground="#FF6A00"/>
+                                       FontSize="10" Foreground="#FFB300"/>
                         </Border>
 
                         <TextBlock Text="{Binding ActionMessage}" FontFamily="Segoe UI" FontSize="11"
-                                   Foreground="#9999AA" HorizontalAlignment="Right" Margin="0,8,0,0"/>
+                                   Foreground="#9AA5B5" HorizontalAlignment="Right" Margin="0,8,0,0"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- STATS ROW -->
-            <Border Grid.Row="4" CornerRadius="10" Background="#13131A"
-                    BorderBrush="#22222A" BorderThickness="1">
+            <Border Grid.Row="4" CornerRadius="10" Background="#12151B"
+                    BorderBrush="#1E232E" BorderThickness="1">
                 <UniformGrid Columns="6" Height="86">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="K/D" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#55555F" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Text="K/D" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
                         <TextBlock Text="{Binding User.KD, StringFormat=F2}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="WINRATE" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#55555F" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Text="WINRATE" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
                         <TextBlock Text="{Binding User.WinRate, StringFormat=P0}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="#22C55E" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="HS%" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#55555F" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Text="HS%" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
                         <TextBlock Text="{Binding User.HeadshotPercent, StringFormat=P0}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="PARTIDAS" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#55555F" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Text="PARTIDAS" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
                         <TextBlock Text="{Binding User.TotalMatches}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="ELO" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#55555F" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                        <TextBlock Text="{Binding User.Elo}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="#FF6A00" HorizontalAlignment="Center"/>
+                        <TextBlock Text="ELO" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Text="{Binding User.Elo}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="#FFB300" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="MAPA FAV" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#55555F" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                        <TextBlock Text="{Binding User.FavoriteMap}" FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Foreground="#FF6A00" HorizontalAlignment="Center"/>
+                        <TextBlock Text="MAPA FAV" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Text="{Binding User.FavoriteMap}" FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Foreground="#FFB300" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </UniformGrid>
             </Border>
@@ -213,9 +213,9 @@
             <!-- Bio -->
             <Border Grid.Row="6" Style="{StaticResource Card}">
                 <StackPanel>
-                    <TextBlock Text="BIO" FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#FF6A00" Margin="0,0,0,10"/>
+                    <TextBlock Text="BIO" FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#FFB300" Margin="0,0,0,10"/>
                     <TextBlock Text="{Binding User.Bio}" FontFamily="Segoe UI" FontSize="13"
-                               Foreground="#9999AA" TextWrapping="Wrap" LineHeight="22"/>
+                               Foreground="#9AA5B5" TextWrapping="Wrap" LineHeight="22"/>
                 </StackPanel>
             </Border>
         </Grid>

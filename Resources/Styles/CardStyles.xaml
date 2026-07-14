@@ -27,7 +27,7 @@
 
     <!-- Flat card — no shadow, lighter bg -->
     <Style x:Key="CardFlat" TargetType="Border">
-        <Setter Property="Background" Value="#1A1A1F"/>
+        <Setter Property="Background" Value="#14181F"/>
         <Setter Property="CornerRadius" Value="8"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSubtle}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -40,14 +40,14 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource BrushBgCardHover}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource BrushOrangeHot}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!-- Stat item card -->
     <Style x:Key="StatCard" TargetType="Border">
-        <Setter Property="Background" Value="#1C1C22"/>
+        <Setter Property="Background" Value="#161A22"/>
         <Setter Property="CornerRadius" Value="8"/>
         <Setter Property="Padding" Value="16,12"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSubtle}"/>

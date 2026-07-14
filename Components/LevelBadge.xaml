@@ -29,12 +29,12 @@
                   StrokeThickness="1">
                 <Path.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#1F1F26" Offset="0"/>
-                        <GradientStop Color="#121218" Offset="1"/>
+                        <GradientStop Color="#1E232E" Offset="0"/>
+                        <GradientStop Color="#0E1117" Offset="1"/>
                     </LinearGradientBrush>
                 </Path.Fill>
                 <Path.Stroke>
-                    <SolidColorBrush Color="#2A2A35"/>
+                    <SolidColorBrush Color="#262C39"/>
                 </Path.Stroke>
             </Path>
 
@@ -52,7 +52,7 @@
                        FontFamily="Segoe UI"
                        FontWeight="Black"
                        FontSize="42"
-                       Foreground="#F5F5F5"
+                       Foreground="#F2F5FA"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Margin="0,-6,0,0"
