@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using System.IO;
 using Summit.Models;
 
-namespace Summit.Data;
+namespace Summit.Api;
 
-public class SummitDbContext : DbContext
+public class ApiDbContext : DbContext
 {
+    public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { }
+
     public DbSet<User>             Users            => Set<User>();
     public DbSet<Team>             Teams            => Set<Team>();
     public DbSet<TeamInvitation>   TeamInvitations  => Set<TeamInvitation>();
@@ -19,21 +20,6 @@ public class SummitDbContext : DbContext
     public DbSet<Badge>            Badges           => Set<Badge>();
     public DbSet<UserBadge>        UserBadges       => Set<UserBadge>();
 
-    public static string DatabasePath { get; } = BuildDbPath();
-
-    private static string BuildDbPath()
-    {
-        var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        var dir = Path.Combine(appData, "Summit");
-        Directory.CreateDirectory(dir);
-        return Path.Combine(dir, "summit.db");
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        options.UseSqlite($"Data Source={DatabasePath}");
-    }
-
     protected override void OnModelCreating(ModelBuilder b)
     {
         // ───── USER ─────
@@ -44,6 +30,9 @@ public class SummitDbContext : DbContext
         user.Property(u => u.SteamId).IsRequired();
         user.Property(u => u.Nickname).HasMaxLength(128);
         user.Property(u => u.TeamRole).HasConversion<int>();
+        user.Ignore(u => u.IsCaptain);
+        user.Ignore(u => u.IsViceCaptain);
+        user.Ignore(u => u.CanInvite);
         user.HasOne(u => u.Team)
             .WithMany(t => t.Members)
             .HasForeignKey(u => u.TeamId)
@@ -55,6 +44,9 @@ public class SummitDbContext : DbContext
         team.HasIndex(t => t.Tag).IsUnique();
         team.Property(t => t.Name).HasMaxLength(128);
         team.Property(t => t.Tag).HasMaxLength(8);
+        team.Ignore(t => t.WinRate);
+        team.Ignore(t => t.AverageLevel);
+        team.Ignore(t => t.InitialLetter);
 
         // ───── TEAM INVITATION ─────
         var inv = b.Entity<TeamInvitation>();

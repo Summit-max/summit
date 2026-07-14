@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Summit.Data;
+
 using Summit.Models;
 
-namespace Summit.Services;
+namespace Summit.Api;
 
-public class SeedService
+public static class SeedData
 {
-    public async Task EnsureSeededAsync()
+    public static async Task EnsureSeededAsync(ApiDbContext db)
     {
-        using var db = new SummitDbContext();
+        
 
         bool hasUsers = await db.Users.AnyAsync();
         if (hasUsers) return;
@@ -196,7 +196,7 @@ public class SeedService
         await db.SaveChangesAsync();
     }
 
-    private static async Task SeedMatchesAsync(SummitDbContext db, DateTime now, Tournament liveTournament)
+    private static async Task SeedMatchesAsync(ApiDbContext db, DateTime now, Tournament liveTournament)
     {
         // Matches with scoreboards. Each match has 10 players (5 per side).
         var matches = new List<(string id, string map, DateTime when, string taTag, string tbTag, string taId, string tbId, int sa, int sb, int duration, string[] sideA, string[] sideB, string? bracketMatchId, string? tournamentId, string? tournamentName)>

@@ -33,10 +33,7 @@ public partial class App : Application
             args.Handled = true;
         };
 
-        EnsureDbSchema();
-
-        new SeedService().EnsureSeededAsync().GetAwaiter().GetResult();
-
+        // Todos os dados agora vêm da Summit API (ApiClient.BaseUrl).
         Navigation        = new NavigationService();
         UserService       = new UserService();
         UserRepository    = new UserRepository();
@@ -49,24 +46,5 @@ public partial class App : Application
         RankingService    = new RankingService();
 
         new SplashView().Show();
-    }
-
-    private static void EnsureDbSchema()
-    {
-        try
-        {
-            using var db = new SummitDbContext();
-            db.Database.EnsureCreated();
-            // probe a new-schema table to detect stale db
-            _ = db.Teams.FirstOrDefault();
-            _ = db.Matches.FirstOrDefault();
-            _ = db.Friendships.FirstOrDefault();
-        }
-        catch
-        {
-            using var db = new SummitDbContext();
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
-        }
     }
 }
