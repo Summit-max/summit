@@ -57,7 +57,7 @@
                             Margin="0,0,8,0" Cursor="Hand">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border x:Name="Root" CornerRadius="20" Padding="16,7"
+                                <Border x:Name="Root" CornerRadius="6" Padding="16,7"
                                         SnapsToDevicePixels="True">
                                     <Border.Style>
                                         <Style TargetType="Border">
@@ -108,12 +108,12 @@
             <ItemsControl ItemsSource="{Binding Filtered}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel/>
+                        <UniformGrid Columns="2"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Width="380" Margin="0,0,20,20" CornerRadius="12"
+                        <Border Margin="0,0,20,20" CornerRadius="12"
                                 Background="#12151B" ClipToBounds="True"
                                 Cursor="Hand" RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform><ScaleTransform/></Border.RenderTransform>

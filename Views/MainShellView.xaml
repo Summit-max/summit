@@ -88,8 +88,8 @@
         </Style>
     </Window.Resources>
 
-    <Border CornerRadius="12" ClipToBounds="True">
-        <Grid Background="{StaticResource BrushBgDark}">
+    <Border CornerRadius="12" ClipToBounds="True" Background="{StaticResource BrushBgDark}">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <!-- Sidebar -->
                 <ColumnDefinition Width="236"/>
@@ -99,6 +99,7 @@
 
             <!-- ═══════════════════════════════════════════ SIDEBAR -->
             <Border Grid.Column="0" Background="{StaticResource BrushBgSidebar}"
+                    CornerRadius="12,0,0,12"
                     BorderBrush="#141821" BorderThickness="0,0,1,0">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -223,6 +224,7 @@
 
                 <!-- Topbar -->
                 <Border Grid.Row="0" Background="{StaticResource BrushBgSidebar}"
+                        CornerRadius="0,12,0,0"
                         BorderBrush="#141821" BorderThickness="0,0,0,1"
                         MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                     <Grid Margin="24,0,0,0">
@@ -252,10 +254,8 @@
                     </Grid>
                 </Border>
 
-                <!-- Page content -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <ContentControl Content="{Binding CurrentView}" Focusable="False"/>
-                </ScrollViewer>
+                <!-- Page content (cada view tem seu próprio ScrollViewer) -->
+                <ContentControl Grid.Row="1" Content="{Binding CurrentView}" Focusable="False"/>
             </Grid>
 
         </Grid>

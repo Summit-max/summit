@@ -57,10 +57,10 @@
         <GradientStop Color="#171B22" Offset="1"/>
     </LinearGradientBrush>
 
-    <!-- Subtle gold tint for active sidebar item -->
+    <!-- Subtle tint for active sidebar item (cobre a linha inteira) -->
     <LinearGradientBrush x:Key="BrushSidebarActive" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#26FF6A00" Offset="0"/>
-        <GradientStop Color="#00FF6A00" Offset="1"/>
+        <GradientStop Color="#33FF6A00" Offset="0"/>
+        <GradientStop Color="#14FF6A00" Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Login panel gradient -->

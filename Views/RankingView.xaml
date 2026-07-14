@@ -52,7 +52,7 @@
             <Button Command="{Binding ShowPlayersCommand}" Margin="0,0,10,0" Cursor="Hand">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Root" CornerRadius="24" Padding="24,11"
+                        <Border x:Name="Root" CornerRadius="6" Padding="20,10"
                                 Background="#12151B" BorderBrush="#1E232E" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets"
@@ -106,7 +106,7 @@
             <Button Command="{Binding ShowTeamsCommand}" Cursor="Hand">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Root" CornerRadius="24" Padding="24,11"
+                        <Border x:Name="Root" CornerRadius="6" Padding="20,10"
                                 Background="#12151B" BorderBrush="#1E232E" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE902;" FontFamily="Segoe MDL2 Assets"
@@ -159,7 +159,7 @@
         </StackPanel>
 
         <!-- ═══════════════════════════════════════════ PODIUM ═══════════════════════════════════════════ -->
-        <Border Grid.Row="6" Height="360" CornerRadius="16" ClipToBounds="True">
+        <Border Grid.Row="6" Height="450" CornerRadius="16" ClipToBounds="True">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#10131C" Offset="0"/>

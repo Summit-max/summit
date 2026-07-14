@@ -20,7 +20,7 @@
         <Grid>
 
             <!-- Background -->
-            <Rectangle Fill="{StaticResource BrushGradientBg}"/>
+            <Rectangle Fill="{StaticResource BrushGradientBg}" RadiusX="14" RadiusY="14"/>
 
             <!-- Decorative brand circle glow -->
             <Ellipse Width="600" Height="600"
@@ -91,25 +91,25 @@
 
                     <!-- Feature pills -->
                     <WrapPanel Margin="22,0,0,0">
-                        <Border CornerRadius="20" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
+                        <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE7C1;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Torneios" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
                             </StackPanel>
                         </Border>
-                        <Border CornerRadius="20" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
+                        <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Times" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
                             </StackPanel>
                         </Border>
-                        <Border CornerRadius="20" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
+                        <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Stats" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
                             </StackPanel>
                         </Border>
-                        <Border CornerRadius="20" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
+                        <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Badges" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
