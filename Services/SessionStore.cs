@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text.Json;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public static class SessionStore
 {
@@ -16,7 +16,7 @@ public static class SessionStore
         get
         {
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var dir = Path.Combine(appData, "Wallbang");
+            var dir = Path.Combine(appData, "Summit");
             Directory.CreateDirectory(dir);
             return Path.Combine(dir, "session.json");
         }

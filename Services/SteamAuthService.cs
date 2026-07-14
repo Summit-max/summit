@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using Wallbang.Data;
-using Wallbang.Models;
+using Summit.Data;
+using Summit.Models;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public class SteamAuthService
 {
@@ -243,7 +243,7 @@ public class SteamAuthService
     }
 
     private const string SuccessHtml = @"<!doctype html>
-<html><head><meta charset='utf-8'><title>Wallbang</title>
+<html><head><meta charset='utf-8'><title>Summit</title>
 <style>
   body{margin:0;background:#0E0E10;color:#F5F5F5;font-family:Segoe UI,system-ui,sans-serif;
        display:flex;align-items:center;justify-content:center;height:100vh}
@@ -253,12 +253,12 @@ public class SteamAuthService
      -webkit-background-clip:text;color:transparent;font-weight:900;letter-spacing:-.5px}
   p{color:#9999AA;font-size:14px;line-height:1.5}
 </style></head><body><div class='card'>
-<h1>WALLBANG</h1>
+<h1>SUMMIT</h1>
 <p>Autenticação concluída. Você já pode voltar para o app.</p>
 </div></body></html>";
 
     private const string FailureHtml = @"<!doctype html>
-<html><head><meta charset='utf-8'><title>Wallbang</title></head>
+<html><head><meta charset='utf-8'><title>Summit</title></head>
 <body style='background:#0E0E10;color:#EF4444;font-family:Segoe UI'>
 <div style='padding:40px;text-align:center'><h1>Falha na autenticação</h1></div>
 </body></html>";

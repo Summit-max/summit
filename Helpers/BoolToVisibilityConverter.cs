@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Wallbang.Helpers;
+namespace Summit.Helpers;
 
 [ValueConversion(typeof(bool), typeof(Visibility))]
 public class BoolToVisibilityConverter : IValueConverter

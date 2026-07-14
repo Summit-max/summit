@@ -1,7 +1,7 @@
-using Wallbang.Models;
-using Wallbang.Services.Interfaces;
+using Summit.Models;
+using Summit.Services.Interfaces;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public class UserService : IUserService
 {

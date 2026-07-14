@@ -1,8 +1,8 @@
 using System.Windows;
-using Wallbang.Commands;
-using Wallbang.Views;
+using Summit.Commands;
+using Summit.Views;
 
-namespace Wallbang.ViewModels;
+namespace Summit.ViewModels;
 
 public class SettingsViewModel : BaseViewModel
 {

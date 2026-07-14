@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Wallbang.Data;
-using Wallbang.Models;
+using Summit.Data;
+using Summit.Models;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public class SeedService
 {
     public async Task EnsureSeededAsync()
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
 
         bool hasUsers = await db.Users.AnyAsync();
         if (hasUsers) return;
@@ -80,10 +80,10 @@ public class SeedService
         await db.SaveChangesAsync();
 
         // ───── TOURNAMENTS ─────
-        var t1 = new Tournament { Id="trn_cup1",   Name="Wallbang Cup #1",           Format="5v5 • Single Elimination • BO3",     Status=TournamentStatus.Open,       Prize="R$ 5.000",  MaxTeams=8,  StartDate=now.AddDays(7),   Description="Primeiro torneio oficial. Servers on-demand AWS.", Rules="BO3. Veto alternado. Regras HLTV.",      Organizer="Wallbang Staff", MapPoolCsv="Mirage, Inferno, Nuke, Ancient, Anubis, Dust2, Vertigo" };
-        var t2 = new Tournament { Id="trn_ranked", Name="Ranked Series — Season 1",  Format="5v5 • Round Robin + Playoffs",       Status=TournamentStatus.InProgress, Prize="R$ 2.000",  MaxTeams=4,  StartDate=now.AddDays(-5), EndDate=now.AddDays(10), Description="Liga semanal com pontuação acumulada.", Rules="BO1 grupos, BO3 playoffs.",    Organizer="Wallbang Staff", MapPoolCsv="Mirage, Inferno, Nuke, Ancient, Anubis" };
-        var t3 = new Tournament { Id="trn_newbie", Name="Newcomer Bowl",             Format="5v5 • Single Elimination • BO1",     Status=TournamentStatus.Open,       Prize="R$ 500",    MaxTeams=16, StartDate=now.AddDays(14),  Description="Torneio pra times novos. Nivel médio <= 25.", Rules="BO1. Nivel medio do time <=25.", Organizer="Wallbang Staff", MapPoolCsv="Mirage, Dust2, Inferno" };
-        var t4 = new Tournament { Id="trn_pro",    Name="Pro Invitational",          Format="5v5 • GSL Groups + Playoffs",        Status=TournamentStatus.Upcoming,   Prize="R$ 20.000", MaxTeams=8,  StartDate=now.AddDays(30),  Description="Por convite para os 8 melhores do ranking.", Rules="GSL duplo, playoffs BO5.",      Organizer="Wallbang Staff", MapPoolCsv="Mirage, Inferno, Nuke, Ancient, Anubis, Dust2, Vertigo" };
+        var t1 = new Tournament { Id="trn_cup1",   Name="Summit Cup #1",           Format="5v5 • Single Elimination • BO3",     Status=TournamentStatus.Open,       Prize="R$ 5.000",  MaxTeams=8,  StartDate=now.AddDays(7),   Description="Primeiro torneio oficial. Servers on-demand AWS.", Rules="BO3. Veto alternado. Regras HLTV.",      Organizer="Summit Staff", MapPoolCsv="Mirage, Inferno, Nuke, Ancient, Anubis, Dust2, Vertigo" };
+        var t2 = new Tournament { Id="trn_ranked", Name="Ranked Series — Season 1",  Format="5v5 • Round Robin + Playoffs",       Status=TournamentStatus.InProgress, Prize="R$ 2.000",  MaxTeams=4,  StartDate=now.AddDays(-5), EndDate=now.AddDays(10), Description="Liga semanal com pontuação acumulada.", Rules="BO1 grupos, BO3 playoffs.",    Organizer="Summit Staff", MapPoolCsv="Mirage, Inferno, Nuke, Ancient, Anubis" };
+        var t3 = new Tournament { Id="trn_newbie", Name="Newcomer Bowl",             Format="5v5 • Single Elimination • BO1",     Status=TournamentStatus.Open,       Prize="R$ 500",    MaxTeams=16, StartDate=now.AddDays(14),  Description="Torneio pra times novos. Nivel médio <= 25.", Rules="BO1. Nivel medio do time <=25.", Organizer="Summit Staff", MapPoolCsv="Mirage, Dust2, Inferno" };
+        var t4 = new Tournament { Id="trn_pro",    Name="Pro Invitational",          Format="5v5 • GSL Groups + Playoffs",        Status=TournamentStatus.Upcoming,   Prize="R$ 20.000", MaxTeams=8,  StartDate=now.AddDays(30),  Description="Por convite para os 8 melhores do ranking.", Rules="GSL duplo, playoffs BO5.",      Organizer="Summit Staff", MapPoolCsv="Mirage, Inferno, Nuke, Ancient, Anubis, Dust2, Vertigo" };
         await db.Tournaments.AddRangeAsync(t1, t2, t3, t4);
         await db.SaveChangesAsync();
 
@@ -144,7 +144,7 @@ public class SeedService
             new Badge { Id="bd_champion",  Name="Campeão",           Description="Venceu um campeonato oficial.",          Icon="", Rarity="Legendary" },
             new Badge { Id="bd_hunter",    Name="Headhunter",        Description="HS% acima de 50% em 30 partidas.",       Icon="", Rarity="Epic" },
             new Badge { Id="bd_loyal",     Name="Leal",              Description="1 ano no mesmo time.",                   Icon="", Rarity="Rare" },
-            new Badge { Id="bd_founder",   Name="Fundador",          Description="Conta criada na beta da Wallbang.",      Icon="", Rarity="Legendary" },
+            new Badge { Id="bd_founder",   Name="Fundador",          Description="Conta criada na beta da Summit.",      Icon="", Rarity="Legendary" },
         };
         await db.Badges.AddRangeAsync(badges);
         await db.SaveChangesAsync();
@@ -196,7 +196,7 @@ public class SeedService
         await db.SaveChangesAsync();
     }
 
-    private static async Task SeedMatchesAsync(WallbangDbContext db, DateTime now, Tournament liveTournament)
+    private static async Task SeedMatchesAsync(SummitDbContext db, DateTime now, Tournament liveTournament)
     {
         // Matches with scoreboards. Each match has 10 players (5 per side).
         var matches = new List<(string id, string map, DateTime when, string taTag, string tbTag, string taId, string tbId, int sa, int sb, int duration, string[] sideA, string[] sideB, string? bracketMatchId, string? tournamentId, string? tournamentName)>

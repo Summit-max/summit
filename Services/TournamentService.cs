@@ -1,7 +1,7 @@
-using Wallbang.Data;
-using Wallbang.Models;
+using Summit.Data;
+using Summit.Models;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public class TournamentService : Interfaces.ITournamentService
 {

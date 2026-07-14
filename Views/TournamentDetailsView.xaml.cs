@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace Wallbang.Views;
+namespace Summit.Views;
 
 public partial class TournamentDetailsView : UserControl
 {

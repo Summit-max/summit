@@ -1,7 +1,7 @@
-<Window x:Class="Wallbang.Views.SplashView"
+<Window x:Class="Summit.Views.SplashView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Wallbang" Width="520" Height="320"
+        Title="Summit" Width="520" Height="320"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent">
@@ -78,7 +78,7 @@
                             <DropShadowEffect Color="#FF6A00" BlurRadius="20" ShadowDepth="0" Opacity="0.7"/>
                         </Border.Effect>
                     </Border>
-                    <TextBlock Text="WALLBANG" FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
+                    <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
                                Foreground="#F5F5F5" VerticalAlignment="Center"/>
                 </StackPanel>
 

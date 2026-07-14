@@ -1,7 +1,7 @@
 using System.Windows;
-using Wallbang.ViewModels;
+using Summit.ViewModels;
 
-namespace Wallbang.Views;
+namespace Summit.Views;
 
 public partial class SplashView : Window
 {

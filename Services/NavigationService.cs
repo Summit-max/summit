@@ -1,6 +1,6 @@
-using Wallbang.ViewModels;
+using Summit.ViewModels;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public class NavigationService
 {

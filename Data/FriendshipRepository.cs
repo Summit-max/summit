@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Wallbang.Models;
+using Summit.Models;
 
-namespace Wallbang.Data;
+namespace Summit.Data;
 
 public class FriendshipRepository
 {
     public async Task<List<User>> GetFriendsAsync(string userId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var asRequester = db.Friendships
             .Where(f => f.RequesterId == userId && f.Status == FriendshipStatus.Accepted)
             .Select(f => f.Addressee!);
@@ -20,7 +20,7 @@ public class FriendshipRepository
 
     public async Task<List<Friendship>> GetIncomingRequestsAsync(string userId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Friendships
             .Include(f => f.Requester)
             .Where(f => f.AddresseeId == userId && f.Status == FriendshipStatus.Pending)
@@ -30,7 +30,7 @@ public class FriendshipRepository
 
     public async Task<List<Friendship>> GetOutgoingRequestsAsync(string userId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Friendships
             .Include(f => f.Addressee)
             .Where(f => f.RequesterId == userId && f.Status == FriendshipStatus.Pending)
@@ -43,7 +43,7 @@ public class FriendshipRepository
     public async Task<RelationStatus> GetRelationAsync(string viewerId, string otherId)
     {
         if (viewerId == otherId) return RelationStatus.None;
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var f = await db.Friendships.FirstOrDefaultAsync(x =>
             (x.RequesterId == viewerId && x.AddresseeId == otherId) ||
             (x.RequesterId == otherId && x.AddresseeId == viewerId));
@@ -57,7 +57,7 @@ public class FriendshipRepository
     public async Task<bool> SendRequestAsync(string requesterId, string addresseeId)
     {
         if (requesterId == addresseeId) return false;
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var existing = await db.Friendships.FirstOrDefaultAsync(x =>
             (x.RequesterId == requesterId && x.AddresseeId == addresseeId) ||
             (x.RequesterId == addresseeId && x.AddresseeId == requesterId));
@@ -77,7 +77,7 @@ public class FriendshipRepository
 
     public async Task<bool> AcceptRequestAsync(string friendshipId, string acceptorId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var f = await db.Friendships.FirstOrDefaultAsync(x => x.Id == friendshipId);
         if (f == null || f.AddresseeId != acceptorId || f.Status != FriendshipStatus.Pending) return false;
         f.Status = FriendshipStatus.Accepted;
@@ -88,7 +88,7 @@ public class FriendshipRepository
 
     public async Task<bool> DeclineRequestAsync(string friendshipId, string declinerId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var f = await db.Friendships.FirstOrDefaultAsync(x => x.Id == friendshipId);
         if (f == null || f.AddresseeId != declinerId || f.Status != FriendshipStatus.Pending) return false;
         f.Status = FriendshipStatus.Declined;
@@ -99,7 +99,7 @@ public class FriendshipRepository
 
     public async Task<bool> RemoveFriendAsync(string userAId, string userBId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var f = await db.Friendships.FirstOrDefaultAsync(x =>
             (x.RequesterId == userAId && x.AddresseeId == userBId) ||
             (x.RequesterId == userBId && x.AddresseeId == userAId));

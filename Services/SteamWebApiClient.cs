@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Text.Json;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public class SteamPlayerSummary
 {

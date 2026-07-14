@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using System.IO;
-using Wallbang.Models;
+using Summit.Models;
 
-namespace Wallbang.Data;
+namespace Summit.Data;
 
-public class WallbangDbContext : DbContext
+public class SummitDbContext : DbContext
 {
     public DbSet<User>             Users            => Set<User>();
     public DbSet<Team>             Teams            => Set<Team>();
@@ -24,9 +24,9 @@ public class WallbangDbContext : DbContext
     private static string BuildDbPath()
     {
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        var dir = Path.Combine(appData, "Wallbang");
+        var dir = Path.Combine(appData, "Summit");
         Directory.CreateDirectory(dir);
-        return Path.Combine(dir, "wallbang.db");
+        return Path.Combine(dir, "summit.db");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)

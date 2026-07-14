@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Wallbang.Components;
+namespace Summit.Components;
 
 public partial class LevelBadge : UserControl
 {

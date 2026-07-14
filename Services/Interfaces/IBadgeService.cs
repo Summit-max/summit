@@ -1,6 +1,6 @@
-using Wallbang.Models;
+using Summit.Models;
 
-namespace Wallbang.Services.Interfaces;
+namespace Summit.Services.Interfaces;
 
 public interface IBadgeService
 {

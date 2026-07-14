@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace Wallbang.Commands;
+namespace Summit.Commands;
 
 public class RelayCommand : ICommand
 {

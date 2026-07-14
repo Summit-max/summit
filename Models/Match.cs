@@ -1,4 +1,4 @@
-namespace Wallbang.Models;
+namespace Summit.Models;
 
 public class Match
 {

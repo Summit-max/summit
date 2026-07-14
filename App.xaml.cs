@@ -1,10 +1,10 @@
 using System.Windows;
 using System.Windows.Threading;
-using Wallbang.Data;
-using Wallbang.Services;
-using Wallbang.Views;
+using Summit.Data;
+using Summit.Services;
+using Summit.Views;
 
-namespace Wallbang;
+namespace Summit;
 
 public partial class App : Application
 {
@@ -27,7 +27,7 @@ public partial class App : Application
         {
             MessageBox.Show(
                 $"Erro: {args.Exception.GetType().Name}\n\n{args.Exception.Message}\n\n{args.Exception.StackTrace}",
-                "Wallbang — Exceção não tratada",
+                "Summit — Exceção não tratada",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             args.Handled = true;
@@ -55,7 +55,7 @@ public partial class App : Application
     {
         try
         {
-            using var db = new WallbangDbContext();
+            using var db = new SummitDbContext();
             db.Database.EnsureCreated();
             // probe a new-schema table to detect stale db
             _ = db.Teams.FirstOrDefault();
@@ -64,7 +64,7 @@ public partial class App : Application
         }
         catch
         {
-            using var db = new WallbangDbContext();
+            using var db = new SummitDbContext();
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
         }

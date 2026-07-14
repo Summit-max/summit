@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Wallbang.Models;
+using Summit.Models;
 
-namespace Wallbang.Data;
+namespace Summit.Data;
 
 public class TournamentRepository
 {
     public async Task<List<Tournament>> GetAllAsync()
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Tournaments
             .Include(t => t.TournamentTeams).ThenInclude(tt => tt.Team).ThenInclude(tm => tm!.Members)
             .OrderBy(t => t.Status)
@@ -17,7 +17,7 @@ public class TournamentRepository
 
     public async Task<Tournament?> GetByIdAsync(string id)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Tournaments
             .Include(t => t.TournamentTeams).ThenInclude(tt => tt.Team).ThenInclude(tm => tm!.Members)
             .Include(t => t.Bracket).ThenInclude(r => r.Matches)
@@ -26,7 +26,7 @@ public class TournamentRepository
 
     public async Task<bool> RegisterTeamAsync(string tournamentId, string teamId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var exists = await db.TournamentTeams
             .AnyAsync(x => x.TournamentId == tournamentId && x.TeamId == teamId);
         if (exists) return true;
@@ -51,7 +51,7 @@ public class TournamentRepository
 
     public async Task<bool> IsTeamRegisteredAsync(string tournamentId, string teamId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.TournamentTeams
             .AnyAsync(x => x.TournamentId == tournamentId && x.TeamId == teamId);
     }

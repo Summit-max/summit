@@ -1,6 +1,6 @@
-using Wallbang.Models;
+using Summit.Models;
 
-namespace Wallbang.ViewModels;
+namespace Summit.ViewModels;
 
 public class BadgesViewModel : BaseViewModel
 {

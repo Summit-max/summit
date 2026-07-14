@@ -1,8 +1,8 @@
-<Window x:Class="Wallbang.Views.MainShellView"
+<Window x:Class="Summit.Views.MainShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:Wallbang.ViewModels"
-        Title="Wallbang"
+        xmlns:vm="clr-namespace:Summit.ViewModels"
+        Title="Summit"
         Width="1280" Height="800"
         MinWidth="1100" MinHeight="680"
         WindowStartupLocation="CenterScreen"
@@ -40,7 +40,7 @@
                                     </LinearGradientBrush>
                                 </Border.Background>
                             </Border>
-                            <TextBlock Text="WALLBANG" FontFamily="Segoe UI" FontWeight="Black"
+                            <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black"
                                        FontSize="18" Foreground="{StaticResource BrushTextPrimary}"
                                        VerticalAlignment="Center"/>
                         </StackPanel>

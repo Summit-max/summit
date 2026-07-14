@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Wallbang.Data;
-using Wallbang.Models;
+using Summit.Data;
+using Summit.Models;
 
-namespace Wallbang.Services;
+namespace Summit.Services;
 
 public class RankingService
 {
     public async Task<List<RankingPlayer>> GetTopPlayersAsync()
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var users = await db.Users
             .Include(u => u.Team)
             .OrderByDescending(u => u.Elo)
@@ -40,7 +40,7 @@ public class RankingService
 
     public async Task<List<RankingTeam>> GetTopTeamsAsync()
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var teams = await db.Teams
             .OrderByDescending(t => t.Elo)
             .Take(50)

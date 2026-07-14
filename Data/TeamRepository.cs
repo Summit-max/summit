@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Wallbang.Models;
+using Summit.Models;
 
-namespace Wallbang.Data;
+namespace Summit.Data;
 
 public class TeamRepository
 {
     public async Task<Team?> GetByIdAsync(string teamId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Teams
             .Include(t => t.Members)
             .FirstOrDefaultAsync(t => t.Id == teamId);
@@ -15,7 +15,7 @@ public class TeamRepository
 
     public async Task<Team?> GetByTagAsync(string tag)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Teams
             .Include(t => t.Members)
             .FirstOrDefaultAsync(t => t.Tag.ToLower() == tag.ToLower());
@@ -23,7 +23,7 @@ public class TeamRepository
 
     public async Task<List<Team>> GetAllAsync()
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Teams
             .Include(t => t.Members)
             .OrderByDescending(t => t.Elo)
@@ -32,7 +32,7 @@ public class TeamRepository
 
     public async Task<Team> CreateAsync(string name, string tag, string captainId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var team = new Team
         {
             Id = $"team_{Guid.NewGuid():N}",
@@ -57,7 +57,7 @@ public class TeamRepository
 
     public async Task<List<TeamInvitation>> GetInvitationsForUserAsync(string userId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.TeamInvitations
             .Include(i => i.Team).ThenInclude(t => t!.Members)
             .Include(i => i.InvitedBy)
@@ -68,7 +68,7 @@ public class TeamRepository
 
     public async Task<TeamInvitation?> InviteAsync(string teamId, string invitedUserId, string invitedById)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
 
         var inviter = await db.Users.FirstOrDefaultAsync(u => u.Id == invitedById);
         if (inviter == null) return null;
@@ -101,7 +101,7 @@ public class TeamRepository
 
     public async Task<bool> AcceptInvitationAsync(string invitationId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var inv = await db.TeamInvitations.FirstOrDefaultAsync(i => i.Id == invitationId);
         if (inv == null || inv.Status != TeamInvitationStatus.Pending) return false;
 
@@ -132,7 +132,7 @@ public class TeamRepository
 
     public async Task<bool> DeclineInvitationAsync(string invitationId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var inv = await db.TeamInvitations.FirstOrDefaultAsync(i => i.Id == invitationId);
         if (inv == null || inv.Status != TeamInvitationStatus.Pending) return false;
         inv.Status = TeamInvitationStatus.Declined;
@@ -143,7 +143,7 @@ public class TeamRepository
 
     public async Task<bool> LeaveTeamAsync(string userId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var user = await db.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null || user.TeamId == null) return false;
         user.TeamId = null;

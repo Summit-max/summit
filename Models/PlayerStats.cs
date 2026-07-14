@@ -1,4 +1,4 @@
-namespace Wallbang.Models;
+namespace Summit.Models;
 
 // Aggregated stats DTO computed from User + recent matches (not a DB entity).
 public class PlayerStats

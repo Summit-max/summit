@@ -1,8 +1,8 @@
-<UserControl x:Class="Wallbang.Views.HomeView"
+<UserControl x:Class="Summit.Views.HomeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:h="clr-namespace:Wallbang.Helpers"
-             xmlns:c="clr-namespace:Wallbang.Components"
+             xmlns:h="clr-namespace:Summit.Helpers"
+             xmlns:c="clr-namespace:Summit.Components"
              Background="Transparent" Opacity="0">
 
     <UserControl.Resources>

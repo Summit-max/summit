@@ -1,4 +1,4 @@
-namespace Wallbang.Models;
+namespace Summit.Models;
 
 public enum TournamentStatus { Open, InProgress, Finished, Upcoming }
 

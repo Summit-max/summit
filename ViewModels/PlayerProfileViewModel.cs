@@ -1,8 +1,8 @@
-using Wallbang.Commands;
-using Wallbang.Data;
-using Wallbang.Models;
+using Summit.Commands;
+using Summit.Data;
+using Summit.Models;
 
-namespace Wallbang.ViewModels;
+namespace Summit.ViewModels;
 
 public class PlayerProfileViewModel : BaseViewModel
 {

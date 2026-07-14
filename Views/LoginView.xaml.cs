@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace Wallbang.Views;
+namespace Summit.Views;
 
 public partial class LoginView : Window
 {

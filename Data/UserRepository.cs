@@ -1,19 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-using Wallbang.Models;
+using Summit.Models;
 
-namespace Wallbang.Data;
+namespace Summit.Data;
 
 public class UserRepository
 {
     public async Task<User?> GetBySteamIdAsync(string steamId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Users.FirstOrDefaultAsync(u => u.SteamId == steamId);
     }
 
     public async Task<User> UpsertFromSteamAsync(string steamId, string nickname, string avatarUrl)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var existing = await db.Users.FirstOrDefaultAsync(u => u.SteamId == steamId);
 
         if (existing == null)
@@ -50,7 +50,7 @@ public class UserRepository
 
     public async Task UpdateAsync(User user)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         var existing = await db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
         if (existing == null) return;
 
@@ -82,7 +82,7 @@ public class UserRepository
 
     public async Task<List<User>> SearchAsync(string query)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         if (string.IsNullOrWhiteSpace(query)) return new();
         var q = query.ToLower();
         return await db.Users
@@ -94,7 +94,7 @@ public class UserRepository
 
     public async Task<User?> GetByIdAsync(string userId)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Users
             .Include(u => u.Team)
             .FirstOrDefaultAsync(u => u.Id == userId);
@@ -102,7 +102,7 @@ public class UserRepository
 
     public async Task<User?> GetByNicknameAsync(string nickname)
     {
-        using var db = new WallbangDbContext();
+        using var db = new SummitDbContext();
         return await db.Users
             .FirstOrDefaultAsync(u => u.Nickname.ToLower() == nickname.ToLower());
     }

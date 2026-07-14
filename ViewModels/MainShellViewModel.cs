@@ -1,8 +1,8 @@
 using System.Windows;
-using Wallbang.Commands;
-using Wallbang.Models;
+using Summit.Commands;
+using Summit.Models;
 
-namespace Wallbang.ViewModels;
+namespace Summit.ViewModels;
 
 public class SidebarItem : BaseViewModel
 {

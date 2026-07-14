@@ -1,8 +1,8 @@
-<Application x:Class="Wallbang.App"
+<Application x:Class="Summit.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:Wallbang.ViewModels"
-             xmlns:views="clr-namespace:Wallbang.Views">
+             xmlns:vm="clr-namespace:Summit.ViewModels"
+             xmlns:views="clr-namespace:Summit.Views">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

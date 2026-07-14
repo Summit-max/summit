@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="Wallbang.Views.TeamView"
+﻿<UserControl x:Class="Summit.Views.TeamView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:h="clr-namespace:Wallbang.Helpers"
+             xmlns:h="clr-namespace:Summit.Helpers"
              Background="Transparent" Opacity="0">
 
     <UserControl.Resources>

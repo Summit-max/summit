@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Wallbang.ViewModels;
+namespace Summit.ViewModels;
 
 public abstract class BaseViewModel : INotifyPropertyChanged
 {

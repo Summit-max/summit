@@ -1,8 +1,8 @@
-﻿<Window x:Class="Wallbang.Views.LoginView"
+﻿<Window x:Class="Summit.Views.LoginView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:h="clr-namespace:Wallbang.Helpers"
-        Title="Wallbang"
+        xmlns:h="clr-namespace:Summit.Helpers"
+        Title="Summit"
         Width="960" Height="580"
         MinWidth="960" MinHeight="580"
         WindowStartupLocation="CenterScreen"
@@ -69,7 +69,7 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
-                        <TextBlock Text="WALLBANG"
+                        <TextBlock Text="SUMMIT"
                                    FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
                                    Foreground="{StaticResource BrushTextPrimary}"
                                    VerticalAlignment="Center"/>
@@ -181,7 +181,7 @@
                         </Border>
 
                         <!-- Footer -->
-                        <TextBlock Text="Ao entrar, vocÃª concorda com os Termos de Uso da Wallbang."
+                        <TextBlock Text="Ao entrar, vocÃª concorda com os Termos de Uso da Summit."
                                    FontFamily="Segoe UI" FontSize="10" Foreground="#44444E"
                                    TextWrapping="Wrap" TextAlignment="Center" Margin="0,28,0,0"/>
                     </StackPanel>
