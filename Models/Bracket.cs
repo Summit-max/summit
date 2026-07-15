@@ -1,6 +1,7 @@
 namespace Summit.Models;
 
-public enum BracketMatchStatus { Pending, Live, Finished }
+// Aguardando → Vetos → Preparando servidor → Ao vivo → Finalizada (espec-campeonatos.md §7)
+public enum BracketMatchStatus { Pending = 0, Live = 1, Finished = 2, Veto = 3, PreparingServer = 4 }
 
 public class TournamentTeamEntry
 {

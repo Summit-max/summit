@@ -19,6 +19,23 @@ public class Tournament
     public string Organizer { get; set; } = string.Empty;
     public string MapPoolCsv { get; set; } = string.Empty;
 
+    // ───── Configuração do campeonato (espec-campeonatos.md §1) ─────
+    public string Region { get; set; } = "América do Sul";
+    public int MinTeams { get; set; } = 2;
+    public bool IsPaidEntry { get; set; }
+    public string EntryFee { get; set; } = string.Empty;
+    public TournamentFormat FormatType { get; set; } = TournamentFormat.SingleElimination;
+    public SeriesFormat Series { get; set; } = SeriesFormat.MD1;
+    public SeriesFormat FinalSeries { get; set; } = SeriesFormat.MD1;
+    public bool BracketReset { get; set; }                 // grande final da eliminação dupla
+    public int NoShowMinutes { get; set; } = 10;
+    public int PausesPerTeam { get; set; } = 4;
+    public string OvertimeConfig { get; set; } = "MR3 $10.000";
+
+    // Janelas automáticas (§3-4): inscrições fecham T-12h; check-in abre T-1h
+    public DateTime RegistrationClosesAt => StartDate.AddHours(-12);
+    public DateTime CheckInOpensAt => StartDate.AddHours(-1);
+
     public List<TournamentTeam> TournamentTeams { get; set; } = new();
     public List<BracketRound> Bracket { get; set; } = new();
 
@@ -83,6 +100,12 @@ public class TournamentTeam
     public int? FinalPosition { get; set; }
     public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 
+    // Escalação + check-in (espec-times.md §16-20, espec-campeonatos.md §4)
+    public string? CaptainUserId { get; set; }
+    public CheckInStatus CheckIn { get; set; } = CheckInStatus.Waiting;
+    public DateTime? CheckedInAt { get; set; }
+
     public Tournament? Tournament { get; set; }
     public Team? Team { get; set; }
+    public List<TournamentLineupPlayer> Lineup { get; set; } = new();
 }

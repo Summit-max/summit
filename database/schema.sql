@@ -18,6 +18,26 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `auditlogs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auditlogs` (
+  `Id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Action` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ActorUserId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `TargetUserId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `TeamId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `TournamentId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `OldValue` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `NewValue` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `Reason` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `CreatedAt` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `IX_AuditLogs_CreatedAt` (`CreatedAt`),
+  KEY `IX_AuditLogs_TeamId` (`TeamId`),
+  KEY `IX_AuditLogs_TournamentId` (`TournamentId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `badges`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -144,6 +164,24 @@ CREATE TABLE `teaminvitations` (
   CONSTRAINT `FK_TeamInvitations_Users_InvitedUserId` FOREIGN KEY (`InvitedUserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `teamjoinrequests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `teamjoinrequests` (
+  `Id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `TeamId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `UserId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Status` int NOT NULL,
+  `CreatedAt` datetime(6) NOT NULL,
+  `RespondedAt` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `IX_TeamJoinRequests_TeamId_UserId` (`TeamId`,`UserId`),
+  KEY `IX_TeamJoinRequests_UserId` (`UserId`),
+  CONSTRAINT `FK_TeamJoinRequests_Teams_TeamId` FOREIGN KEY (`TeamId`) REFERENCES `teams` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_TeamJoinRequests_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `teams`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -165,6 +203,20 @@ CREATE TABLE `teams` (
   UNIQUE KEY `IX_Teams_Tag` (`Tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `tournamentlineupplayers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tournamentlineupplayers` (
+  `Id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `TournamentTeamId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `UserId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_TournamentLineupPlayers_TournamentTeamId_UserId` (`TournamentTeamId`,`UserId`),
+  KEY `IX_TournamentLineupPlayers_UserId` (`UserId`),
+  CONSTRAINT `FK_TournamentLineupPlayers_TournamentTeams_TournamentTeamId` FOREIGN KEY (`TournamentTeamId`) REFERENCES `tournamentteams` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_TournamentLineupPlayers_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tournaments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -183,6 +235,17 @@ CREATE TABLE `tournaments` (
   `Rules` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Organizer` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `MapPoolCsv` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Region` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `MinTeams` int NOT NULL,
+  `IsPaidEntry` tinyint(1) NOT NULL,
+  `EntryFee` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `FormatType` int NOT NULL,
+  `Series` int NOT NULL,
+  `FinalSeries` int NOT NULL,
+  `BracketReset` tinyint(1) NOT NULL,
+  `NoShowMinutes` int NOT NULL,
+  `PausesPerTeam` int NOT NULL,
+  `OvertimeConfig` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -197,6 +260,9 @@ CREATE TABLE `tournamentteams` (
   `IsEliminated` tinyint(1) NOT NULL,
   `FinalPosition` int DEFAULT NULL,
   `RegisteredAt` datetime(6) NOT NULL,
+  `CaptainUserId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `CheckIn` int NOT NULL,
+  `CheckedInAt` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_TournamentTeams_TournamentId_TeamId` (`TournamentId`,`TeamId`),
   KEY `IX_TournamentTeams_TeamId` (`TeamId`),
@@ -254,6 +320,39 @@ CREATE TABLE `users` (
   KEY `IX_Users_Nickname` (`Nickname`),
   KEY `IX_Users_TeamId` (`TeamId`),
   CONSTRAINT `FK_Users_Teams_TeamId` FOREIGN KEY (`TeamId`) REFERENCES `teams` (`Id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `vetosessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vetosessions` (
+  `Id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `BracketMatchId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Series` int NOT NULL,
+  `MapPoolCsv` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `TeamATag` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `TeamBTag` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `StepIndex` int NOT NULL,
+  `IsComplete` tinyint(1) NOT NULL,
+  `CreatedAt` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_VetoSessions_BracketMatchId` (`BracketMatchId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `vetosteps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vetosteps` (
+  `Id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `SessionId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Order` int NOT NULL,
+  `TeamTag` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Action` int NOT NULL,
+  `Map` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `CreatedAt` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_VetoSteps_SessionId_Order` (`SessionId`,`Order`),
+  CONSTRAINT `FK_VetoSteps_VetoSessions_SessionId` FOREIGN KEY (`SessionId`) REFERENCES `vetosessions` (`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

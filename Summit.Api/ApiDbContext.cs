@@ -19,6 +19,11 @@ public class ApiDbContext : DbContext
     public DbSet<MatchPlayer>      MatchPlayers     => Set<MatchPlayer>();
     public DbSet<Badge>            Badges           => Set<Badge>();
     public DbSet<UserBadge>        UserBadges       => Set<UserBadge>();
+    public DbSet<TeamJoinRequest>  TeamJoinRequests => Set<TeamJoinRequest>();
+    public DbSet<TournamentLineupPlayer> TournamentLineupPlayers => Set<TournamentLineupPlayer>();
+    public DbSet<VetoSession>      VetoSessions     => Set<VetoSession>();
+    public DbSet<VetoStep>         VetoSteps        => Set<VetoStep>();
+    public DbSet<AuditLog>         AuditLogs        => Set<AuditLog>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -95,11 +100,17 @@ public class ApiDbContext : DbContext
         tour.Ignore(t => t.SlotsFillPercent);
         tour.Ignore(t => t.StatusLabel);
         tour.Ignore(t => t.CountdownLabel);
+        tour.Ignore(t => t.RegistrationClosesAt);
+        tour.Ignore(t => t.CheckInOpensAt);
+        tour.Property(t => t.FormatType).HasConversion<int>();
+        tour.Property(t => t.Series).HasConversion<int>();
+        tour.Property(t => t.FinalSeries).HasConversion<int>();
 
         // ───── TOURNAMENT TEAM (join) ─────
         var tt = b.Entity<TournamentTeam>();
         tt.HasKey(x => x.Id);
         tt.HasIndex(x => new { x.TournamentId, x.TeamId }).IsUnique();
+        tt.Property(x => x.CheckIn).HasConversion<int>();
         tt.HasOne(x => x.Tournament)
             .WithMany(t => t.TournamentTeams)
             .HasForeignKey(x => x.TournamentId)
@@ -180,5 +191,55 @@ public class ApiDbContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.BadgeId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // ───── TEAM JOIN REQUEST ─────
+        var jr = b.Entity<TeamJoinRequest>();
+        jr.HasKey(x => x.Id);
+        jr.HasIndex(x => new { x.TeamId, x.UserId });
+        jr.Property(x => x.Status).HasConversion<int>();
+        jr.HasOne(x => x.Team)
+            .WithMany()
+            .HasForeignKey(x => x.TeamId)
+            .OnDelete(DeleteBehavior.Cascade);
+        jr.HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ───── TOURNAMENT LINEUP PLAYER ─────
+        var lp = b.Entity<TournamentLineupPlayer>();
+        lp.HasKey(x => x.Id);
+        lp.HasIndex(x => new { x.TournamentTeamId, x.UserId }).IsUnique();
+        lp.HasOne(x => x.TournamentTeam)
+            .WithMany(t => t.Lineup)
+            .HasForeignKey(x => x.TournamentTeamId)
+            .OnDelete(DeleteBehavior.Cascade);
+        lp.HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ───── VETO SESSION / STEPS ─────
+        var vs = b.Entity<VetoSession>();
+        vs.HasKey(x => x.Id);
+        vs.HasIndex(x => x.BracketMatchId).IsUnique();
+        vs.Property(x => x.Series).HasConversion<int>();
+        vs.Ignore(x => x.MapPool);
+
+        var vstep = b.Entity<VetoStep>();
+        vstep.HasKey(x => x.Id);
+        vstep.HasIndex(x => new { x.SessionId, x.Order }).IsUnique();
+        vstep.Property(x => x.Action).HasConversion<int>();
+        vstep.HasOne(x => x.Session)
+            .WithMany(s => s.Steps)
+            .HasForeignKey(x => x.SessionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ───── AUDIT LOG ─────
+        var al = b.Entity<AuditLog>();
+        al.HasKey(x => x.Id);
+        al.HasIndex(x => x.TeamId);
+        al.HasIndex(x => x.TournamentId);
+        al.HasIndex(x => x.CreatedAt);
     }
 }

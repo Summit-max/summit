@@ -196,7 +196,8 @@ app.MapPost("/api/teams/{teamId}/invite", async (ApiDbContext db, string teamId,
 {
     var inviter = await db.Users.FirstOrDefaultAsync(u => u.Id == req.InvitedById);
     if (inviter == null || inviter.TeamId != teamId) return Results.BadRequest();
-    if (inviter.TeamRole != TeamRole.Captain && inviter.TeamRole != TeamRole.ViceCaptain)
+    // somente o DONO convida jogadores (espec-times §3.1/§7)
+    if (inviter.TeamRole != TeamRole.Captain)
         return Results.BadRequest();
 
     var target = await db.Users.FirstOrDefaultAsync(u => u.Id == req.InvitedUserId);
@@ -261,13 +262,47 @@ app.MapPost("/api/teams/invitations/{id}/decline", async (ApiDbContext db, strin
     return Results.Ok();
 });
 
+// Saída do time — com transferência automática de propriedade (espec-times §12-13)
 app.MapPost("/api/teams/leave/{userId}", async (ApiDbContext db, string userId) =>
 {
     var user = await db.Users.FirstOrDefaultAsync(u => u.Id == userId);
     if (user == null || user.TeamId == null) return Results.BadRequest();
+    var teamId = user.TeamId;
+
+    if (user.TeamRole == TeamRole.Captain)
+    {
+        var others = await db.Users
+            .Where(u => u.TeamId == teamId && u.Id != userId)
+            .ToListAsync();
+
+        if (others.Count == 0)
+        {
+            // último membro: o time é excluído (§13)
+            var team = await db.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
+            if (team != null) db.Teams.Remove(team);
+            await CompetitionEndpoints.Audit(db, "team_deleted", userId, null, teamId, null, null, null,
+                "Dono saiu e o time não possuía outros membros");
+        }
+        else
+        {
+            // ordem: sublíder mais antigo → membro mais antigo → id (§12)
+            var newOwner = others
+                .OrderByDescending(u => u.TeamRole == TeamRole.ViceCaptain)
+                .ThenBy(u => u.TeamJoinedAt ?? DateTime.MaxValue)
+                .ThenBy(u => u.Id)
+                .First();
+            newOwner.TeamRole = TeamRole.Captain;
+            var team = await db.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
+            if (team != null) team.CaptainId = newOwner.Id;
+            await CompetitionEndpoints.Audit(db, "ownership_auto_transferred", userId, newOwner.Id,
+                teamId, null, user.Nickname, newOwner.Nickname, "Saída do dono");
+        }
+    }
+
     user.TeamId = null;
     user.TeamRole = TeamRole.Member;
     user.TeamJoinedAt = null;
+    await CompetitionEndpoints.Audit(db, "member_left", userId, null, teamId, null, null, null, null);
     await db.SaveChangesAsync();
     return Results.Ok();
 });
@@ -290,6 +325,7 @@ app.MapGet("/api/tournaments/{id}", async (ApiDbContext db, string id) =>
     return t == null ? Results.NotFound() : Results.Ok(t);
 });
 
+// Inscrição com escalação de 5 + capitão (espec-times §16; espec-campeonatos §2-3)
 app.MapPost("/api/tournaments/{id}/register", async (ApiDbContext db, string id, RegisterTeamRequest req) =>
 {
     var exists = await db.TournamentTeams
@@ -299,17 +335,52 @@ app.MapPost("/api/tournaments/{id}/register", async (ApiDbContext db, string id,
     var t = await db.Tournaments.FindAsync(id);
     if (t == null) return Results.Ok(false);
 
+    // inscrições fecham automaticamente 12h antes do início (§3)
+    if (DateTime.UtcNow >= t.RegistrationClosesAt) return Results.Ok(false);
+    if (t.Status != TournamentStatus.Open) return Results.Ok(false);
+
     var count = await db.TournamentTeams.CountAsync(x => x.TournamentId == id);
     if (count >= t.MaxTeams) return Results.Ok(false);
 
-    db.TournamentTeams.Add(new TournamentTeam
+    var team = await db.Teams.Include(x => x.Members)
+        .FirstOrDefaultAsync(x => x.Id == req.TeamId);
+    if (team == null) return Results.Ok(false);
+
+    // quem inscreve precisa ser dono ou sublíder (§16)
+    if (!string.IsNullOrEmpty(req.ByUserId) &&
+        !await CompetitionEndpoints.IsOwnerOrSub(db, req.TeamId, req.ByUserId))
+        return Results.Ok(false);
+
+    // escalação: usa a enviada ou monta com os 5 mais antigos do elenco
+    var playerIds = (req.PlayerIds != null && req.PlayerIds.Count > 0)
+        ? req.PlayerIds
+        : team.Members.OrderBy(m => m.TeamJoinedAt ?? DateTime.MaxValue).Take(5).Select(m => m.Id).ToList();
+    var captainId = req.CaptainUserId
+        ?? (playerIds.Contains(team.CaptainId) ? team.CaptainId : playerIds.FirstOrDefault());
+
+    var error = await CompetitionEndpoints.ValidateLineupAsync(db, id, req.TeamId, playerIds, captainId, null);
+    if (error != null) return Results.Ok(false);
+
+    var tt = new TournamentTeam
     {
         Id = $"tt_{Guid.NewGuid():N}",
         TournamentId = id,
         TeamId = req.TeamId,
         Seed = count + 1,
-        RegisteredAt = DateTime.UtcNow
-    });
+        RegisteredAt = DateTime.UtcNow,
+        CaptainUserId = captainId,
+        CheckIn = CheckInStatus.Waiting
+    };
+    db.TournamentTeams.Add(tt);
+    foreach (var pid in playerIds.Distinct())
+        db.TournamentLineupPlayers.Add(new TournamentLineupPlayer
+        {
+            Id = $"lp_{Guid.NewGuid():N}",
+            TournamentTeamId = tt.Id,
+            UserId = pid
+        });
+    await CompetitionEndpoints.Audit(db, "team_registered", req.ByUserId, null, req.TeamId, id,
+        null, string.Join(",", playerIds), null);
     await db.SaveChangesAsync();
     return Results.Ok(true);
 });
@@ -526,12 +597,15 @@ app.MapGet("/api/ranking/teams", async (ApiDbContext db) =>
     return Results.Ok(list);
 });
 
+// Endpoints das especificações (docs/espec-*.md)
+app.MapCompetitionEndpoints();
+
 app.Run("http://localhost:5180");
 
 // ───── Request DTOs ─────
 record SteamLoginRequest(string SteamId, string Nickname, string AvatarUrl);
 record CreateTeamRequest(string Name, string Tag, string CaptainId);
 record InviteRequest(string InvitedUserId, string InvitedById);
-record RegisterTeamRequest(string TeamId);
+record RegisterTeamRequest(string TeamId, string? ByUserId, List<string>? PlayerIds, string? CaptainUserId);
 record FriendRequest(string RequesterId, string AddresseeId);
 record FriendActionRequest(string UserId);
