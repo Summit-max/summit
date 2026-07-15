@@ -109,9 +109,9 @@
                     </Grid.RowDefinitions>
 
                     <!-- Logo -->
-                    <Border Grid.Row="0" Padding="22,0" BorderBrush="#141821" BorderThickness="0,0,0,1">
+                    <Border Grid.Row="0" Padding="14,0" BorderBrush="#141821" BorderThickness="0,0,0,1">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Image Source="/Assets/logo.png" Height="68" Margin="-6,0,8,0"
+                            <Image Source="/Assets/logo.png" Height="58" Margin="0,0,8,0"
                                    VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality">
                                 <Image.Effect>
                                     <DropShadowEffect Color="#FF3B30" BlurRadius="16" ShadowDepth="0" Opacity="0.5"/>
