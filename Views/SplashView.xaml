@@ -87,7 +87,7 @@
                     </EventTrigger>
                 </StackPanel.Triggers>
 
-                <Image Source="/Assets/logo.png" Height="96" HorizontalAlignment="Center"
+                <Image Source="/Assets/logo.png" Height="150" HorizontalAlignment="Center"
                        RenderOptions.BitmapScalingMode="HighQuality">
                     <Image.Effect>
                         <DropShadowEffect Color="#FF3B30" BlurRadius="36" ShadowDepth="0" Opacity="0.75"/>

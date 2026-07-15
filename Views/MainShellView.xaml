@@ -111,7 +111,7 @@
                     <!-- Logo -->
                     <Border Grid.Row="0" Padding="22,0" BorderBrush="#141821" BorderThickness="0,0,0,1">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Image Source="/Assets/logo.png" Height="34" Margin="0,0,10,0"
+                            <Image Source="/Assets/logo.png" Height="52" Margin="-4,0,8,0"
                                    VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality">
                                 <Image.Effect>
                                     <DropShadowEffect Color="#FF3B30" BlurRadius="16" ShadowDepth="0" Opacity="0.5"/>
