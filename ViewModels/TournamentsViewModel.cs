@@ -30,12 +30,14 @@ public class TournamentsViewModel : BaseViewModel
 
     public RelayCommand FilterCommand   { get; }
     public RelayCommand RegisterCommand { get; }
+    public RelayCommand CheckInCommand  { get; }
     public RelayCommand DetailsCommand  { get; }
 
     public TournamentsViewModel()
     {
         FilterCommand   = new RelayCommand(p => { if (p is string f) SetFilter(f); });
         RegisterCommand = new RelayCommand(async p => await RegisterAsync(p as string ?? ""));
+        CheckInCommand  = new RelayCommand(async p => await CheckInAsync(p as string ?? ""));
         DetailsCommand  = new RelayCommand(p =>
         {
             if (p is string id)
@@ -74,6 +76,14 @@ public class TournamentsViewModel : BaseViewModel
     {
         var teamId = App.UserService.CurrentUser?.TeamId ?? "";
         await App.TournamentService.RegisterAsync(tournamentId, teamId);
+        await LoadAsync();
+    }
+
+    private async Task CheckInAsync(string tournamentId)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me?.TeamId == null) return;
+        await App.TournamentService.CheckInAsync(tournamentId, me.TeamId, me.Id);
         await LoadAsync();
     }
 }

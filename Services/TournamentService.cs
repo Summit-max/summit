@@ -24,6 +24,9 @@ public class TournamentService : Interfaces.ITournamentService
     public Task<bool> RegisterAsync(string tournamentId, string teamId)
         => _repo.RegisterTeamAsync(tournamentId, teamId);
 
+    public Task<bool> CheckInAsync(string tournamentId, string teamId, string byUserId)
+        => _repo.CheckInAsync(tournamentId, teamId, byUserId);
+
     private async Task MarkRegisteredAsync(List<Tournament> list)
     {
         var teamId = App.UserService.CurrentUser?.TeamId;

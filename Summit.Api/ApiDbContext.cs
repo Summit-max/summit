@@ -102,6 +102,10 @@ public class ApiDbContext : DbContext
         tour.Ignore(t => t.CountdownLabel);
         tour.Ignore(t => t.RegistrationClosesAt);
         tour.Ignore(t => t.CheckInOpensAt);
+        tour.Ignore(t => t.CheckInClosesAt);
+        tour.Ignore(t => t.IsRegistrationOpen);
+        tour.Ignore(t => t.IsCheckInOpen);
+        tour.Ignore(t => t.RegistrationLabel);
         tour.Property(t => t.FormatType).HasConversion<int>();
         tour.Property(t => t.Series).HasConversion<int>();
         tour.Property(t => t.FinalSeries).HasConversion<int>();

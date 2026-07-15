@@ -1,12 +1,6 @@
-﻿-- ═══════════════════════════════════════════════════════════════════
---  SUMMIT — Schema MySQL 8.x
---  Gerado a partir do banco real (mysqldump --no-data).
---  Para criar do zero:
---      mysql -u root -e "CREATE DATABASE summit CHARACTER SET utf8mb4"
---      mysql -u root summit < schema.sql
---  A API le a connection string de Summit.Api/appsettings.json
---  (ou da variavel de ambiente SUMMIT_DB).
--- ═══════════════════════════════════════════════════════════════════
+﻿-- SUMMIT - Schema MySQL 8.x (mysqldump --no-data)
+-- mysql -u root -e "CREATE DATABASE summit CHARACTER SET utf8mb4" ; mysql -u root summit < schema.sql
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -119,6 +113,8 @@ CREATE TABLE `matches` (
   `TournamentId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `TournamentName` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `BracketMatchId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `ServerIp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ServerPassword` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

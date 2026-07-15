@@ -21,6 +21,10 @@ public class Match
     public string? TournamentName { get; set; }
     public string? BracketMatchId { get; set; }
 
+    // Sala da partida (preenchida quando o veto termina; AWS na próxima fase)
+    public string ServerIp { get; set; } = string.Empty;
+    public string ServerPassword { get; set; } = string.Empty;
+
     public List<MatchPlayer> Players { get; set; } = new();
 
     public string Score => $"{ScoreA}-{ScoreB}";

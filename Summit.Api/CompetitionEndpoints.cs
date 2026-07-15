@@ -311,8 +311,40 @@ public static class CompetitionEndpoints
                 });
                 s.IsComplete = true;
 
-                var bm = await db.BracketMatches.FirstOrDefaultAsync(m => m.Id == bracketMatchId);
-                if (bm != null) bm.Status = BracketMatchStatus.PreparingServer;
+                var bm = await db.BracketMatches.Include(m => m.Round)
+                    .FirstOrDefaultAsync(m => m.Id == bracketMatchId);
+                if (bm != null)
+                {
+                    bm.Status = BracketMatchStatus.PreparingServer;
+
+                    // cria a SALA da partida: mapa definido + IP + senha (AWS na próxima fase)
+                    var playMaps = s.Steps.Where(x => x.Action != VetoActionType.Ban)
+                        .OrderBy(x => x.Order).Select(x => x.Map).ToList();
+                    var teamA = await db.Teams.FirstOrDefaultAsync(x => x.Tag == s.TeamATag);
+                    var teamB = await db.Teams.FirstOrDefaultAsync(x => x.Tag == s.TeamBTag);
+                    var tour = bm.Round != null
+                        ? await db.Tournaments.FindAsync(bm.Round.TournamentId) : null;
+                    var room = new Match
+                    {
+                        Id = $"m_{Guid.NewGuid():N}",
+                        Map = playMaps.First(),
+                        PlayedAt = bm.ScheduledAt ?? DateTime.UtcNow,
+                        Status = MatchStatus.Scheduled,
+                        TeamAId = teamA?.Id ?? "",
+                        TeamBId = teamB?.Id ?? "",
+                        TeamATag = s.TeamATag,
+                        TeamBTag = s.TeamBTag,
+                        TeamAName = teamA?.Name ?? s.TeamATag,
+                        TeamBName = teamB?.Name ?? s.TeamBTag,
+                        TournamentId = tour?.Id,
+                        TournamentName = tour?.Name,
+                        BracketMatchId = bm.Id,
+                        ServerIp = $"sv{Random.Shared.Next(1, 9)}.summit.gg:{27015 + Random.Shared.Next(0, 4)}",
+                        ServerPassword = $"smt_{Guid.NewGuid().ToString("N")[..8]}"
+                    };
+                    db.Matches.Add(room);
+                    bm.MatchId = room.Id;
+                }
                 await Audit(db, "veto_completed", null, null, null, null, null,
                     string.Join(" | ", s.Steps.OrderBy(x => x.Order).Where(x => x.Action != VetoActionType.Ban).Select(x => x.Map)), null);
             }

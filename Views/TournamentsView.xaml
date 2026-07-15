@@ -434,15 +434,21 @@
                                             <Button.Style>
                                                 <Style TargetType="Button">
                                                     <Style.Triggers>
+                                                        <!-- T-12h: inscrições fechadas -->
+                                                        <DataTrigger Binding="{Binding IsRegistrationOpen}" Value="False">
+                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                        </DataTrigger>
                                                         <DataTrigger Binding="{Binding IsRegistered}" Value="True">
                                                             <Setter Property="IsEnabled" Value="False"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="Finished">
-                                                            <Setter Property="IsEnabled" Value="False"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="InProgress">
-                                                            <Setter Property="IsEnabled" Value="False"/>
-                                                        </DataTrigger>
+                                                        <!-- janela de check-in: dá lugar ao botão verde -->
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheckInOpen}" Value="True"/>
+                                                                <Condition Binding="{Binding IsRegistered}" Value="True"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </MultiDataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Style>
@@ -495,6 +501,9 @@
                                                         <Style TargetType="TextBlock">
                                                             <Setter Property="Text" Value="INSCREVER TIME"/>
                                                             <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsRegistrationOpen}" Value="False">
+                                                                    <Setter Property="Text" Value="INSCRIÇÕES ENCERRADAS"/>
+                                                                </DataTrigger>
                                                                 <DataTrigger Binding="{Binding IsRegistered}" Value="True">
                                                                     <Setter Property="Text" Value="INSCRITO"/>
                                                                 </DataTrigger>
@@ -502,6 +511,50 @@
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
+                                            </StackPanel>
+                                        </Button>
+
+                                        <!-- CHECK-IN (janela T-1h → T-30min, só p/ inscritos) -->
+                                        <Button Grid.Column="2" Height="38" Cursor="Hand"
+                                                Command="{Binding DataContext.CheckInCommand,
+                                                    RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding Id}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheckInOpen}" Value="True"/>
+                                                                <Condition Binding="{Binding IsRegistered}" Value="True"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border x:Name="Root" CornerRadius="6" Background="#1B7A45">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="#22C55E" BlurRadius="16"
+                                                                              ShadowDepth="0" Opacity="0.45"/>
+                                                        </Border.Effect>
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Root" Property="Opacity" Value="0.9"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                                           Foreground="White" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                <TextBlock Text="FAZER CHECK-IN" FontFamily="Segoe UI" FontWeight="Black"
+                                                           FontSize="11" Foreground="White" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </Button>
                                     </Grid>

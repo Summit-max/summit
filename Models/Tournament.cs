@@ -32,9 +32,16 @@ public class Tournament
     public int PausesPerTeam { get; set; } = 4;
     public string OvertimeConfig { get; set; } = "MR3 $10.000";
 
-    // Janelas automáticas (§3-4): inscrições fecham T-12h; check-in abre T-1h
+    // Janelas automáticas (§3-4): inscrições fecham T-12h; check-in T-1h → T-30min
     public DateTime RegistrationClosesAt => StartDate.AddHours(-12);
     public DateTime CheckInOpensAt => StartDate.AddHours(-1);
+    public DateTime CheckInClosesAt => StartDate.AddMinutes(-30);
+
+    public bool IsRegistrationOpen =>
+        Status == TournamentStatus.Open && DateTime.UtcNow < RegistrationClosesAt;
+    public bool IsCheckInOpen =>
+        DateTime.UtcNow >= CheckInOpensAt && DateTime.UtcNow < CheckInClosesAt
+        && Status != TournamentStatus.Finished;
 
     public List<TournamentTeam> TournamentTeams { get; set; } = new();
     public List<BracketRound> Bracket { get; set; } = new();
@@ -78,16 +85,17 @@ public class Tournament
         {
             if (Status == TournamentStatus.Finished) return "ENCERRADO";
             if (Status == TournamentStatus.InProgress) return "AO VIVO AGORA";
-            var days = (int)(StartDate.Date - DateTime.Now.Date).TotalDays;
-            return days switch
-            {
-                0            => "COMEÇA HOJE",
-                1            => "COMEÇA AMANHÃ",
-                > 1          => $"EM {days} DIAS",
-                _            => $"HÁ {-days} DIAS"
-            };
+            var span = StartDate - DateTime.UtcNow;
+            if (span.TotalSeconds <= 0) return "COMEÇANDO...";
+            if (span.TotalDays >= 2) return $"EM {(int)span.TotalDays} DIAS";
+            if (span.TotalHours >= 1) return $"EM {(int)span.TotalHours}H {span.Minutes:D2}M";
+            return $"EM {span.Minutes}M {span.Seconds:D2}S";
         }
     }
+
+    public string RegistrationLabel => IsRegistrationOpen
+        ? "INSCREVER TIME"
+        : "INSCRIÇÕES ENCERRADAS";
 }
 
 public class TournamentTeam

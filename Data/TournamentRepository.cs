@@ -16,4 +16,7 @@ public class TournamentRepository
 
     public async Task<bool> IsTeamRegisteredAsync(string tournamentId, string teamId)
         => await ApiClient.GetAsync<bool>($"/api/tournaments/{tournamentId}/registered/{teamId}");
+
+    public Task<bool> CheckInAsync(string tournamentId, string teamId, string byUserId)
+        => ApiClient.PostBoolAsync($"/api/tournaments/{tournamentId}/checkin", new { teamId, byUserId });
 }

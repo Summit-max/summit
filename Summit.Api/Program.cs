@@ -22,6 +22,9 @@ builder.Services.ConfigureHttpJsonOptions(o =>
     o.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
+// motor do ciclo de vida dos campeonatos (check-in, chave, início, vetos)
+builder.Services.AddHostedService<LifecycleWorker>();
+
 var app = builder.Build();
 
 // cria schema + seed de demonstração
