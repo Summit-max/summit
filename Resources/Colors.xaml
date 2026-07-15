@@ -3,10 +3,10 @@
 
     <!-- ═══ SUMMIT brand palette ═══
          Tema: fogo Summit — degradê laranja→vermelho sobre dark azulado premium. -->
-    <Color x:Key="AccentGold">#FF6A00</Color>
-    <Color x:Key="AccentAmber">#FF6A00</Color>
-    <Color x:Key="AccentEmber">#FF3B1F</Color>
-    <Color x:Key="AccentDeep">#D7261E</Color>
+    <Color x:Key="AccentGold">#FF6A1A</Color>
+    <Color x:Key="AccentAmber">#FF6A1A</Color>
+    <Color x:Key="AccentEmber">#FF3B30</Color>
+    <Color x:Key="AccentDeep">#FF3B30</Color>
 
     <!-- Backgrounds (cool charcoal) -->
     <Color x:Key="BgDark">#0A0C10</Color>
@@ -23,7 +23,7 @@
 
     <!-- UI accents -->
     <Color x:Key="BorderSubtle">#262C39</Color>
-    <Color x:Key="BorderAccent">#FF6A00</Color>
+    <Color x:Key="BorderAccent">#FF6A1A</Color>
     <Color x:Key="Success">#2EDE8D</Color>
     <Color x:Key="Warning">#FACC15</Color>
     <Color x:Key="ErrorColor">#F4485E</Color>

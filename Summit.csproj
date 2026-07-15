@@ -13,6 +13,10 @@
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Assets/logo.png" />
+  </ItemGroup>
+
   <!-- O projeto da API vive em subpasta; excluir do glob do client -->
   <ItemGroup>
     <Compile Remove="Summit.Api\**" />

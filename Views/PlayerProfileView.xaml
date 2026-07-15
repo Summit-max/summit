@@ -81,14 +81,14 @@
                                 Visibility="{Binding HasAvatar, Converter={StaticResource InverseBoolToVisibility}}">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#FF6A00" Offset="0"/>
-                                    <GradientStop Color="#D7261E" Offset="1"/>
+                                    <GradientStop Color="#FF6A1A" Offset="0"/>
+                                    <GradientStop Color="#FF3B30" Offset="1"/>
                                 </LinearGradientBrush>
                             </Border.Background>
                             <TextBlock Text="{Binding InitialLetter}" FontFamily="Segoe UI" FontWeight="Black"
                                        FontSize="36" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <Ellipse Stroke="#FF6A00" StrokeThickness="2" Opacity="0.6" IsHitTestVisible="False"/>
+                        <Ellipse Stroke="#FF6A1A" StrokeThickness="2" Opacity="0.6" IsHitTestVisible="False"/>
                     </Grid>
 
                     <!-- Info -->
@@ -110,7 +110,7 @@
                             <Border CornerRadius="4" Padding="10,4" Background="#1E232E"
                                     BorderBrush="#262C39" BorderThickness="1" Margin="0,0,8,0">
                                 <TextBlock Text="{Binding User.Rank}" FontFamily="Segoe UI" FontSize="11"
-                                           Foreground="#FF6A00" FontWeight="Bold"/>
+                                           Foreground="#FF6A1A" FontWeight="Bold"/>
                             </Border>
                             <Border CornerRadius="4" Padding="10,4" Background="#1E232E"
                                     BorderBrush="#262C39" BorderThickness="1">
@@ -167,10 +167,10 @@
                         </Border>
 
                         <Border CornerRadius="5" Padding="14,8" Background="#1E232E"
-                                BorderBrush="#60FF6A00" BorderThickness="1"
+                                BorderBrush="#60FF6A1A" BorderThickness="1"
                                 Visibility="{Binding HasIncoming, Converter={StaticResource BoolToVisibility}}">
                             <TextBlock Text="PEDIU PRA TE ADICIONAR" FontFamily="Segoe UI" FontWeight="Black"
-                                       FontSize="10" Foreground="#FF6A00"/>
+                                       FontSize="10" Foreground="#FF6A1A"/>
                         </Border>
 
                         <TextBlock Text="{Binding ActionMessage}" FontFamily="Segoe UI" FontSize="11"
@@ -201,11 +201,11 @@
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Text="ELO" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                        <TextBlock Text="{Binding User.Elo}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="#FF6A00" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding User.Elo}" FontFamily="Segoe UI" FontWeight="Black" FontSize="20" Foreground="#FF6A1A" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Text="MAPA FAV" FontFamily="Segoe UI" FontWeight="Black" FontSize="9" Foreground="#5A6577" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                        <TextBlock Text="{Binding User.FavoriteMap}" FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Foreground="#FF6A00" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding User.FavoriteMap}" FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Foreground="#FF6A1A" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </UniformGrid>
             </Border>
@@ -213,7 +213,7 @@
             <!-- Bio -->
             <Border Grid.Row="6" Style="{StaticResource Card}">
                 <StackPanel>
-                    <TextBlock Text="BIO" FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#FF6A00" Margin="0,0,0,10"/>
+                    <TextBlock Text="BIO" FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#FF6A1A" Margin="0,0,0,10"/>
                     <TextBlock Text="{Binding User.Bio}" FontFamily="Segoe UI" FontSize="13"
                                Foreground="#9AA5B5" TextWrapping="Wrap" LineHeight="22"/>
                 </StackPanel>

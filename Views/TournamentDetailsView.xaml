@@ -44,7 +44,7 @@
                                 <Setter Property="Fill" Value="Transparent"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding AWon}" Value="True">
-                                        <Setter Property="Fill" Value="#FF6A00"/>
+                                        <Setter Property="Fill" Value="#FF6A1A"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -78,7 +78,7 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding AWon}" Value="True">
                                         <Setter Property="FontWeight" Value="Black"/>
-                                        <Setter Property="Foreground" Value="#FF6A00"/>
+                                        <Setter Property="Foreground" Value="#FF6A1A"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -103,7 +103,7 @@
                                 <Setter Property="Fill" Value="Transparent"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding BWon}" Value="True">
-                                        <Setter Property="Fill" Value="#FF6A00"/>
+                                        <Setter Property="Fill" Value="#FF6A1A"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -137,7 +137,7 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding BWon}" Value="True">
                                         <Setter Property="FontWeight" Value="Black"/>
-                                        <Setter Property="Foreground" Value="#FF6A00"/>
+                                        <Setter Property="Foreground" Value="#FF6A1A"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -249,8 +249,8 @@
                              VerticalAlignment="Center" Margin="0,0,-240,0" IsHitTestVisible="False">
                         <Ellipse.Fill>
                             <RadialGradientBrush>
-                                <GradientStop Color="#40FF4D00" Offset="0"/>
-                                <GradientStop Color="#00FF4D00" Offset="1"/>
+                                <GradientStop Color="#40FF5024" Offset="0"/>
+                                <GradientStop Color="#00FF5024" Offset="1"/>
                             </RadialGradientBrush>
                         </Ellipse.Fill>
                     </Ellipse>
@@ -259,8 +259,8 @@
                           Data="M 0,220 L 120,0 L 180,0 L 60,220 Z">
                         <Path.Fill>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FF6A1A" Offset="0"/>
+                                <GradientStop Color="#FF3B30" Offset="1"/>
                             </LinearGradientBrush>
                         </Path.Fill>
                     </Path>
@@ -281,7 +281,7 @@
                                 <Border CornerRadius="3" Padding="8,3" Background="#141821"
                                         BorderBrush="#262C39" BorderThickness="1" Margin="8,0,0,0">
                                     <TextBlock Text="{Binding CountdownLabel}" FontFamily="Segoe UI"
-                                               FontWeight="Black" FontSize="9" Foreground="#FF6A00"/>
+                                               FontWeight="Black" FontSize="9" Foreground="#FF6A1A"/>
                                 </Border>
                             </StackPanel>
                             <TextBlock Text="{Binding Name}" FontFamily="Segoe UI" FontWeight="Black"
@@ -300,7 +300,7 @@
                                 <TextBlock.Foreground>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                         <GradientStop Color="#FF9A3C" Offset="0"/>
-                                        <GradientStop Color="#D7261E" Offset="1"/>
+                                        <GradientStop Color="#FF3B30" Offset="1"/>
                                     </LinearGradientBrush>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -368,7 +368,7 @@
                         <TextBlock Text="MAP POOL" FontFamily="Segoe UI" FontWeight="Black"
                                    FontSize="9" Foreground="#5A6577" Margin="0,0,0,8"/>
                         <TextBlock Text="{Binding MapPoolText}" FontFamily="Segoe UI"
-                                   FontWeight="Bold" FontSize="13" Foreground="#FF6A00"
+                                   FontWeight="Bold" FontSize="13" Foreground="#FF6A1A"
                                    TextWrapping="Wrap"/>
                     </StackPanel>
                 </Grid>
@@ -379,8 +379,8 @@
                 <Border Width="3" Height="18" CornerRadius="2" Margin="0,0,12,0">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#FF6A00" Offset="0"/>
-                            <GradientStop Color="#D7261E" Offset="1"/>
+                            <GradientStop Color="#FF6A1A" Offset="0"/>
+                            <GradientStop Color="#FF3B30" Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
                 </Border>
@@ -461,7 +461,7 @@
                                 <Border.BorderBrush>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                         <GradientStop Color="#FFD700" Offset="0"/>
-                                        <GradientStop Color="#FF6A00" Offset="1"/>
+                                        <GradientStop Color="#FF6A1A" Offset="1"/>
                                     </LinearGradientBrush>
                                 </Border.BorderBrush>
                                 <ContentControl Content="{Binding Bracket[2].Matches[0]}"
@@ -478,8 +478,8 @@
                 <Border Width="3" Height="18" CornerRadius="2" Margin="0,0,12,0">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#FF6A00" Offset="0"/>
-                            <GradientStop Color="#D7261E" Offset="1"/>
+                            <GradientStop Color="#FF6A1A" Offset="0"/>
+                            <GradientStop Color="#FF3B30" Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
                 </Border>
@@ -507,7 +507,7 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="BorderBrush" Value="#70FF6A00"/>
+                                            <Setter Property="BorderBrush" Value="#70FF6A1A"/>
                                             <Setter Property="Background" Value="#171B22"/>
                                         </Trigger>
                                     </Style.Triggers>
@@ -530,7 +530,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Tag}" FontFamily="Segoe UI"
                                                    FontWeight="Black" FontSize="13"
-                                                   Foreground="#FF6A00"/>
+                                                   Foreground="#FF6A1A"/>
                                         <Rectangle Width="1" Height="10" Fill="#2E3543" Margin="8,0"/>
                                         <TextBlock Text="{Binding SeedLabel}" FontFamily="Segoe UI"
                                                    FontWeight="Bold" FontSize="11"

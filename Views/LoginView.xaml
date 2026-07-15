@@ -28,16 +28,25 @@
                      Margin="-200,0,0,0">
                 <Ellipse.Fill>
                     <RadialGradientBrush>
-                        <GradientStop Color="#18FF4D00" Offset="0"/>
-                        <GradientStop Color="#00FF4D00" Offset="1"/>
+                        <GradientStop Color="#18FF5024" Offset="0"/>
+                        <GradientStop Color="#00FF5024" Offset="1"/>
                     </RadialGradientBrush>
                 </Ellipse.Fill>
             </Ellipse>
 
             <!-- Geometric diagonal accent line -->
             <Line X1="0" Y1="580" X2="500" Y2="0"
-                  Stroke="#10FF6A00" StrokeThickness="120"
+                  Stroke="#10FF6A1A" StrokeThickness="120"
                   HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+
+            <!-- Cantos HUD (marca Summit) -->
+            <Border Width="26" Height="26" BorderBrush="#FF3B30" BorderThickness="2,2,0,0"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,18,0,0" Opacity="0.8"/>
+            <Border Width="26" Height="26" BorderBrush="#FF3B30" BorderThickness="0,0,2,2"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,18,18" Opacity="0.8"/>
+            <TextBlock Text="////" FontFamily="Segoe UI" FontWeight="Black" FontSize="14"
+                       Foreground="#FF3B30" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                       Margin="20,0,0,16" Opacity="0.7"/>
 
             <!-- Title bar drag / window controls -->
             <Grid Height="40" VerticalAlignment="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
@@ -60,31 +69,31 @@
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="64,0,40,0">
 
                     <!-- Logo -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <TextBlock Text="▲" FontSize="44" VerticalAlignment="Center" Margin="0,0,16,4"
-                                   Foreground="{StaticResource BrushAccent}">
-                            <TextBlock.Effect>
-                                <DropShadowEffect Color="#FF6A00" BlurRadius="24" ShadowDepth="0" Opacity="0.7"/>
-                            </TextBlock.Effect>
-                        </TextBlock>
-                        <TextBlock Text="SUMMIT"
-                                   FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
-                                   Foreground="{StaticResource BrushTextPrimary}"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
+                    <Image Source="/Assets/logo.png" Height="110" HorizontalAlignment="Left"
+                           Margin="10,0,0,4" RenderOptions.BitmapScalingMode="HighQuality">
+                        <Image.Effect>
+                            <DropShadowEffect Color="#FF3B30" BlurRadius="34" ShadowDepth="0" Opacity="0.65"/>
+                        </Image.Effect>
+                    </Image>
 
-                    <TextBlock Text="A ARENA DOS MELHORES."
-                               FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13"
-                               Foreground="{StaticResource BrushTextSecondary}"
+                    <TextBlock Text="SUMMIT"
+                               FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
+                               Foreground="{StaticResource BrushTextPrimary}"
+                               Margin="18,0,0,4"/>
 
-                               Margin="22,0,0,0"/>
+                    <TextBlock FontFamily="Segoe UI" FontWeight="Bold" FontSize="12" Margin="22,2,0,0">
+                        <Run Text="ELEVATE YOUR GAME." Foreground="#FF6A1A"/>
+                    </TextBlock>
+                    <TextBlock FontFamily="Segoe UI" FontWeight="Bold" FontSize="10" Margin="22,8,0,0">
+                        <Run Text="FOCO" Foreground="#9AA5B5"/><Run Text="  //  " Foreground="#FF3B30"/><Run Text="PRECISÃO" Foreground="#9AA5B5"/><Run Text="  //  " Foreground="#FF3B30"/><Run Text="DOMINAÇÃO" Foreground="#9AA5B5"/>
+                    </TextBlock>
 
                     <Border Width="80" Height="2" HorizontalAlignment="Left"
                                Margin="22,24,0,32">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#00FF6A00" Offset="1"/>
+                                <GradientStop Color="#FF6A1A" Offset="0"/>
+                                <GradientStop Color="#00FF6A1A" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                     </Border>
@@ -93,25 +102,25 @@
                     <WrapPanel Margin="22,0,0,0">
                         <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE7C1;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="&#xE7C1;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A1A" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Torneios" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
                             </StackPanel>
                         </Border>
                         <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A1A" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Times" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
                             </StackPanel>
                         </Border>
                         <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A1A" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Stats" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
                             </StackPanel>
                         </Border>
                         <Border CornerRadius="6" Padding="12,6" Margin="0,0,8,8" Background="#181D26" BorderBrush="#262C39" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A00" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FF6A1A" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="Badges" FontSize="12" Foreground="#9AA5B5" FontFamily="Segoe UI"/>
                             </StackPanel>
                         </Border>
@@ -124,7 +133,7 @@
                     <StackPanel VerticalAlignment="Center" Margin="44,0">
 
                         <TextBlock Text="BEM-VINDO" FontFamily="Segoe UI" FontWeight="Bold"
-                                   FontSize="10" Foreground="#FF6A00"
+                                   FontSize="10" Foreground="#FF6A1A"
                                    Margin="0,0,0,6"/>
                         <TextBlock Text="Entre na sua conta" FontFamily="Segoe UI" FontWeight="Bold"
                                    FontSize="26" Foreground="{StaticResource BrushTextPrimary}"

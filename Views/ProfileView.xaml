@@ -49,7 +49,7 @@
                 </Border.Background>
                 <Border.BorderBrush>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="#50FF6A00" Offset="0"/>
+                        <GradientStop Color="#50FF6A1A" Offset="0"/>
                         <GradientStop Color="#262C39" Offset="0.5"/>
                     </LinearGradientBrush>
                 </Border.BorderBrush>
@@ -64,8 +64,8 @@
                              Margin="-50,0,0,0">
                         <Ellipse.Fill>
                             <RadialGradientBrush>
-                                <GradientStop Color="#10FF6A00" Offset="0"/>
-                                <GradientStop Color="#00FF6A00" Offset="1"/>
+                                <GradientStop Color="#10FF6A1A" Offset="0"/>
+                                <GradientStop Color="#00FF6A1A" Offset="1"/>
                             </RadialGradientBrush>
                         </Ellipse.Fill>
                     </Ellipse>
@@ -81,7 +81,7 @@
                         <Grid Grid.Column="0" Width="84" Height="84"
                               Margin="0,0,24,0" VerticalAlignment="Top">
                             <Grid.Effect>
-                                <DropShadowEffect Color="#FF6A00" BlurRadius="18" ShadowDepth="0" Opacity="0.45"/>
+                                <DropShadowEffect Color="#FF6A1A" BlurRadius="18" ShadowDepth="0" Opacity="0.45"/>
                             </Grid.Effect>
 
                             <!-- Steam avatar -->
@@ -96,8 +96,8 @@
                                     Visibility="{Binding HasAvatar, Converter={StaticResource InverseBoolToVisibility}}">
                                 <Border.Background>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#FF6A00" Offset="0"/>
-                                        <GradientStop Color="#D7261E" Offset="1"/>
+                                        <GradientStop Color="#FF6A1A" Offset="0"/>
+                                        <GradientStop Color="#FF3B30" Offset="1"/>
                                     </LinearGradientBrush>
                                 </Border.Background>
                                 <TextBlock Text="{Binding NicknameInitial}" FontFamily="Segoe UI"
@@ -106,7 +106,7 @@
                             </Border>
 
                             <!-- Ring -->
-                            <Ellipse Stroke="#FF6A00" StrokeThickness="2" Opacity="0.65"
+                            <Ellipse Stroke="#FF6A1A" StrokeThickness="2" Opacity="0.65"
                                      IsHitTestVisible="False"/>
                         </Grid>
 
@@ -120,12 +120,12 @@
                                         VerticalAlignment="Center">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#25FF6A00" Offset="0"/>
-                                            <GradientStop Color="#25D7261E" Offset="1"/>
+                                            <GradientStop Color="#25FF6A1A" Offset="0"/>
+                                            <GradientStop Color="#25FF3B30" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                     <TextBlock Text="{Binding Rank}" FontFamily="Segoe UI"
-                                               FontWeight="Bold" FontSize="11" Foreground="#FF6A00"/>
+                                               FontWeight="Bold" FontSize="11" Foreground="#FF6A1A"/>
                                 </Border>
                             </StackPanel>
 
@@ -253,7 +253,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="BIO" FontFamily="Segoe UI" FontWeight="Bold"
-                                   FontSize="9" Foreground="#FF6A00"/>
+                                   FontSize="9" Foreground="#FF6A1A"/>
 
                         <!-- View mode -->
                         <TextBlock Grid.Row="2" Text="{Binding Bio}" FontFamily="Segoe UI"
@@ -286,7 +286,7 @@
                 <Border Grid.Column="2" Style="{StaticResource Card}">
                     <StackPanel>
                         <TextBlock Text="CONTA" FontFamily="Segoe UI" FontWeight="Bold"
-                                   FontSize="9" Foreground="#FF6A00" Margin="0,0,0,16"/>
+                                   FontSize="9" Foreground="#FF6A1A" Margin="0,0,0,16"/>
 
                         <!-- Rows -->
                         <Grid Margin="0,0,0,10">
@@ -318,7 +318,7 @@
                             <TextBlock Grid.Column="0" Text="Rank" FontFamily="Segoe UI"
                                        FontSize="12" Foreground="#9AA5B5"/>
                             <TextBlock Grid.Column="1" Text="{Binding Rank}" FontFamily="Segoe UI"
-                                       FontWeight="SemiBold" FontSize="12" Foreground="#FF6A00"/>
+                                       FontWeight="SemiBold" FontSize="12" Foreground="#FF6A1A"/>
                         </Grid>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -346,8 +346,8 @@
                     <Border Width="3" Height="20" CornerRadius="2" Margin="0,0,10,0">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FF6A1A" Offset="0"/>
+                                <GradientStop Color="#FF3B30" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                     </Border>
@@ -369,14 +369,14 @@
                                     Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets"
-                                               FontSize="20" Foreground="#FF6A00" VerticalAlignment="Center"
+                                               FontSize="20" Foreground="#FF6A1A" VerticalAlignment="Center"
                                                Margin="0,0,10,0"/>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="{Binding Name}" FontFamily="Segoe UI"
                                                    FontWeight="Bold" FontSize="12"
                                                    Foreground="{StaticResource BrushTextPrimary}"/>
                                         <TextBlock Text="{Binding Rarity}" FontFamily="Segoe UI"
-                                                   FontSize="10" Foreground="#FF6A00"/>
+                                                   FontSize="10" Foreground="#FF6A1A"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>

@@ -20,7 +20,7 @@
                     <Border x:Name="Root" CornerRadius="6" Background="{StaticResource BrushGradientBrand}"
                             SnapsToDevicePixels="True">
                         <Border.Effect>
-                            <DropShadowEffect Color="#FF6A00" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
+                            <DropShadowEffect Color="#FF6A1A" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
                         </Border.Effect>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
@@ -81,12 +81,12 @@
                     <Border x:Name="Root" CornerRadius="8" SnapsToDevicePixels="True">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FF6A1A" Offset="0"/>
+                                <GradientStop Color="#FF3B30" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                         <Border.Effect>
-                            <DropShadowEffect Color="#FF4D00" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/>
+                            <DropShadowEffect Color="#FF5024" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/>
                         </Border.Effect>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Margin="{TemplateBinding Padding}"/>

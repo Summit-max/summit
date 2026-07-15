@@ -252,7 +252,7 @@ public class SteamAuthService
        display:flex;align-items:center;justify-content:center;height:100vh}
   .card{padding:40px 48px;border-radius:14px;border:1px solid #262C39;
         background:linear-gradient(135deg,#1E1208,#12151B);text-align:center;max-width:420px}
-  h1{margin:0 0 10px;font-size:28px;background:linear-gradient(90deg,#FF6A00,#D7261E);
+  h1{margin:0 0 10px;font-size:28px;background:linear-gradient(90deg,#FF6A1A,#FF3B30);
      -webkit-background-clip:text;color:transparent;font-weight:900;letter-spacing:-.5px}
   p{color:#9AA5B5;font-size:14px;line-height:1.5}
 </style></head><body><div class='card'>

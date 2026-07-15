@@ -53,8 +53,8 @@
                     <Border Width="64" Height="64" CornerRadius="8" Margin="0,0,20,0">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FF6A1A" Offset="0"/>
+                                <GradientStop Color="#FF3B30" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                         <TextBlock Text="{Binding Team.Tag}" FontFamily="Segoe UI" FontWeight="Black"
@@ -66,7 +66,7 @@
                         <TextBlock Text="{Binding Team.Name}" FontFamily="Segoe UI" FontWeight="Black"
                                    FontSize="26" Foreground="{StaticResource BrushTextPrimary}"/>
                         <TextBlock FontFamily="Segoe UI" FontSize="12" Foreground="#9AA5B5" Margin="0,4,0,0">
-                            <Run Text="["/><Run Text="{Binding Team.Tag, Mode=OneWay}" FontWeight="Bold" Foreground="#FF6A00"/><Run Text="]  •  "/>
+                            <Run Text="["/><Run Text="{Binding Team.Tag, Mode=OneWay}" FontWeight="Bold" Foreground="#FF6A1A"/><Run Text="]  •  "/>
                             <Run Text="{Binding Team.Members.Count, Mode=OneWay}"/><Run Text=" jogadores"/>
                         </TextBlock>
                     </StackPanel>
@@ -108,8 +108,8 @@
                     <Border Width="3" Height="20" CornerRadius="2" Margin="0,0,10,0">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FF6A1A" Offset="0"/>
+                                <GradientStop Color="#FF3B30" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                     </Border>
@@ -143,10 +143,10 @@
             <!-- Invite panel -->
             <Border Visibility="{Binding IsInviting, Converter={StaticResource BoolToVisibility}}"
                     CornerRadius="8" Padding="18,14" Margin="0,0,0,14"
-                    Background="#151A23" BorderBrush="#50FF6A00" BorderThickness="1">
+                    Background="#151A23" BorderBrush="#50FF6A1A" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="CONVIDAR JOGADOR" FontFamily="Segoe UI" FontWeight="Black"
-                               FontSize="10" Foreground="#FF6A00" Margin="0,0,0,10"/>
+                               FontSize="10" Foreground="#FF6A1A" Margin="0,0,0,10"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

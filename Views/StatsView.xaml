@@ -57,7 +57,7 @@
             </Border.Background>
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#50FF6A00" Offset="0"/>
+                    <GradientStop Color="#50FF6A1A" Offset="0"/>
                     <GradientStop Color="#1E232E" Offset="0.6"/>
                 </LinearGradientBrush>
             </Border.BorderBrush>
@@ -68,8 +68,8 @@
                          IsHitTestVisible="False">
                     <Ellipse.Fill>
                         <RadialGradientBrush>
-                            <GradientStop Color="#20FF6A00" Offset="0"/>
-                            <GradientStop Color="#00FF6A00" Offset="1"/>
+                            <GradientStop Color="#20FF6A1A" Offset="0"/>
+                            <GradientStop Color="#00FF6A1A" Offset="1"/>
                         </RadialGradientBrush>
                     </Ellipse.Fill>
                 </Ellipse>
@@ -84,7 +84,7 @@
                     <!-- WINRATE -->
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock Text="WINRATE" FontFamily="Segoe UI" FontWeight="Black"
-                                   FontSize="10" Foreground="#FF6A00" Margin="0,0,0,10"/>
+                                   FontSize="10" Foreground="#FF6A1A" Margin="0,0,0,10"/>
                         <TextBlock Text="{Binding WinRateText}" FontFamily="Segoe UI" FontWeight="Black"
                                    FontSize="64" Foreground="{StaticResource BrushTextPrimary}"/>
 
@@ -119,7 +119,7 @@
                     <!-- K/D (centro, destaque) -->
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Text="K/D RATIO" FontFamily="Segoe UI" FontWeight="Black"
-                                   FontSize="11" Foreground="#FF6A00" Margin="0,0,0,14"
+                                   FontSize="11" Foreground="#FF6A1A" Margin="0,0,0,14"
                                    HorizontalAlignment="Center"/>
                         <Grid>
                             <TextBlock Text="{Binding KDText}" FontFamily="Segoe UI" FontWeight="Black"
@@ -127,12 +127,12 @@
                                 <TextBlock.Foreground>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                         <GradientStop Color="#FFE66B" Offset="0"/>
-                                        <GradientStop Color="#FF6A00" Offset="0.5"/>
-                                        <GradientStop Color="#D7261E" Offset="1"/>
+                                        <GradientStop Color="#FF6A1A" Offset="0.5"/>
+                                        <GradientStop Color="#FF3B30" Offset="1"/>
                                     </LinearGradientBrush>
                                 </TextBlock.Foreground>
                                 <TextBlock.Effect>
-                                    <DropShadowEffect Color="#FF4D00" BlurRadius="26"
+                                    <DropShadowEffect Color="#FF5024" BlurRadius="26"
                                                       ShadowDepth="0" Opacity="0.55"/>
                                 </TextBlock.Effect>
                             </TextBlock>
@@ -151,8 +151,8 @@
                                                     HorizontalAlignment="Left">
                                                 <Border.Background>
                                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                        <GradientStop Color="#FF6A00" Offset="0"/>
-                                                        <GradientStop Color="#D7261E" Offset="1"/>
+                                                        <GradientStop Color="#FF6A1A" Offset="0"/>
+                                                        <GradientStop Color="#FF3B30" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.Background>
                                             </Border>
@@ -169,7 +169,7 @@
                     <!-- HEADSHOT % -->
                     <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
                         <TextBlock Text="HEADSHOT %" FontFamily="Segoe UI" FontWeight="Black"
-                                   FontSize="10" Foreground="#FF6A00" Margin="0,0,0,10"
+                                   FontSize="10" Foreground="#FF6A1A" Margin="0,0,0,10"
                                    HorizontalAlignment="Right"/>
                         <TextBlock Text="{Binding HSText}" FontFamily="Segoe UI" FontWeight="Black"
                                    FontSize="64" Foreground="{StaticResource BrushTextPrimary}"
@@ -306,7 +306,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock Text="MAPA FAVORITO" FontFamily="Segoe UI" FontWeight="Black"
-                                   FontSize="10" Foreground="#FF6A00"/>
+                                   FontSize="10" Foreground="#FF6A1A"/>
                         <TextBlock Text="{Binding FavoriteMap}" FontFamily="Segoe UI" FontWeight="Black"
                                    FontSize="32" Foreground="{StaticResource BrushTextPrimary}"
                                    Margin="0,6,0,0"/>
@@ -314,7 +314,7 @@
                                    FontSize="11" Foreground="#5A6577" Margin="0,4,0,0"/>
                     </StackPanel>
                     <TextBlock Grid.Column="1" Text="&#xE707;" FontFamily="Segoe MDL2 Assets"
-                               FontSize="64" Foreground="#10FF6A00" VerticalAlignment="Center"
+                               FontSize="64" Foreground="#10FF6A1A" VerticalAlignment="Center"
                                IsHitTestVisible="False"/>
                 </Grid>
             </Border>
@@ -328,7 +328,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock Text="ARMA FAVORITA" FontFamily="Segoe UI" FontWeight="Black"
-                                   FontSize="10" Foreground="#FF6A00"/>
+                                   FontSize="10" Foreground="#FF6A1A"/>
                         <TextBlock Text="{Binding FavoriteWeapon}" FontFamily="Segoe UI" FontWeight="Black"
                                    FontSize="32" Foreground="{StaticResource BrushTextPrimary}"
                                    Margin="0,6,0,0"/>
@@ -336,7 +336,7 @@
                                    FontSize="11" Foreground="#5A6577" Margin="0,4,0,0"/>
                     </StackPanel>
                     <TextBlock Grid.Column="1" Text="&#xE8D7;" FontFamily="Segoe MDL2 Assets"
-                               FontSize="58" Foreground="#10FF6A00" VerticalAlignment="Center"
+                               FontSize="58" Foreground="#10FF6A1A" VerticalAlignment="Center"
                                IsHitTestVisible="False"/>
                 </Grid>
             </Border>
@@ -347,8 +347,8 @@
             <Border Width="3" Height="18" CornerRadius="2" Margin="0,0,12,0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#FF6A00" Offset="0"/>
-                        <GradientStop Color="#D7261E" Offset="1"/>
+                        <GradientStop Color="#FF6A1A" Offset="0"/>
+                        <GradientStop Color="#FF3B30" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
             </Border>
@@ -447,7 +447,7 @@
                                                FontSize="9" Foreground="#5A6577"
                                                HorizontalAlignment="Right"/>
                                     <TextBlock Text="{Binding KD}" FontFamily="Segoe UI" FontWeight="Black"
-                                               FontSize="13" Foreground="#FF6A00"
+                                               FontSize="13" Foreground="#FF6A1A"
                                                HorizontalAlignment="Right" Margin="0,2,0,0"/>
                                 </StackPanel>
                             </Grid>

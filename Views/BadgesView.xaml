@@ -64,7 +64,7 @@
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
-                                            <Setter Property="BorderBrush" Value="#60FF6A00"/>
+                                            <Setter Property="BorderBrush" Value="#60FF6A1A"/>
                                         </DataTrigger>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" Value="#262C39"/>
@@ -114,7 +114,7 @@
                                                 <Setter Property="Foreground" Value="#434D5F"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
-                                                        <Setter Property="Foreground" Value="#FF6A00"/>
+                                                        <Setter Property="Foreground" Value="#FF6A1A"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>

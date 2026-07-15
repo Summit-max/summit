@@ -43,7 +43,7 @@
                                        FontSize="26" Foreground="{StaticResource BrushTextPrimary}"/>
                             <Border CornerRadius="4" Padding="8,3" Margin="12,4,0,0" Background="#1E232E">
                                 <TextBlock Text="{Binding Team.Tag}" FontFamily="Segoe UI" FontWeight="Bold"
-                                           FontSize="11" Foreground="#FF6A00"/>
+                                           FontSize="11" Foreground="#FF6A1A"/>
                             </Border>
                         </StackPanel>
                         <TextBlock Text="{Binding Team.Description}" FontFamily="Segoe UI" FontSize="12"
@@ -55,7 +55,7 @@
                             <TextBlock Text="ELO" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
                                        Foreground="#5A6577" HorizontalAlignment="Center"/>
                             <TextBlock Text="{Binding Team.Elo}" FontFamily="Segoe UI" FontWeight="Black"
-                                       FontSize="22" Foreground="#FF6A00" HorizontalAlignment="Center"/>
+                                       FontSize="22" Foreground="#FF6A1A" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Margin="0,0,28,0">
                             <TextBlock Text="VITÓRIAS" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
@@ -97,7 +97,7 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="BorderBrush" Value="#60FF6A00"/>
+                                            <Setter Property="BorderBrush" Value="#60FF6A1A"/>
                                             <Setter Property="Background" Value="#171B22"/>
                                         </Trigger>
                                     </Style.Triggers>
@@ -121,7 +121,7 @@
                                 </StackPanel>
 
                                 <TextBlock Grid.Column="2" Text="{Binding Rank}" FontFamily="Segoe UI"
-                                           FontWeight="Bold" FontSize="12" Foreground="#FF6A00"
+                                           FontWeight="Bold" FontSize="12" Foreground="#FF6A1A"
                                            VerticalAlignment="Center"/>
                             </Grid>
                         </Border>

@@ -23,8 +23,8 @@
             <Ellipse Width="500" Height="500" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Ellipse.Fill>
                     <RadialGradientBrush>
-                        <GradientStop Color="#14FF4D00" Offset="0"/>
-                        <GradientStop Color="#00FF4D00" Offset="1"/>
+                        <GradientStop Color="#14FF5024" Offset="0"/>
+                        <GradientStop Color="#00FF5024" Offset="1"/>
                     </RadialGradientBrush>
                 </Ellipse.Fill>
             </Ellipse>
@@ -67,20 +67,21 @@
                     </StackPanel.RenderTransform>
                     <StackPanel.RenderTransformOrigin>0.5,0.5</StackPanel.RenderTransformOrigin>
 
-                    <TextBlock Text="▲" FontSize="44" VerticalAlignment="Center" Margin="0,0,16,4"
-                               Foreground="{StaticResource BrushAccent}">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Color="#FF6A00" BlurRadius="24" ShadowDepth="0" Opacity="0.7"/>
-                        </TextBlock.Effect>
-                    </TextBlock>
+                    <Image Source="/Assets/logo.png" Height="66" Margin="0,0,16,0"
+                           VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality">
+                        <Image.Effect>
+                            <DropShadowEffect Color="#FF3B30" BlurRadius="28" ShadowDepth="0" Opacity="0.7"/>
+                        </Image.Effect>
+                    </Image>
                     <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black" FontSize="52"
                                Foreground="#F2F5FA" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Tagline -->
-                <TextBlock Text="A ARENA DOS MELHORES" FontFamily="Segoe UI" FontWeight="SemiBold"
-                           FontSize="11" Foreground="#5A6577" HorizontalAlignment="Center"
+                <TextBlock FontFamily="Segoe UI" FontWeight="Bold"
+                           FontSize="10" HorizontalAlignment="Center"
                            Margin="0,10,0,36" x:Name="Tagline" Opacity="0">
+                    <Run Text="FOCO" Foreground="#9AA5B5"/><Run Text="  //  " Foreground="#FF3B30"/><Run Text="PRECISÃO" Foreground="#9AA5B5"/><Run Text="  //  " Foreground="#FF3B30"/><Run Text="DOMINAÇÃO" Foreground="#9AA5B5"/>
                     <TextBlock.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
                             <BeginStoryboard>
@@ -112,8 +113,8 @@
                             Width="0" Height="2">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#FF6A00" Offset="0"/>
-                                <GradientStop Color="#D7261E" Offset="1"/>
+                                <GradientStop Color="#FF6A1A" Offset="0"/>
+                                <GradientStop Color="#FF3B30" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
                         <Border.Triggers>

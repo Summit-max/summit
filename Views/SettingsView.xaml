@@ -35,7 +35,7 @@
         <Border Grid.Row="2" Style="{StaticResource Card}" MaxWidth="560" HorizontalAlignment="Left">
             <StackPanel>
                 <TextBlock Text="CONTA" FontFamily="Segoe UI" FontWeight="Bold"
-                           FontSize="9" Foreground="#FF6A00" Margin="0,0,0,20"/>
+                           FontSize="9" Foreground="#FF6A1A" Margin="0,0,0,20"/>
 
                 <Grid Margin="0,0,0,14">
                     <Grid.ColumnDefinitions>
