@@ -91,6 +91,7 @@ public class MainShellViewModel : BaseViewModel
             {
                 TournamentDetailsViewModel => "CAMPEONATO",
                 PlayerProfileViewModel     => "JOGADOR",
+                TeamProfileViewModel       => "TIME",
                 MatchDetailsViewModel      => "PARTIDA",
                 _                          => PageTitle
             };

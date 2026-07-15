@@ -197,7 +197,7 @@
 
                     <!-- 2º lugar -->
                     <StackPanel Grid.Column="0" VerticalAlignment="Bottom"
-                                DataContext="{Binding Second}">
+                                DataContext="{Binding Second}" Cursor="Hand"><StackPanel.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenPlayerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding UserId}"/></StackPanel.InputBindings>
                         <Grid Width="96" Height="96" HorizontalAlignment="Center" Margin="0,0,0,12">
                             <Ellipse Width="110" Height="110" Fill="#15C0C0C0" IsHitTestVisible="False"/>
                             <Ellipse>
@@ -276,17 +276,8 @@
 
                     <!-- 1º lugar -->
                     <StackPanel Grid.Column="1" VerticalAlignment="Bottom"
-                                DataContext="{Binding First}">
-                        <!-- Crown -->
-                        <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets"
-                                   FontSize="34" Foreground="#FFD700" HorizontalAlignment="Center"
-                                   Margin="0,0,0,6">
-                            <TextBlock.Effect>
-                                <DropShadowEffect Color="#FFD700" BlurRadius="22" ShadowDepth="0" Opacity="0.85"/>
-                            </TextBlock.Effect>
-                        </TextBlock>
-
-                        <Grid Width="120" Height="120" HorizontalAlignment="Center" Margin="0,0,0,14">
+                                DataContext="{Binding First}" Cursor="Hand"><StackPanel.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenPlayerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding UserId}"/></StackPanel.InputBindings>
+                                                <Grid Width="120" Height="120" HorizontalAlignment="Center" Margin="0,0,0,14">
                             <Ellipse Width="140" Height="140" IsHitTestVisible="False">
                                 <Ellipse.Fill>
                                     <RadialGradientBrush>
@@ -381,7 +372,7 @@
 
                     <!-- 3º lugar -->
                     <StackPanel Grid.Column="2" VerticalAlignment="Bottom"
-                                DataContext="{Binding Third}">
+                                DataContext="{Binding Third}" Cursor="Hand"><StackPanel.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenPlayerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding UserId}"/></StackPanel.InputBindings>
                         <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,12">
                             <Ellipse Width="104" Height="104" Fill="#15CD7F32" IsHitTestVisible="False"/>
                             <Ellipse>
@@ -469,7 +460,7 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- 2º time -->
-                    <StackPanel Grid.Column="0" VerticalAlignment="Bottom" DataContext="{Binding SecondTeam}">
+                    <StackPanel Grid.Column="0" VerticalAlignment="Bottom" DataContext="{Binding SecondTeam}" Cursor="Hand"><StackPanel.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenTeamCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding TeamId}"/></StackPanel.InputBindings>
                         <Border Width="96" Height="96" CornerRadius="16" HorizontalAlignment="Center"
                                 Margin="0,0,0,12">
                             <Border.Background>
@@ -513,7 +504,7 @@
                     </StackPanel>
 
                     <!-- 1º time -->
-                    <StackPanel Grid.Column="1" VerticalAlignment="Bottom" DataContext="{Binding FirstTeam}">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Bottom" DataContext="{Binding FirstTeam}" Cursor="Hand"><StackPanel.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenTeamCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding TeamId}"/></StackPanel.InputBindings>
                         <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets" FontSize="34"
                                    Foreground="#FFD700" HorizontalAlignment="Center" Margin="0,0,0,6">
                             <TextBlock.Effect>
@@ -571,7 +562,7 @@
                     </StackPanel>
 
                     <!-- 3º time -->
-                    <StackPanel Grid.Column="2" VerticalAlignment="Bottom" DataContext="{Binding ThirdTeam}">
+                    <StackPanel Grid.Column="2" VerticalAlignment="Bottom" DataContext="{Binding ThirdTeam}" Cursor="Hand"><StackPanel.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenTeamCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding TeamId}"/></StackPanel.InputBindings>
                         <Border Width="90" Height="90" CornerRadius="16"
                                 HorizontalAlignment="Center" Margin="0,0,0,12">
                             <Border.Background>
@@ -649,7 +640,7 @@
                 <DataTemplate>
                     <Border Margin="0,0,0,10" Padding="18,14" CornerRadius="10"
                             Background="#12151B" BorderBrush="#1E232E" BorderThickness="1"
-                            Cursor="Hand">
+                            Cursor="Hand"><Border.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenPlayerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding UserId}"/></Border.InputBindings>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
@@ -786,7 +777,7 @@
                 <DataTemplate>
                     <Border Margin="0,0,0,10" Padding="18,14" CornerRadius="10"
                             Background="#12151B" BorderBrush="#1E232E" BorderThickness="1"
-                            Cursor="Hand">
+                            Cursor="Hand"><Border.InputBindings><MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenTeamCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding TeamId}"/></Border.InputBindings>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>

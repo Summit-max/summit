@@ -351,14 +351,16 @@ app.MapPost("/api/tournaments/{id}/register", async (ApiDbContext db, string id,
         !await CompetitionEndpoints.IsOwnerOrSub(db, req.TeamId, req.ByUserId))
         return Results.Ok(false);
 
-    // escalação: usa a enviada ou monta com os 5 mais antigos do elenco
+    // escalação: 5 quando o elenco permite; senão o elenco completo (modo alpha)
+    var required = Math.Min(5, team.Members.Count);
+    if (required < 1) return Results.Ok(false);
     var playerIds = (req.PlayerIds != null && req.PlayerIds.Count > 0)
         ? req.PlayerIds
-        : team.Members.OrderBy(m => m.TeamJoinedAt ?? DateTime.MaxValue).Take(5).Select(m => m.Id).ToList();
+        : team.Members.OrderBy(m => m.TeamJoinedAt ?? DateTime.MaxValue).Take(required).Select(m => m.Id).ToList();
     var captainId = req.CaptainUserId
         ?? (playerIds.Contains(team.CaptainId) ? team.CaptainId : playerIds.FirstOrDefault());
 
-    var error = await CompetitionEndpoints.ValidateLineupAsync(db, id, req.TeamId, playerIds, captainId, null);
+    var error = await CompetitionEndpoints.ValidateLineupAsync(db, id, req.TeamId, playerIds, captainId, null, required);
     if (error != null) return Results.Ok(false);
 
     var tt = new TournamentTeam

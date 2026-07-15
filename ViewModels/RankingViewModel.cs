@@ -50,6 +50,8 @@ public class RankingViewModel : BaseViewModel
 
     public RelayCommand ShowPlayersCommand { get; }
     public RelayCommand ShowTeamsCommand { get; }
+    public RelayCommand OpenPlayerCommand { get; }
+    public RelayCommand OpenTeamCommand { get; }
 
     public RankingViewModel()
     {
@@ -60,6 +62,14 @@ public class RankingViewModel : BaseViewModel
         ShowTeamsCommand = new RelayCommand(_ =>
         {
             ShowingPlayers = false;
+        });
+        OpenPlayerCommand = new RelayCommand(p =>
+        {
+            if (p is string id) App.Navigation.NavigateTo(new PlayerProfileViewModel(id));
+        });
+        OpenTeamCommand = new RelayCommand(p =>
+        {
+            if (p is string id) App.Navigation.NavigateTo(new TeamProfileViewModel(id));
         });
         _ = LoadAsync();
     }

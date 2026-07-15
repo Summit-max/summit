@@ -200,7 +200,9 @@ public static class CompetitionEndpoints
             if (tt == null) return Results.BadRequest("Time não inscrito.");
             if (!await IsOwnerOrSub(db, body.TeamId, body.ByUserId)) return Results.Forbid();
 
-            var error = await ValidateLineupAsync(db, id, body.TeamId, body.PlayerIds, body.CaptainUserId, tt.Id);
+            var memberCount = await db.Users.CountAsync(u => u.TeamId == body.TeamId);
+            var error = await ValidateLineupAsync(db, id, body.TeamId, body.PlayerIds, body.CaptainUserId,
+                tt.Id, Math.Min(5, memberCount));
             if (error != null) return Results.BadRequest(error);
 
             db.TournamentLineupPlayers.RemoveRange(tt.Lineup);
@@ -340,16 +342,20 @@ public static class CompetitionEndpoints
         => await db.Users.AnyAsync(u => u.Id == userId && u.TeamId == teamId &&
             (u.TeamRole == TeamRole.Captain || u.TeamRole == TeamRole.ViceCaptain));
 
-    /// <summary>Valida os 5 jogadores + capitão de uma escalação (espec-times §16).</summary>
+    /// <summary>
+    /// Valida a escalação + capitão (espec-times §16). O padrão competitivo é 5;
+    /// enquanto o time tem elenco menor, aceita o elenco completo (modo alpha).
+    /// </summary>
     public static async Task<string?> ValidateLineupAsync(
         ApiDbContext db, string tournamentId, string teamId,
-        List<string> playerIds, string? captainUserId, string? ignoreTournamentTeamId)
+        List<string> playerIds, string? captainUserId, string? ignoreTournamentTeamId,
+        int requiredCount = 5)
     {
         var ids = playerIds.Distinct().ToList();
-        if (ids.Count != 5) return "A escalação precisa de exatamente 5 jogadores.";
+        if (ids.Count != requiredCount) return $"A escalação precisa de exatamente {requiredCount} jogadores.";
 
         var inTeam = await db.Users.CountAsync(u => ids.Contains(u.Id) && u.TeamId == teamId);
-        if (inTeam != 5) return "Todos os 5 jogadores precisam pertencer ao time.";
+        if (inTeam != requiredCount) return "Todos os jogadores da escalação precisam pertencer ao time.";
 
         if (string.IsNullOrEmpty(captainUserId) || !ids.Contains(captainUserId))
             return "O capitão da escalação deve estar entre os 5 selecionados.";

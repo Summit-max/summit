@@ -57,11 +57,8 @@
         <GradientStop Color="#171B22" Offset="1"/>
     </LinearGradientBrush>
 
-    <!-- Subtle tint for active sidebar item (cobre a linha inteira) -->
-    <LinearGradientBrush x:Key="BrushSidebarActive" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#33FF6A00" Offset="0"/>
-        <GradientStop Color="#14FF6A00" Offset="1"/>
-    </LinearGradientBrush>
+    <!-- Active sidebar item: laranja cobrindo o botão inteiro -->
+    <SolidColorBrush x:Key="BrushSidebarActive" Color="#3DFF6A00"/>
 
     <!-- Login panel gradient -->
     <LinearGradientBrush x:Key="BrushLoginPanel" StartPoint="0,0" EndPoint="0,1">

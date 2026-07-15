@@ -1,0 +1,133 @@
+<UserControl x:Class="Summit.Views.TeamProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:h="clr-namespace:Summit.Helpers"
+             xmlns:c="clr-namespace:Summit.Components"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <h:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="40,32,40,40"
+              Visibility="{Binding HasTeam, Converter={StaticResource BoolToVisibility}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="28"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="18"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" CornerRadius="14" Padding="28" Background="#12151B"
+                    BorderBrush="#1E232E" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="76" Height="76" CornerRadius="14"
+                            Background="{StaticResource BrushGradientBrandD}" Margin="0,0,20,0">
+                        <TextBlock Text="{Binding Team.InitialLetter}" FontFamily="Segoe UI"
+                                   FontWeight="Black" FontSize="30" Foreground="White"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Team.Name}" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="26" Foreground="{StaticResource BrushTextPrimary}"/>
+                            <Border CornerRadius="4" Padding="8,3" Margin="12,4,0,0" Background="#1E232E">
+                                <TextBlock Text="{Binding Team.Tag}" FontFamily="Segoe UI" FontWeight="Bold"
+                                           FontSize="11" Foreground="#FF6A00"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Team.Description}" FontFamily="Segoe UI" FontSize="12"
+                                   Foreground="#9AA5B5" Margin="0,6,0,0" TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <StackPanel Margin="0,0,28,0">
+                            <TextBlock Text="ELO" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                                       Foreground="#5A6577" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Team.Elo}" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="22" Foreground="#FF6A00" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,28,0">
+                            <TextBlock Text="VITÓRIAS" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                                       Foreground="#5A6577" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Team.MatchesWon}" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="22" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="TÍTULOS" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                                       Foreground="#5A6577" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Team.TournamentsWon}" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="22" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Section -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Border Width="3" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                        Background="{StaticResource BrushGradientBrandV}"/>
+                <TextBlock Text="ELENCO" FontFamily="Segoe UI" FontWeight="Black" FontSize="13"
+                           Foreground="{StaticResource BrushTextPrimary}" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Members -->
+            <ItemsControl Grid.Row="4" ItemsSource="{Binding Team.Members}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,10" Padding="16,12" CornerRadius="10"
+                                Background="#12151B" BorderBrush="#1E232E" BorderThickness="1"
+                                Cursor="Hand">
+                            <Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick"
+                                              Command="{Binding DataContext.OpenPlayerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              CommandParameter="{Binding Id}"/>
+                            </Border.InputBindings>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="#60FF6A00"/>
+                                            <Setter Property="Background" Value="#171B22"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <c:LevelBadge Grid.Column="0" Level="{Binding Level}" Size="40"
+                                              ShowTier="False" Margin="0,0,14,0"/>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Nickname}" FontFamily="Segoe UI" FontWeight="Bold"
+                                               FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
+                                    <TextBlock Text="{Binding PrimaryRole}" FontFamily="Segoe UI" FontSize="11"
+                                               Foreground="#5A6577" Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="2" Text="{Binding Rank}" FontFamily="Segoe UI"
+                                           FontWeight="Bold" FontSize="12" Foreground="#FF6A00"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
