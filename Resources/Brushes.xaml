@@ -58,7 +58,7 @@
     </LinearGradientBrush>
 
     <!-- Active sidebar item: laranja cobrindo o botão inteiro -->
-    <SolidColorBrush x:Key="BrushSidebarActive" Color="#3DFF6A1A"/>
+    <SolidColorBrush x:Key="BrushSidebarActive" Color="#14FFFFFF"/>
 
     <!-- Login panel gradient -->
     <LinearGradientBrush x:Key="BrushLoginPanel" StartPoint="0,0" EndPoint="0,1">
