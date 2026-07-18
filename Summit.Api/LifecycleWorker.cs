@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Json;
 using Summit.Models;
 
 namespace Summit.Api;
@@ -112,6 +113,33 @@ public class LifecycleWorker : BackgroundService
         }
 
         await db.SaveChangesAsync();
+        await AutoVetoBotsAsync(db);
+    }
+
+    private static readonly HttpClient Http = new() { BaseAddress = new Uri("http://localhost:5180") };
+
+    /// <summary>
+    /// Bots do seed (capitães com id curto, ex. usr_ghost) jogam o veto sozinhos —
+    /// um lance por tick, dando ritmo de adversário real. Dev only.
+    /// </summary>
+    private static async Task AutoVetoBotsAsync(ApiDbContext db)
+    {
+        var sessions = await db.VetoSessions.Include(s => s.Steps)
+            .Where(s => !s.IsComplete).ToListAsync();
+        foreach (var s in sessions)
+        {
+            var seq = CompetitionEndpoints.BuildSequence(s.Series, s.MapPool.Count);
+            if (s.StepIndex >= seq.Count) continue;
+            var (_, side) = seq[s.StepIndex];
+            var tag = side == 0 ? s.TeamATag : s.TeamBTag;
+            var team = await db.Teams.FirstOrDefaultAsync(t => t.Tag == tag);
+            if (team == null || team.CaptainId.Length > 12) continue;   // humano: não interfere
+            var remaining = CompetitionEndpoints.RemainingMaps(s);
+            if (remaining.Count == 0) continue;
+            var map = remaining[Random.Shared.Next(remaining.Count)];
+            try { await Http.PostAsJsonAsync($"/api/veto/{s.BracketMatchId}/action", new { teamTag = tag, map }); }
+            catch { }
+        }
     }
 
     /// <summary>Chave de eliminação simples — seed ALEATÓRIO (espec §5, sorteio pós check-in).</summary>

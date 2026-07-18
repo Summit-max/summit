@@ -53,6 +53,9 @@
             <DataTemplate DataType="{x:Type vm:TeamProfileViewModel}">
                 <views:TeamProfileView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:MatchRoomViewModel}">
+                <views:MatchRoomView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:MatchesViewModel}">
                 <views:MatchesView/>
             </DataTemplate>

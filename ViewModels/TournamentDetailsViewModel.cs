@@ -22,8 +22,13 @@ public class TournamentDetailsViewModel : BaseViewModel
         RegisterCommand = new RelayCommand(async _ => await RegisterAsync());
         OpenMatchCommand = new RelayCommand(p =>
         {
-            if (p is string matchId && !string.IsNullOrEmpty(matchId))
-                App.Navigation.NavigateTo(new MatchDetailsViewModel(matchId));
+            if (p is not BracketMatch bm) return;
+            if (bm.TeamATag == "TBD" || bm.TeamBTag == "TBD") return;
+            // finalizada com scoreboard → tela de resultado; senão → sala (hub c/ veto)
+            if (bm.IsFinished && !string.IsNullOrEmpty(bm.MatchId))
+                App.Navigation.NavigateTo(new MatchDetailsViewModel(bm.MatchId!));
+            else
+                App.Navigation.NavigateTo(new MatchRoomViewModel(bm.Id));
         });
         BackCommand     = new RelayCommand(_ =>
         {

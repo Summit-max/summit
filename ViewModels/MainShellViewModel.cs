@@ -93,6 +93,7 @@ public class MainShellViewModel : BaseViewModel
                 PlayerProfileViewModel     => "JOGADOR",
                 TeamProfileViewModel       => "TIME",
                 MatchDetailsViewModel      => "PARTIDA",
+                MatchRoomViewModel         => "SALA DA PARTIDA",
                 _                          => PageTitle
             };
             CurrentView = vm;

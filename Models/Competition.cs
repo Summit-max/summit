@@ -112,3 +112,17 @@ public class AuditLog
     public string? Reason { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
+
+// ───── DTOs do estado do veto (GET /api/veto/{bmId}) ─────
+public class VetoState
+{
+    public VetoSession? Session { get; set; }
+    public List<string> Remaining { get; set; } = new();
+    public VetoNext? Next { get; set; }
+}
+
+public class VetoNext
+{
+    public string Action { get; set; } = string.Empty;
+    public string Team { get; set; } = string.Empty;
+}

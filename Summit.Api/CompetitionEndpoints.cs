@@ -354,6 +354,12 @@ public static class CompetitionEndpoints
             return Results.Ok(new { complete = s.IsComplete, maps = picks, remaining = RemainingMaps(s) });
         });
 
+        app.MapGet("/api/matches/by-bracket/{bracketMatchId}", async (ApiDbContext db, string bracketMatchId) =>
+        {
+            var m = await db.Matches.FirstOrDefaultAsync(x => x.BracketMatchId == bracketMatchId);
+            return m == null ? Results.NotFound() : Results.Ok(m);
+        });
+
         // ═════════════ AUDITORIA ═════════════
 
         app.MapGet("/api/audit", async (ApiDbContext db, string? teamId, string? tournamentId, int take) =>
