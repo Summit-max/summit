@@ -20,7 +20,12 @@
 
         <!-- Match row inner content template (DataContext = BracketMatch) -->
         <DataTemplate x:Key="MatchInnerTpl">
-            <Grid>
+            <Grid Background="Transparent" Cursor="Hand">
+                <Grid.InputBindings>
+                    <MouseBinding MouseAction="LeftClick"
+                                  Command="{Binding DataContext.OpenMatchCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                  CommandParameter="{Binding MatchId}"/>
+                </Grid.InputBindings>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="1"/>

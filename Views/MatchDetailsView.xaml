@@ -224,9 +224,90 @@
                 </Grid>
             </Border>
 
+            <!-- ═════ SALA DA PARTIDA (servidor pronto) ═════ -->
+            <Border Grid.Row="4" CornerRadius="12" Padding="26" VerticalAlignment="Top"
+                    Background="#150F0C" BorderBrush="#60FF6A1A" BorderThickness="1"
+                    Visibility="{Binding HasRoom, Converter={StaticResource BoolToVisibility}}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                        <Border Width="8" Height="8" CornerRadius="4" Background="#22C55E"
+                                VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="SERVIDOR PRONTO — SALA DA PARTIDA" FontFamily="Segoe UI"
+                                   FontWeight="Black" FontSize="13" Foreground="#F2F5FA"/>
+                    </StackPanel>
+
+                    <Grid Margin="0,0,0,18">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="MAPA" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                                       Foreground="#5A6577"/>
+                            <TextBlock Text="{Binding RoomMap}" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="20" Foreground="#FF6A1A" Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="IP DO SERVIDOR" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                                       Foreground="#5A6577"/>
+                            <TextBlock Text="{Binding RoomIp}" FontFamily="Consolas" FontWeight="Bold"
+                                       FontSize="15" Foreground="#F2F5FA" Margin="0,5,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="SENHA" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                                       Foreground="#5A6577"/>
+                            <TextBlock Text="{Binding RoomPassword}" FontFamily="Consolas" FontWeight="Bold"
+                                       FontSize="15" Foreground="#F2F5FA" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Button Height="46" HorizontalAlignment="Left" MinWidth="280" Padding="24,0"
+                            Cursor="Hand" Command="{Binding ConnectCommand}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Root" CornerRadius="6">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#FF6A1A" Offset="0"/>
+                                            <GradientStop Color="#FF3B30" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#FF3B30" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                                    </Border.Effect>
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      Margin="{TemplateBinding Padding}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Root" Property="Opacity" Value="0.9"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                                       Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding ConnectLabel}" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="12" Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
             <!-- SCOREBOARD -->
             <Border Grid.Row="4" CornerRadius="10" Background="#12151B"
                     BorderBrush="#1E232E" BorderThickness="1">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasRoom}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <StackPanel>
                     <!-- Side A header -->
                     <Border Padding="14,12" Background="#141821" CornerRadius="10,10,0,0">

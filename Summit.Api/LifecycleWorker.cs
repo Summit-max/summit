@@ -114,9 +114,10 @@ public class LifecycleWorker : BackgroundService
         await db.SaveChangesAsync();
     }
 
-    /// <summary>Chave de eliminação simples a partir dos times presentes (seed ordena).</summary>
+    /// <summary>Chave de eliminação simples — seed ALEATÓRIO (espec §5, sorteio pós check-in).</summary>
     private static void GenerateBracket(ApiDbContext db, Tournament t, List<TournamentTeam> teams)
     {
+        teams = teams.OrderBy(_ => Random.Shared.Next()).ToList();
         int n = teams.Count;
         int totalRounds = (int)Math.Ceiling(Math.Log2(Math.Max(n, 2)));
 

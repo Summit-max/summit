@@ -11,14 +11,20 @@ public class TournamentDetailsViewModel : BaseViewModel
     public Tournament? Tournament { get => _tournament; set => SetProperty(ref _tournament, value); }
     public bool IsLoading         { get => _isLoading;  set => SetProperty(ref _isLoading, value); }
 
-    public RelayCommand RegisterCommand { get; }
-    public RelayCommand BackCommand     { get; }
+    public RelayCommand RegisterCommand  { get; }
+    public RelayCommand BackCommand      { get; }
+    public RelayCommand OpenMatchCommand { get; }
 
     public TournamentDetailsViewModel() : this("trn_001") { }
 
     public TournamentDetailsViewModel(string tournamentId)
     {
         RegisterCommand = new RelayCommand(async _ => await RegisterAsync());
+        OpenMatchCommand = new RelayCommand(p =>
+        {
+            if (p is string matchId && !string.IsNullOrEmpty(matchId))
+                App.Navigation.NavigateTo(new MatchDetailsViewModel(matchId));
+        });
         BackCommand     = new RelayCommand(_ =>
         {
             if (App.Navigation.CanGoBack) App.Navigation.GoBack();
