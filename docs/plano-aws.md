@@ -127,6 +127,31 @@ Confirmado ao vivo numa `c5.large` sa-east-1, Ubuntu 24.04. Guarde isso pro `use
    No AMI/user-data (Fase 3) isso não é problema — lá o processo já roda como serviço/systemd,
    não numa sessão SSH interativa.
 
+### ⏸️ MatchZy/CounterStrikeSharp — bloqueado por incompatibilidade upstream (22/jul/2026)
+Metamod:Source 2.0.0-dev+1407 instalado e carregando OK (`meta version` confirma).
+CounterStrikeSharp v1.0.371 (a mais recente no momento) falha ao carregar:
+```
+[META] Failed to load plugin addons/counterstrikesharp/bin/linuxsteamrt64/counterstrikesharp:
+.../counterstrikesharp.so: undefined symbol: g_bUpdateStringTokenDatabase
+```
+Isso é um problema **conhecido do ecossistema**, não nosso: a Valve atualizou o CS2 depois do
+dia 10/jul (quando saiu a v1.0.371, que corrigia a quebra anterior) e o CounterStrikeSharp ainda
+não lançou o fix pra essa atualização nova. Ver `github.com/roflmuffin/CounterStrikeSharp/issues`
+— esse tipo de quebra historicamente é corrigido em 1-2 dias pelo mantenedor.
+
+**Retomar assim que houver uma release mais nova que v1.0.371**:
+```bash
+curl -s https://api.github.com/repos/roflmuffin/CounterStrikeSharp/releases/latest | grep tag_name
+```
+Se aparecer versão > 1.0.371, tenta o mesmo processo (baixar o zip `-with-runtime-linux-`
+ou o combo do MatchZy `-with-cssharp-linux-`, extrair em `~/cs2/game/csgo/`, reiniciar o server
+dentro do `screen`, conferir com `meta list` dentro do console).
+
+Arquivos já no lugar certo nessa instância de teste (não precisa refazer):
+- `~/cs2/game/csgo/addons/metamod/` (Metamod instalado e funcionando)
+- `~/cs2/game/csgo/gameinfo.gi` já tem a linha `Game csgo/addons/metamod` inserida
+- `~/cs2/game/csgo/addons/counterstrikesharp/` (arquivos da v1.0.371, aguardando update)
+
 ### ✅ Fase 2 (POC) validada ao vivo em 21/jul/2026
 Conectou de verdade no mapa de_mirage rodando na EC2. Ciclo completo confirmado:
 EC2 c5.large sa-east-1 → CS2 instalado via steamcmd → servidor sobe com GSLT válido →
