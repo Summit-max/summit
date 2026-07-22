@@ -93,3 +93,32 @@ chave avança → instância morre. Medir custo real (meta: ~R$ 0,15/partida spo
 - **Cold start**: sem pool quente é 90-120 s. UX honesta no hub resolve; pool warm depois.
 - **EBS da AMI** custa ~R$ 0,50/GB/mês parado — manter 1 AMI só.
 - Elastic IP **desanexado** cobra por hora — não usar no MVP.
+
+### POC (Fase 2) — 3 problemas reais encontrados e resolvidos (21/jul/2026)
+Confirmado ao vivo numa `c5.large` sa-east-1, Ubuntu 24.04. Guarde isso pro `user-data` da AMI (Fase 3):
+
+1. **Disco de 60 GiB não é suficiente** — o CS2 precisa pré-alocar ~57 GB e o volume de 60 GiB
+   líquido dá só ~55 GB. Usar **no mínimo 80-100 GiB** no Launch Template.
+   (Se acontecer de novo: `sudo growpart /dev/nvme0n1 1 && sudo resize2fs /dev/nvme0n1p1` depois de aumentar o volume no console/API.)
+2. **`libv8.so: cannot open shared object file`** — o binário roda de `game/bin/linuxsteamrt64/`
+   mas depende de libs que só existem em `game/csgo/bin/linuxsteamrt64/`. Fix: exportar as DUAS
+   pastas no `LD_LIBRARY_PATH` antes de rodar:
+   ```bash
+   cd ~/cs2/game
+   export LD_LIBRARY_PATH="$PWD/bin/linuxsteamrt64:$PWD/csgo/bin/linuxsteamrt64:$LD_LIBRARY_PATH"
+   ```
+3. **`steamclient.so` ausente em `~/.steam/sdk64/`** — o SteamCMD baixa o arquivo em
+   `~/steamcmd/linux64/steamclient.so`, mas o CS2 procura em `~/.steam/sdk64/steamclient.so`. Fix:
+   ```bash
+   mkdir -p ~/.steam/sdk64
+   ln -sf ~/steamcmd/linux64/steamclient.so ~/.steam/sdk64/steamclient.so
+   ```
+
+### Comando de start validado (funcionando)
+```bash
+cd ~/cs2/game
+export LD_LIBRARY_PATH="$PWD/bin/linuxsteamrt64:$PWD/csgo/bin/linuxsteamrt64:$LD_LIBRARY_PATH"
+./bin/linuxsteamrt64/cs2 -dedicated -port 27015 \
+  +sv_setsteamaccount SEU_GSLT +map de_mirage +sv_password SENHA
+```
+Resultado esperado: `SV: 64 player server started` + `CSource2Server::GameServerSteamAPIActivated()`.
