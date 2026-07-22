@@ -113,6 +113,26 @@ Confirmado ao vivo numa `c5.large` sa-east-1, Ubuntu 24.04. Guarde isso pro `use
    mkdir -p ~/.steam/sdk64
    ln -sf ~/steamcmd/linux64/steamclient.so ~/.steam/sdk64/steamclient.so
    ```
+4. **SSH cai → servidor morre junto** — rodar o `cs2` solto no terminal SSH é fatal: qualquer
+   queda de conexão mata o processo em primeiro plano (visto na prática: `client_loop: send
+   disconnect: Connection reset`). Sempre rodar dentro de `screen` (ou `tmux`/`nohup`) pra
+   sobreviver à sessão:
+   ```bash
+   sudo apt install -y screen
+   screen -S cs2server
+   # ... roda o comando do cs2 normalmente aqui dentro ...
+   # Ctrl+A depois D pra "soltar" sem matar o processo
+   # screen -r cs2server pra voltar a ver o console depois
+   ```
+   No AMI/user-data (Fase 3) isso não é problema — lá o processo já roda como serviço/systemd,
+   não numa sessão SSH interativa.
+
+### ✅ Fase 2 (POC) validada ao vivo em 21/jul/2026
+Conectou de verdade no mapa de_mirage rodando na EC2. Ciclo completo confirmado:
+EC2 c5.large sa-east-1 → CS2 instalado via steamcmd → servidor sobe com GSLT válido →
+autentica na Steam (VAC secure) → cliente conecta pelo IP público → dentro do jogo.
+Todas as 4 armadilhas acima foram as únicas barreiras — nenhuma é bloqueante, todas têm fix
+de uma linha. Path livre pra Fase 3 (AMI + Launch Template) quando quiser seguir.
 
 ### Comando de start validado (funcionando)
 ```bash
