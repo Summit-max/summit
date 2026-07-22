@@ -268,7 +268,7 @@ public static class CompetitionEndpoints
             return Results.Ok(new { session = s, remaining, next });
         });
 
-        app.MapPost("/api/veto/{bracketMatchId}/action", async (ApiDbContext db, string bracketMatchId, VetoBody body) =>
+        app.MapPost("/api/veto/{bracketMatchId}/action", async (ApiDbContext db, MatchServerService server, string bracketMatchId, VetoBody body) =>
         {
             var s = await db.VetoSessions.Include(x => x.Steps)
                 .FirstOrDefaultAsync(x => x.BracketMatchId == bracketMatchId);
@@ -324,6 +324,7 @@ public static class CompetitionEndpoints
                     var teamB = await db.Teams.FirstOrDefaultAsync(x => x.Tag == s.TeamBTag);
                     var tour = bm.Round != null
                         ? await db.Tournaments.FindAsync(bm.Round.TournamentId) : null;
+                    var isAwsConfigured = MatchServerService.IsConfigured;
                     var room = new Match
                     {
                         Id = $"m_{Guid.NewGuid():N}",
@@ -339,8 +340,10 @@ public static class CompetitionEndpoints
                         TournamentId = tour?.Id,
                         TournamentName = tour?.Name,
                         BracketMatchId = bm.Id,
-                        ServerIp = $"sv{Random.Shared.Next(1, 9)}.summit.gg:{27015 + Random.Shared.Next(0, 4)}",
-                        ServerPassword = $"smt_{Guid.NewGuid().ToString("N")[..8]}"
+                        // sem AWS configurada (dev local): sala simulada, so o time ve algo pra testar a UI
+                        ServerIp = isAwsConfigured ? "" : $"sv{Random.Shared.Next(1, 9)}.summit.gg:{27015 + Random.Shared.Next(0, 4)}",
+                        ServerPassword = $"smt_{Guid.NewGuid().ToString("N")[..8]}",
+                        ProvisionState = isAwsConfigured ? ServerProvisionState.Requesting : ServerProvisionState.Ready
                     };
                     db.Matches.Add(room);
                     bm.MatchId = room.Id;
@@ -350,6 +353,12 @@ public static class CompetitionEndpoints
             }
 
             await db.SaveChangesAsync();
+
+            // veto acabou de fechar: dispara o provisionamento real na AWS (se configurada)
+            var newRoom = await db.Matches.FirstOrDefaultAsync(m => m.BracketMatchId == bracketMatchId);
+            if (newRoom != null && newRoom.ProvisionState == ServerProvisionState.Requesting)
+                _ = server.ProvisionAsync(newRoom.Id);
+
             var picks = s.Steps.Where(x => x.Action != VetoActionType.Ban).OrderBy(x => x.Order).Select(x => x.Map);
             return Results.Ok(new { complete = s.IsComplete, maps = picks, remaining = RemainingMaps(s) });
         });

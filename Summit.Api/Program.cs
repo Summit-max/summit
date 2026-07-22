@@ -25,6 +25,10 @@ builder.Services.ConfigureHttpJsonOptions(o =>
 // motor do ciclo de vida dos campeonatos (check-in, chave, início, vetos)
 builder.Services.AddHostedService<LifecycleWorker>();
 
+// provisionamento de servidores CS2 na AWS (docs/plano-aws.md)
+builder.Services.AddSingleton<MatchServerService>();
+builder.Services.AddHostedService<ServerProvisionPoller>();
+
 var app = builder.Build();
 
 // cria schema + seed de demonstração

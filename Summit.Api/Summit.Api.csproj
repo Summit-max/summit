@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+    <PackageReference Include="AWSSDK.EC2" Version="3.7.408" />
   </ItemGroup>
 
   <!-- Modelos compartilhados com o client WPF -->

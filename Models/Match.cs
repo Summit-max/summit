@@ -1,5 +1,8 @@
 namespace Summit.Models;
 
+// Preparando (instância pedida) -> Booting (ligou, aguardando IP) -> Ready (IP obtido, CS2 a caminho) -> Failed
+public enum ServerProvisionState { None = 0, Requesting = 1, Booting = 2, Ready = 3, Failed = 4 }
+
 public class Match
 {
     public string Id { get; set; } = string.Empty;
@@ -21,9 +24,13 @@ public class Match
     public string? TournamentName { get; set; }
     public string? BracketMatchId { get; set; }
 
-    // Sala da partida (preenchida quando o veto termina; AWS na próxima fase)
+    // Sala da partida (preenchida quando o veto termina)
     public string ServerIp { get; set; } = string.Empty;
     public string ServerPassword { get; set; } = string.Empty;
+
+    // Provisionamento AWS (efêmero) — instância criada por partida, terminada ao fim
+    public string? Ec2InstanceId { get; set; }
+    public ServerProvisionState ProvisionState { get; set; } = ServerProvisionState.None;
 
     public List<MatchPlayer> Players { get; set; } = new();
 

@@ -153,6 +153,7 @@ public class ApiDbContext : DbContext
         var match = b.Entity<Match>();
         match.HasKey(m => m.Id);
         match.Property(m => m.Status).HasConversion<int>();
+        match.Property(m => m.ProvisionState).HasConversion<int>();
         match.Ignore(m => m.Score);
         match.Ignore(m => m.TeamAWon);
         match.Ignore(m => m.TeamBWon);

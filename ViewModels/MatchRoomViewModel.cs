@@ -41,7 +41,7 @@ public class MatchRoomViewModel : BaseViewModel
     public string StatusLine { get => _statusLine; set => SetProperty(ref _statusLine, value); }
     public bool MyTurn { get => _myTurn; set => SetProperty(ref _myTurn, value); }
     public Match? Room { get => _room; set { SetProperty(ref _room, value); OnPropertyChanged(nameof(HasRoom)); } }
-    public bool HasRoom => _room != null;
+    public bool HasRoom => _room != null && !string.IsNullOrWhiteSpace(_room.ServerIp);
     public string ConnectLabel { get => _connectLabel; set => SetProperty(ref _connectLabel, value); }
 
     public RelayCommand BackCommand { get; }
@@ -138,12 +138,15 @@ public class MatchRoomViewModel : BaseViewModel
 
         if (s.IsComplete)
         {
-            StatusLine = "VETO CONCLUÍDO — PREPARANDO SERVIDOR";
-            Room ??= await _veto.GetRoomAsync(_bracketMatchId);
+            Room = await _veto.GetRoomAsync(_bracketMatchId);
             if (HasRoom)
             {
                 StatusLine = "SERVIDOR PRONTO — BOA SORTE!";
                 _timer.Stop();
+            }
+            else
+            {
+                StatusLine = "PROVISIONANDO SERVIDOR NA AWS... ~90S";
             }
         }
         else if (next != null)
