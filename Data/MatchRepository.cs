@@ -13,4 +13,7 @@ public class MatchRepository
 
     public Task<Match?> GetByIdAsync(string matchId)
         => ApiClient.GetAsync<Match>($"/api/matches/{matchId}");
+
+    public async Task<List<Match>> GetSeriesAsync(string bracketMatchId)
+        => await ApiClient.GetAsync<List<Match>>($"/api/matches/by-bracket/{bracketMatchId}/all") ?? new();
 }

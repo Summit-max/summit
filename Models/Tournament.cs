@@ -32,6 +32,11 @@ public class Tournament
     public int PausesPerTeam { get; set; } = 4;
     public string OvertimeConfig { get; set; } = "MR3 $10.000";
 
+    // ───── Fase pós-partida: organizador real + config do formato suíço ─────
+    public string OrganizerUserId { get; set; } = string.Empty;
+    public int SwissTargetWins { get; set; } = 3;
+    public int SwissEliminationLosses { get; set; } = 2;
+
     // Janelas automáticas (§3-4): inscrições fecham T-12h; check-in T-1h → T-30min
     public DateTime RegistrationClosesAt => StartDate.AddHours(-12);
     public DateTime CheckInOpensAt => StartDate.AddHours(-1);
@@ -42,6 +47,10 @@ public class Tournament
     public bool IsCheckInOpen =>
         DateTime.UtcNow >= CheckInOpensAt && DateTime.UtcNow < CheckInClosesAt
         && Status != TournamentStatus.Finished;
+    public bool CanEditLineup => IsRegistered && DateTime.UtcNow < CheckInOpensAt;
+
+    public bool IsOrganizer { get; set; } // setado pelo service ao carregar, comparando com o usuário atual
+    public bool CanEdit => IsOrganizer && DateTime.UtcNow < RegistrationClosesAt;
 
     public List<TournamentTeam> TournamentTeams { get; set; } = new();
     public List<BracketRound> Bracket { get; set; } = new();
@@ -60,10 +69,14 @@ public class Tournament
             Name = tt.Team?.Name ?? "—",
             Seed = tt.Seed,
             AverageLevel = tt.Team?.AverageLevel ?? 0,
-            IsEliminated = tt.IsEliminated
+            IsEliminated = tt.IsEliminated,
+            CheckIn = tt.CheckIn
         }).ToList() ?? new();
 
     public bool IsRegistered { get; set; } // set by service when loading for current user
+    public string? MyTeamId { get; set; }  // set by service when loading for current user
+    public bool HasCheckedIn => Teams.FirstOrDefault(t => t.TeamId == MyTeamId)?.CheckIn == CheckInStatus.Confirmed;
+    public bool CanCheckIn => IsRegistered && IsCheckInOpen && !HasCheckedIn;
 
     public string MapPoolText => MapPool.Count > 0 ? string.Join(" • ", MapPool) : "A definir";
     public string TeamsCountText => $"{RegisteredTeams}/{MaxTeams}";

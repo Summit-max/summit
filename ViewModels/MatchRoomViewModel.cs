@@ -19,9 +19,11 @@ public class MatchRoomViewModel : BaseViewModel
 {
     private readonly VetoRepository _veto = new();
     private readonly TeamRepository _teams = new();
+    private readonly DebugRepository _debug = new();
     private readonly string _bracketMatchId;
     private readonly DispatcherTimer _timer;
     private bool _teamsLoaded;
+    private bool _isSimulating;
 
     private string _teamATag = "—";
     private string _teamBTag = "—";
@@ -44,9 +46,14 @@ public class MatchRoomViewModel : BaseViewModel
     public bool HasRoom => _room != null && !string.IsNullOrWhiteSpace(_room.ServerIp);
     public string ConnectLabel { get => _connectLabel; set => SetProperty(ref _connectLabel, value); }
 
+    public bool IsSimulating { get => _isSimulating; set => SetProperty(ref _isSimulating, value); }
+
     public RelayCommand BackCommand { get; }
     public RelayCommand BanCommand { get; }
     public RelayCommand ConnectCommand { get; }
+    public RelayCommand SimulateVetoCommand { get; }
+    public RelayCommand ForceWinACommand { get; }
+    public RelayCommand ForceWinBCommand { get; }
 
     public MatchRoomViewModel() : this("bm_none") { }
 
@@ -77,6 +84,25 @@ public class MatchRoomViewModel : BaseViewModel
                 ConnectLabel = "COMANDO COPIADO! COLE NO CONSOLE DO CS2";
             }
             catch { }
+        });
+
+        // ───── DEV: ferramentas de teste local, docs/spec/summit-fase-final ─────
+        SimulateVetoCommand = new RelayCommand(async _ =>
+        {
+            IsSimulating = true;
+            await _debug.SimulateVetoAsync(_bracketMatchId);
+            await RefreshAsync();
+            IsSimulating = false;
+        }, _ => !IsSimulating);
+        ForceWinACommand = new RelayCommand(async _ =>
+        {
+            await _debug.ForceMatchResultAsync(_bracketMatchId, 'A');
+            await RefreshAsync();
+        });
+        ForceWinBCommand = new RelayCommand(async _ =>
+        {
+            await _debug.ForceMatchResultAsync(_bracketMatchId, 'B');
+            await RefreshAsync();
         });
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
@@ -138,10 +164,30 @@ public class MatchRoomViewModel : BaseViewModel
 
         if (s.IsComplete)
         {
-            Room = await _veto.GetRoomAsync(_bracketMatchId);
+            var freshRoom = await _veto.GetRoomAsync(_bracketMatchId);
+            // MD3/MD5: quando um mapa termina, o próximo jogo da série vira "a sala atual" — se
+            // trocou de partida (novo Id/mapa), o comando antigo de connect não vale mais, então
+            // o timer NUNCA para sozinho aqui (só via BackCommand) pra pegar esse próximo jogo.
+            if (freshRoom != null && freshRoom.Id != _room?.Id)
+                ConnectLabel = "ENTRAR NO SERVIDOR";
+            Room = freshRoom;
+
             if (HasRoom)
             {
-                StatusLine = "SERVIDOR PRONTO — BOA SORTE!";
+                StatusLine = Room!.GameNumber > 1
+                    ? $"MAPA {Room.GameNumber} — SERVIDOR PRONTO!"
+                    : "SERVIDOR PRONTO — BOA SORTE!";
+            }
+            else if (Room != null && Room.GameNumber > 1)
+            {
+                StatusLine = $"MAPA {Room.GameNumber} — PROVISIONANDO SERVIDOR...";
+            }
+            else if (Room == null)
+            {
+                // veto fechou "completo" mas nenhuma sala jamais existiu — só acontece no W.O.
+                // por não comparecer (LifecycleWorker.CheckVetoNoShowsAsync), nunca no fluxo normal
+                // (que sempre cria a sala na mesma hora em que marca o veto como concluído).
+                StatusLine = "PARTIDA ENCERRADA — W.O. (UM DOS TIMES NÃO COMPARECEU)";
                 _timer.Stop();
             }
             else

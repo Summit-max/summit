@@ -73,20 +73,30 @@ public class SteamAuthService
         var nickname = summary?.PersonaName ?? $"Player_{steamId64[^4..]}";
         var avatar = summary?.AvatarUrl ?? string.Empty;
 
-        var user = await _userRepository.UpsertFromSteamAsync(steamId64, nickname, avatar);
-        _userService.SetCurrentUser(user);
-        SessionStore.Save(steamId64);
-        return user;
+        var auth = await _userRepository.UpsertFromSteamAsync(steamId64, nickname, avatar);
+        _userService.SetCurrentUser(auth.User);
+        ApiClient.SetAuthToken(auth.Token);
+        SessionStore.Save(steamId64, auth.Token);
+        return auth.User;
     }
 
     public async Task<User?> TryRestoreSessionAsync()
     {
-        var steamId = SessionStore.Load();
-        if (string.IsNullOrEmpty(steamId)) return null;
+        var (steamId, token) = SessionStore.Load();
+        if (string.IsNullOrEmpty(steamId) || string.IsNullOrEmpty(token))
+        {
+            // sessão salva antes da autenticação por token (ou corrompida) — sem token não
+            // dá pra restaurar, cai limpo na tela de login em vez de tentar algo inválido.
+            SessionStore.Clear();
+            return null;
+        }
 
-        var user = await _userRepository.GetBySteamIdAsync(steamId);
+        ApiClient.SetAuthToken(token);
+        var user = await _userRepository.GetMeAsync();
         if (user == null)
         {
+            // token expirado, revogado, ou segredo da API mudou — mesma degradação graciosa.
+            ApiClient.SetAuthToken(null);
             SessionStore.Clear();
             return null;
         }
@@ -130,10 +140,11 @@ public class SteamAuthService
     {
         await Task.Delay(400);
 
-        var user = await _userRepository.UpsertFromSteamAsync(
+        var auth = await _userRepository.UpsertFromSteamAsync(
             steamId: "76561198000000000",
             nickname: "xGhostFrag",
             avatarUrl: "");
+        var user = auth.User;
 
         user.Rank = "Global Elite";
         user.Level = 42;
@@ -155,13 +166,15 @@ public class SteamAuthService
 
         await _userRepository.UpdateAsync(user);
         _userService.SetCurrentUser(user);
-        SessionStore.Save(user.SteamId);
+        ApiClient.SetAuthToken(auth.Token);
+        SessionStore.Save(user.SteamId, auth.Token);
         return user;
     }
 
     public void Logout()
     {
         _userService.SetCurrentUser(null);
+        ApiClient.SetAuthToken(null);
         SessionStore.Clear();
     }
 

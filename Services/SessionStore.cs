@@ -8,6 +8,7 @@ public static class SessionStore
     private class SessionData
     {
         public string SteamId { get; set; } = string.Empty;
+        public string? Token { get; set; }
         public DateTime SavedAt { get; set; } = DateTime.UtcNow;
     }
 
@@ -22,11 +23,11 @@ public static class SessionStore
         }
     }
 
-    public static void Save(string steamId)
+    public static void Save(string steamId, string? token)
     {
         try
         {
-            var data = new SessionData { SteamId = steamId, SavedAt = DateTime.UtcNow };
+            var data = new SessionData { SteamId = steamId, Token = token, SavedAt = DateTime.UtcNow };
             File.WriteAllText(SessionFilePath, JsonSerializer.Serialize(data));
         }
         catch
@@ -34,18 +35,20 @@ public static class SessionStore
         }
     }
 
-    public static string? Load()
+    /// <summary>Sessão salva antes da autenticação por token vem sem Token (null) — quem
+    /// consome deve tratar isso como "sem sessão válida", não crashar.</summary>
+    public static (string? SteamId, string? Token) Load()
     {
         try
         {
-            if (!File.Exists(SessionFilePath)) return null;
+            if (!File.Exists(SessionFilePath)) return (null, null);
             var json = File.ReadAllText(SessionFilePath);
             var data = JsonSerializer.Deserialize<SessionData>(json);
-            return string.IsNullOrWhiteSpace(data?.SteamId) ? null : data.SteamId;
+            return string.IsNullOrWhiteSpace(data?.SteamId) ? (null, null) : (data.SteamId, data.Token);
         }
         catch
         {
-            return null;
+            return (null, null);
         }
     }
 

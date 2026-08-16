@@ -13,6 +13,13 @@ public class TeamViewModel : BaseViewModel
     private string _inviteNickname = string.Empty;
     private string _inviteMessage = string.Empty;
     private bool _isLoading;
+    private bool _isEditingTeam;
+    private bool _confirmingDelete;
+    private string _deleteErrorMessage = string.Empty;
+    private string _editTeamName = string.Empty;
+    private string _editTeamDescription = string.Empty;
+    private string _editTeamLogoUrl = string.Empty;
+    private string _editTeamCountry = string.Empty;
 
     public Team? Team
     {
@@ -37,6 +44,14 @@ public class TeamViewModel : BaseViewModel
     public string InviteMessage { get => _inviteMessage; set => SetProperty(ref _inviteMessage, value); }
 
     public bool CanInvite => App.UserService.CurrentUser?.CanInvite ?? false;
+    public bool IsMyTeamCaptain => App.UserService.CurrentUser?.IsCaptain ?? false;
+    public bool IsEditingTeam    { get => _isEditingTeam;   set => SetProperty(ref _isEditingTeam, value); }
+    public bool ConfirmingDelete { get => _confirmingDelete;set => SetProperty(ref _confirmingDelete, value); }
+    public string DeleteErrorMessage { get => _deleteErrorMessage; set => SetProperty(ref _deleteErrorMessage, value); }
+    public string EditTeamName        { get => _editTeamName;        set => SetProperty(ref _editTeamName, value); }
+    public string EditTeamDescription { get => _editTeamDescription; set => SetProperty(ref _editTeamDescription, value); }
+    public string EditTeamLogoUrl     { get => _editTeamLogoUrl;     set => SetProperty(ref _editTeamLogoUrl, value); }
+    public string EditTeamCountry     { get => _editTeamCountry;     set => SetProperty(ref _editTeamCountry, value); }
 
     public RelayCommand CreateTeamCommand    { get; }
     public RelayCommand ConfirmCreateCommand { get; }
@@ -46,6 +61,18 @@ public class TeamViewModel : BaseViewModel
     public RelayCommand CancelInviteCommand  { get; }
     public RelayCommand LeaveTeamCommand     { get; }
     public RelayCommand ViewPlayerCommand    { get; }
+    public RelayCommand PromoteCommand           { get; }
+    public RelayCommand DemoteCommand            { get; }
+    public RelayCommand TransferOwnershipCommand { get; }
+    public RelayCommand OpenJoinRequestsCommand  { get; }
+    public RelayCommand OpenAuditLogCommand      { get; }
+    public RelayCommand OpenEditTeamCommand      { get; }
+    public RelayCommand SaveTeamEditCommand      { get; }
+    public RelayCommand CancelTeamEditCommand    { get; }
+    public RelayCommand DeleteTeamCommand        { get; }
+    public RelayCommand ConfirmDeleteTeamCommand { get; }
+    public RelayCommand CancelDeleteTeamCommand  { get; }
+    public RelayCommand KickCommand              { get; }
 
     public TeamViewModel()
     {
@@ -62,6 +89,29 @@ public class TeamViewModel : BaseViewModel
             if (p is string userId && !string.IsNullOrEmpty(userId))
                 App.Navigation.NavigateTo(new PlayerProfileViewModel(userId));
         });
+        PromoteCommand = new RelayCommand(async p => await PromoteAsync(p as string ?? ""));
+        DemoteCommand  = new RelayCommand(async p => await DemoteAsync(p as string ?? ""));
+        TransferOwnershipCommand = new RelayCommand(async p => await TransferOwnershipAsync(p as string ?? ""));
+        OpenJoinRequestsCommand = new RelayCommand(_ => App.Navigation.NavigateTo(new JoinRequestsViewModel()), _ => IsMyTeamCaptain);
+        OpenAuditLogCommand = new RelayCommand(_ =>
+        {
+            if (Team != null) App.Navigation.NavigateTo(new AuditLogViewModel(teamId: Team.Id));
+        });
+        OpenEditTeamCommand = new RelayCommand(_ =>
+        {
+            if (Team == null) return;
+            EditTeamName        = Team.Name;
+            EditTeamDescription = Team.Description;
+            EditTeamLogoUrl     = Team.LogoUrl;
+            EditTeamCountry     = Team.Country;
+            IsEditingTeam       = true;
+        }, _ => IsMyTeamCaptain);
+        SaveTeamEditCommand   = new RelayCommand(async _ => await SaveTeamEditAsync(), _ => !string.IsNullOrWhiteSpace(EditTeamName));
+        CancelTeamEditCommand = new RelayCommand(_ => IsEditingTeam = false);
+        DeleteTeamCommand        = new RelayCommand(_ => { ConfirmingDelete = true; DeleteErrorMessage = string.Empty; }, _ => IsMyTeamCaptain);
+        ConfirmDeleteTeamCommand = new RelayCommand(async _ => await DeleteTeamAsync());
+        CancelDeleteTeamCommand  = new RelayCommand(_ => ConfirmingDelete = false);
+        KickCommand = new RelayCommand(async p => await KickAsync(p as string ?? ""));
         _ = LoadTeamAsync();
     }
 
@@ -84,10 +134,11 @@ public class TeamViewModel : BaseViewModel
 
     private async Task SendInviteAsync()
     {
-        var ok = await App.TeamService.InviteByNicknameAsync(InviteNickname.Trim());
+        var nickname = InviteNickname;
+        var (ok, message) = await App.TeamService.InviteByNicknameAsync(nickname.Trim());
         InviteMessage = ok
-            ? $"Convite enviado para {InviteNickname}."
-            : $"Não foi possível convidar: jogador não encontrado ou já tem time.";
+            ? $"Convite enviado para {nickname}."
+            : message ?? "Não foi possível convidar: jogador não encontrado ou já tem time.";
         if (ok) InviteNickname = string.Empty;
     }
 
@@ -101,5 +152,56 @@ public class TeamViewModel : BaseViewModel
     {
         await LoadTeamAsync();
         OnPropertyChanged(nameof(CanInvite));
+        OnPropertyChanged(nameof(IsMyTeamCaptain));
+    }
+
+    private async Task PromoteAsync(string userId)
+    {
+        if (Team == null || string.IsNullOrEmpty(userId)) return;
+        await App.TeamService.PromoteAsync(Team.Id, userId);
+        await ReloadCurrentUserAndTeamAsync();
+    }
+
+    private async Task DemoteAsync(string userId)
+    {
+        if (Team == null || string.IsNullOrEmpty(userId)) return;
+        await App.TeamService.DemoteAsync(Team.Id, userId);
+        await ReloadCurrentUserAndTeamAsync();
+    }
+
+    private async Task TransferOwnershipAsync(string userId)
+    {
+        if (Team == null || string.IsNullOrEmpty(userId)) return;
+        await App.TeamService.TransferOwnershipAsync(Team.Id, userId);
+        await ReloadCurrentUserAndTeamAsync();
+    }
+
+    private async Task SaveTeamEditAsync()
+    {
+        if (Team == null) return;
+        var updated = await App.TeamService.UpdateTeamAsync(Team.Id, EditTeamName.Trim(),
+            EditTeamDescription, EditTeamLogoUrl, EditTeamCountry);
+        IsEditingTeam = false;
+        if (updated != null) Team = updated;
+    }
+
+    private async Task DeleteTeamAsync()
+    {
+        if (Team == null) return;
+        var (ok, message) = await App.TeamService.DeleteTeamAsync(Team.Id);
+        if (!ok)
+        {
+            DeleteErrorMessage = message ?? "Não foi possível excluir o time.";
+            return;
+        }
+        ConfirmingDelete = false;
+        await ReloadCurrentUserAndTeamAsync();
+    }
+
+    private async Task KickAsync(string userId)
+    {
+        if (Team == null || string.IsNullOrEmpty(userId)) return;
+        await App.TeamService.KickMemberAsync(Team.Id, userId);
+        await LoadTeamAsync();
     }
 }

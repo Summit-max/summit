@@ -1,0 +1,116 @@
+<UserControl x:Class="Summit.Views.JoinRequestsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:h="clr-namespace:Summit.Helpers"
+             Background="Transparent" Opacity="0">
+
+    <UserControl.Resources>
+        <h:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    </UserControl.Resources>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.22"/>
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                     From="12" To="0" Duration="0:0:0.22">
+                        <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <UserControl.RenderTransform><TranslateTransform/></UserControl.RenderTransform>
+
+    <ScrollViewer>
+        <Grid Margin="40,28,40,40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="18"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Back -->
+            <Button Grid.Row="0" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0"
+                    Cursor="Hand" Command="{Binding BackCommand}">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                            <TextBlock Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                       Foreground="#9AA5B5" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="VOLTAR" FontFamily="Segoe UI" FontWeight="Bold"
+                                       FontSize="10" Foreground="#9AA5B5" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <TextBlock Grid.Row="2" Text="SOLICITAÇÕES DE ENTRADA" FontFamily="Segoe UI" FontWeight="Black"
+                       FontSize="28" Foreground="{StaticResource BrushTextPrimary}"/>
+
+            <StackPanel Grid.Row="4">
+                <!-- Empty state -->
+                <StackPanel Visibility="{Binding HasNone, Converter={StaticResource BoolToVisibility}}"
+                            HorizontalAlignment="Center" Margin="0,40,0,0">
+                    <TextBlock Text="&#xE8FD;" FontFamily="Segoe MDL2 Assets" FontSize="48"
+                               Foreground="#262C39" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                    <TextBlock Text="Nenhuma solicitação pendente" FontFamily="Segoe UI" FontSize="13"
+                               Foreground="#5A6577" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <ItemsControl ItemsSource="{Binding Requests}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,8" Padding="16,14" CornerRadius="8"
+                                    Background="#12151B" BorderBrush="#1E232E" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0" Width="44" Height="44" CornerRadius="22" Margin="0,0,14,0">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#262C39" Offset="0"/>
+                                                <GradientStop Color="#1D222C" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Text="{Binding User.Nickname[0]}" FontFamily="Segoe UI"
+                                                   FontWeight="Black" FontSize="16" Foreground="#9AA5B5"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding User.Nickname}" FontFamily="Segoe UI" FontWeight="Black"
+                                                   FontSize="14" Foreground="{StaticResource BrushTextPrimary}"/>
+                                        <TextBlock Text="{Binding Message}" FontFamily="Segoe UI" FontSize="11"
+                                                   Foreground="#9AA5B5" Margin="0,3,0,0" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <Button Grid.Column="2" Style="{StaticResource SmallButton}"
+                                            Command="{Binding DataContext.AcceptCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}" Margin="0,0,8,0">
+                                        <TextBlock Text="ACEITAR" FontFamily="Segoe UI" FontWeight="Black" FontSize="11" Foreground="White"/>
+                                    </Button>
+                                    <Button Grid.Column="3"
+                                            Command="{Binding DataContext.DeclineCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}"
+                                            Background="Transparent" BorderThickness="1" BorderBrush="#3A2A30"
+                                            Padding="14,6" Cursor="Hand">
+                                        <TextBlock Text="RECUSAR" FontFamily="Segoe UI" FontWeight="Bold" FontSize="10" Foreground="#EF4444"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

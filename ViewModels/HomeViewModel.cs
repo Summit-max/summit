@@ -9,10 +9,11 @@ public class HomeViewModel : BaseViewModel
     private readonly MatchRepository _matchRepo = new();
     private readonly TournamentRepository _tourRepo = new();
 
-    private List<MatchListItem> _recentMatches = new();
-    private List<Tournament>    _featuredTournaments = new();
+    private List<MatchListItem>  _recentMatches = new();
+    private List<Tournament>     _featuredTournaments = new();
+    private List<RankingPlayer>  _topPlayers = new();
 
-    public string WelcomeText   => $"BEM-VINDO, {App.UserService.CurrentUser?.Nickname?.ToUpper() ?? "JOGADOR"}";
+    public string WelcomeText   => App.UserService.CurrentUser?.Nickname ?? "Jogador";
     public string UserRank      => App.UserService.CurrentUser?.Rank      ?? "—";
     public int    UserLevel     => App.UserService.CurrentUser?.Level     ?? 0;
     public double WinRate       => App.UserService.CurrentUser?.WinRate   ?? 0;
@@ -22,6 +23,11 @@ public class HomeViewModel : BaseViewModel
     public string KDText        => $"{KD:F2}";
     public double HSPercent     => App.UserService.CurrentUser?.HeadshotPercent ?? 0;
     public string HSText        => $"{HSPercent:P0}";
+    public string SteamId       => App.UserService.CurrentUser?.SteamId ?? "—";
+    public bool   HasAvatar     => !string.IsNullOrWhiteSpace(App.UserService.CurrentUser?.AvatarUrl);
+    public string AvatarUrl     => App.UserService.CurrentUser?.AvatarUrl ?? string.Empty;
+    public bool   HasTeam       => App.UserService.CurrentUser?.Team != null;
+    public int    TeamMemberCount => App.UserService.CurrentUser?.Team?.Members?.Count ?? 0;
 
     public List<MatchListItem> RecentMatches
     {
@@ -35,8 +41,19 @@ public class HomeViewModel : BaseViewModel
         set => SetProperty(ref _featuredTournaments, value);
     }
 
+    public List<RankingPlayer> TopPlayers
+    {
+        get => _topPlayers;
+        set => SetProperty(ref _topPlayers, value);
+    }
+
     public RelayCommand OpenMatchCommand      { get; }
     public RelayCommand OpenTournamentCommand { get; }
+    public RelayCommand OpenTournamentsCommand { get; }
+    public RelayCommand OpenTeamCommand        { get; }
+    public RelayCommand OpenPlayerCommand      { get; }
+    public RelayCommand OpenMatchesCommand     { get; }
+    public RelayCommand OpenRankingCommand     { get; }
 
     public HomeViewModel()
     {
@@ -48,6 +65,18 @@ public class HomeViewModel : BaseViewModel
         {
             if (p is string id) App.Navigation.NavigateTo(new TournamentDetailsViewModel(id));
         });
+        OpenTournamentsCommand = new RelayCommand(_ => App.Navigation.NavigateTo(new TournamentsViewModel()));
+        OpenTeamCommand = new RelayCommand(_ =>
+        {
+            var teamId = App.UserService.CurrentUser?.TeamId;
+            if (!string.IsNullOrEmpty(teamId)) App.Navigation.NavigateTo(new TeamViewModel());
+        });
+        OpenPlayerCommand = new RelayCommand(p =>
+        {
+            if (p is string id) App.Navigation.NavigateTo(new PlayerProfileViewModel(id));
+        });
+        OpenMatchesCommand = new RelayCommand(_ => App.Navigation.NavigateTo(new MatchesViewModel()));
+        OpenRankingCommand = new RelayCommand(_ => App.Navigation.NavigateTo(new RankingViewModel()));
         _ = LoadAsync();
     }
 
@@ -74,5 +103,8 @@ public class HomeViewModel : BaseViewModel
 
         var tours = await _tourRepo.GetAllAsync();
         FeaturedTournaments = tours.Where(t => t.Status != TournamentStatus.Finished).Take(3).ToList();
+
+        var players = await App.RankingService.GetTopPlayersAsync();
+        TopPlayers = players.Take(3).ToList();
     }
 }

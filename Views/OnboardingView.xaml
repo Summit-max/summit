@@ -1,0 +1,45 @@
+<UserControl x:Class="Summit.Views.OnboardingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent" Opacity="0">
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.22"/>
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                     From="12" To="0" Duration="0:0:0.22">
+                        <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <UserControl.RenderTransform><TranslateTransform/></UserControl.RenderTransform>
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="380">
+            <TextBlock FontFamily="Segoe UI" FontSize="24" FontWeight="Black"
+                       Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"
+                       Margin="0,0,0,4">
+                <Run Text="BEM-VINDO, "/><Run Text="{Binding Nickname, Mode=OneWay}" Foreground="#FF6A1A"/>
+            </TextBlock>
+            <TextBlock Text="Só mais duas coisas antes de começar" FontFamily="Segoe UI" FontSize="13"
+                       Foreground="#9AA5B5" HorizontalAlignment="Center" Margin="0,0,0,28"/>
+
+            <TextBlock Text="PAÍS" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                       Foreground="#9AA5B5" Margin="0,0,0,6"/>
+            <TextBox Text="{Binding Country, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,16"/>
+
+            <TextBlock Text="SUA ROLE PRINCIPAL" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                       Foreground="#9AA5B5" Margin="0,0,0,6"/>
+            <TextBox Text="{Binding Role, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,24"/>
+
+            <Button Content="CONTINUAR" Style="{StaticResource PrimaryButton}"
+                    Command="{Binding ContinueCommand}" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

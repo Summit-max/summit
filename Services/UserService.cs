@@ -28,4 +28,18 @@ public class UserService : IUserService
         CurrentUser.PrimaryRole = role;
         await App.UserRepository.UpdateAsync(CurrentUser);
     }
+
+    public async Task UpdateAvatarUrlAsync(string avatarUrl)
+    {
+        if (CurrentUser == null) return;
+        CurrentUser.AvatarUrl = avatarUrl;
+        await App.UserRepository.UpdateAsync(CurrentUser);
+    }
+
+    public async Task UpdateCountryAsync(string country)
+    {
+        if (CurrentUser == null) return;
+        CurrentUser.Country = country;
+        await App.UserRepository.UpdateAsync(CurrentUser);
+    }
 }

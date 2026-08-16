@@ -32,6 +32,7 @@ public class TournamentsViewModel : BaseViewModel
     public RelayCommand RegisterCommand { get; }
     public RelayCommand CheckInCommand  { get; }
     public RelayCommand DetailsCommand  { get; }
+    public RelayCommand CreateTournamentCommand { get; }
 
     public TournamentsViewModel()
     {
@@ -43,6 +44,7 @@ public class TournamentsViewModel : BaseViewModel
             if (p is string id)
                 App.Navigation.NavigateTo(new TournamentDetailsViewModel(id));
         });
+        CreateTournamentCommand = new RelayCommand(_ => App.Navigation.NavigateTo(new CreateTournamentViewModel()));
         _ = LoadAsync();
     }
 

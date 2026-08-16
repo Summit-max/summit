@@ -27,11 +27,15 @@ public class ServerProvisionPoller : BackgroundService
                     var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
                     var server = scope.ServiceProvider.GetRequiredService<MatchServerService>();
 
-                    var booting = await db.Matches
-                        .Where(m => m.ProvisionState == ServerProvisionState.Booting)
+                    // Booting: ainda esperando IP. Ready+!MatchZyConfigLoaded: já tem IP, mas o
+                    // matchzy_loadmatch_url via RCON pode ter falhado (CS2 ainda subindo) — retenta.
+                    var pending = await db.Matches
+                        .Where(m => m.Status != MatchStatus.Finished
+                                 && (m.ProvisionState == ServerProvisionState.Booting
+                                     || (m.ProvisionState == ServerProvisionState.Ready && !m.MatchZyConfigLoaded)))
                         .ToListAsync(ct);
 
-                    foreach (var m in booting)
+                    foreach (var m in pending)
                     {
                         var changed = await server.PollAsync(db, m);
                         if (changed) await db.SaveChangesAsync(ct);

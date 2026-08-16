@@ -28,6 +28,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0" Width="76" Height="76" CornerRadius="14"
@@ -69,6 +70,19 @@
                             <TextBlock Text="{Binding Team.TournamentsWon}" FontFamily="Segoe UI" FontWeight="Black"
                                        FontSize="22" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Center"/>
                         </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" VerticalAlignment="Center" Margin="20,0,0,0" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource SmallButton}"
+                                Command="{Binding RequestJoinCommand}"
+                                Visibility="{Binding CanRequestJoin, Converter={StaticResource BoolToVisibility}}">
+                            <TextBlock Text="SOLICITAR ENTRADA" FontFamily="Segoe UI" FontWeight="Bold"
+                                       FontSize="11" Foreground="White"/>
+                        </Button>
+                        <TextBlock Text="{Binding JoinMessage}" FontFamily="Segoe UI" FontWeight="Bold" FontSize="10"
+                                   Foreground="#22C55E" Margin="0,4,0,0" HorizontalAlignment="Right"
+                                   TextWrapping="Wrap" MaxWidth="160"
+                                   Visibility="{Binding RequestSent, Converter={StaticResource BoolToVisibility}}"/>
                     </StackPanel>
                 </Grid>
             </Border>

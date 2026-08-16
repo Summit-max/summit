@@ -20,17 +20,18 @@ public class TeamService : Interfaces.ITeamService
         return _repo.CreateAsync(name, tag, captainId);
     }
 
-    public async Task<bool> InviteByNicknameAsync(string nickname)
+    public async Task<(bool Ok, string? Message)> InviteByNicknameAsync(string nickname)
     {
         var me = App.UserService.CurrentUser;
-        if (me?.TeamId == null) return false;
-        if (me.TeamRole != TeamRole.Captain && me.TeamRole != TeamRole.ViceCaptain) return false;
+        if (me?.TeamId == null) return (false, "Você não está em um time.");
+        // só o capitão convida (espec-times §3.1/§7) — reflete a mesma regra da API
+        if (me.TeamRole != TeamRole.Captain) return (false, "Só o capitão do time pode convidar jogadores.");
 
         var target = await _userRepo.GetByNicknameAsync(nickname);
-        if (target == null) return false;
+        if (target == null) return (false, "Jogador não encontrado.");
 
-        var inv = await _repo.InviteAsync(me.TeamId, target.Id, me.Id);
-        return inv != null;
+        var (ok, _, message) = await _repo.InviteAsync(me.TeamId, target.Id, me.Id);
+        return (ok, message);
     }
 
     public Task<List<TeamInvitation>> GetPendingInvitationsAsync(string userId)
@@ -55,7 +56,78 @@ public class TeamService : Interfaces.ITeamService
         return ok;
     }
 
-    public Task<bool> RemoveMemberAsync(string teamId, string userId) => Task.FromResult(true);
+    public async Task<List<TeamJoinRequest>> GetJoinRequestsAsync(string teamId)
+    {
+        var me = App.UserService.CurrentUser;
+        return me == null ? new() : await _repo.GetJoinRequestsAsync(teamId, me.Id);
+    }
+
+    public Task<TeamJoinRequest?> RequestToJoinAsync(string teamId, string? message)
+    {
+        var me = App.UserService.CurrentUser;
+        return me == null ? Task.FromResult<TeamJoinRequest?>(null) : _repo.CreateJoinRequestAsync(teamId, me.Id, message);
+    }
+
+    public async Task<bool> AcceptJoinRequestAsync(string id)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me == null) return false;
+        var ok = await _repo.AcceptJoinRequestAsync(id, me.Id);
+        if (ok) await ReloadCurrentUserAsync();
+        return ok;
+    }
+
+    public Task<bool> DeclineJoinRequestAsync(string id)
+    {
+        var me = App.UserService.CurrentUser;
+        return me == null ? Task.FromResult(false) : _repo.DeclineJoinRequestAsync(id, me.Id);
+    }
+
+    public async Task<bool> PromoteAsync(string teamId, string userId)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me?.TeamId == null || !me.IsCaptain) return false;
+        return await _repo.PromoteAsync(teamId, userId, me.Id);
+    }
+
+    public async Task<bool> DemoteAsync(string teamId, string userId)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me?.TeamId == null || !me.IsCaptain) return false;
+        return await _repo.DemoteAsync(teamId, userId, me.Id);
+    }
+
+    public async Task<bool> TransferOwnershipAsync(string teamId, string userId)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me?.TeamId == null || !me.IsCaptain) return false;
+        var ok = await _repo.TransferOwnershipAsync(teamId, userId, me.Id);
+        if (ok) await ReloadCurrentUserAsync();
+        return ok;
+    }
+
+    public async Task<Team?> UpdateTeamAsync(string teamId, string name, string? description, string? logoUrl, string? country)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me?.TeamId != teamId || !me.IsCaptain) return null;
+        return await _repo.UpdateAsync(teamId, name, description, logoUrl, country, me.Id);
+    }
+
+    public async Task<(bool Ok, string? Message)> DeleteTeamAsync(string teamId)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me?.TeamId != teamId || !me.IsCaptain) return (false, "Você não é o capitão deste time.");
+        var (ok, message) = await _repo.DeleteAsync(teamId, me.Id);
+        if (ok) await ReloadCurrentUserAsync();
+        return (ok, message);
+    }
+
+    public async Task<bool> KickMemberAsync(string teamId, string userId)
+    {
+        var me = App.UserService.CurrentUser;
+        if (me?.TeamId != teamId || !me.IsCaptain) return false;
+        return await _repo.KickAsync(teamId, userId, me.Id);
+    }
 
     private async Task ReloadCurrentUserAsync()
     {

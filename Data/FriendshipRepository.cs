@@ -14,7 +14,7 @@ public class FriendshipRepository
     public async Task<List<Friendship>> GetOutgoingRequestsAsync(string userId)
         => await ApiClient.GetAsync<List<Friendship>>($"/api/friends/{userId}/outgoing") ?? new();
 
-    public enum RelationStatus { None, Friends, OutgoingPending, IncomingPending }
+    public enum RelationStatus { None, Friends, OutgoingPending, IncomingPending, Blocked }
 
     public async Task<RelationStatus> GetRelationAsync(string viewerId, string otherId)
     {
@@ -33,5 +33,11 @@ public class FriendshipRepository
         => ApiClient.PostBoolAsync($"/api/friends/{friendshipId}/decline", new { userId = declinerId });
 
     public Task<bool> RemoveFriendAsync(string userAId, string userBId)
+        => ApiClient.DeleteBoolAsync($"/api/friends?userAId={userAId}&userBId={userBId}");
+
+    public Task<bool> BlockAsync(string blockerId, string blockedId)
+        => ApiClient.PostBoolAsync("/api/friends/block", new { requesterId = blockerId, addresseeId = blockedId });
+
+    public Task<bool> UnblockAsync(string userAId, string userBId)
         => ApiClient.DeleteBoolAsync($"/api/friends?userAId={userAId}&userBId={userBId}");
 }

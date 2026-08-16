@@ -188,6 +188,36 @@
                 </Border>
             </Grid>
         </DataTemplate>
+
+        <!-- Coluna de rodada genérica: cabeçalho + slots posicionados por Top (espaçamento
+             padrão de bracket, dobra a cada rodada) — substitui as posições fixas de antes,
+             funciona pra qualquer número de times/rodadas. -->
+        <DataTemplate x:Key="BracketColumnTpl">
+            <StackPanel Margin="0,0,40,0" Width="240">
+                <TextBlock Text="{Binding Header}" FontFamily="Segoe UI" FontWeight="Black"
+                           FontSize="10" Foreground="#5A6577" Margin="0,0,0,14"/>
+                <ItemsControl ItemsSource="{Binding Slots}" Width="240" Height="{Binding Height}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                            <Setter Property="Canvas.Left" Value="0"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="240" Height="80" Style="{StaticResource MatchCard}">
+                                <ContentControl Content="{Binding Match}" ContentTemplate="{StaticResource MatchInnerTpl}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
 
     <UserControl.Triggers>
@@ -212,7 +242,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="16"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="28"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="32"/>
                 <RowDefinition Height="Auto"/>
@@ -317,9 +347,73 @@
                                 <TextBlock Text="INSCREVER TIME" FontFamily="Segoe UI"
                                            FontWeight="Black" FontSize="12" Foreground="White"/>
                             </Button>
+                            <Button Command="{Binding DataContext.OpenLineupCommand,
+                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Background="Transparent" BorderThickness="1" BorderBrush="#262C39"
+                                    HorizontalAlignment="Right" Height="36" Padding="20,0"
+                                    Margin="0,8,0,0" Cursor="Hand"
+                                    Visibility="{Binding CanEditLineup, Converter={StaticResource BoolToVisibility}}">
+                                <TextBlock Text="ESCALAÇÃO" FontFamily="Segoe UI"
+                                           FontWeight="Bold" FontSize="11" Foreground="#9AA5B5"/>
+                            </Button>
+                            <Button Command="{Binding DataContext.CheckInCommand,
+                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Background="#1B7A45" BorderThickness="0"
+                                    HorizontalAlignment="Right" Height="36" Padding="20,0"
+                                    Margin="0,8,0,0" Cursor="Hand"
+                                    Visibility="{Binding CanCheckIn, Converter={StaticResource BoolToVisibility}}">
+                                <TextBlock Text="CONFIRMAR CHECK-IN" FontFamily="Segoe UI"
+                                           FontWeight="Bold" FontSize="11" Foreground="White"/>
+                            </Button>
+                            <Button Command="{Binding DataContext.EditTournamentCommand,
+                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Background="Transparent" BorderThickness="1" BorderBrush="#262C39"
+                                    HorizontalAlignment="Right" Height="36" Padding="20,0"
+                                    Margin="0,8,0,0" Cursor="Hand"
+                                    Visibility="{Binding CanEdit, Converter={StaticResource BoolToVisibility}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets"
+                                               FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"
+                                               Foreground="#9AA5B5"/>
+                                    <TextBlock Text="EDITAR" FontFamily="Segoe UI"
+                                               FontWeight="Bold" FontSize="11" Foreground="#9AA5B5"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
+            </Border>
+
+            <!-- DEV: ferramentas de teste local (fora do Hero, que tem ClipToBounds e altura fixa) -->
+            <Border Grid.Row="3" CornerRadius="6" Padding="10" Margin="0,10,0,10"
+                    Background="#0F1116" BorderBrush="#3A2A1E" BorderThickness="1"
+                    HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="DEV — SIMULAÇÃO LOCAL" FontFamily="Segoe UI" FontWeight="Black"
+                               FontSize="9" Foreground="#FF9A3C" VerticalAlignment="Center"
+                               Margin="0,0,10,0"/>
+                    <Button Command="{Binding DataContext.AddGhostTeamsCommand,
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Background="Transparent" BorderThickness="1" BorderBrush="#262C39"
+                            Padding="16,7" Cursor="Hand" Margin="0,0,6,0">
+                        <TextBlock Text="+4 TIMES FANTASMA" FontFamily="Segoe UI"
+                                   FontWeight="Bold" FontSize="10" Foreground="#9AA5B5"/>
+                    </Button>
+                    <Button Command="{Binding DataContext.SkipToNowCommand,
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Background="Transparent" BorderThickness="1" BorderBrush="#262C39"
+                            Padding="16,7" Cursor="Hand" Margin="0,0,6,0">
+                        <TextBlock Text="ABRIR CHECK-IN (~20MIN)" FontFamily="Segoe UI"
+                                   FontWeight="Bold" FontSize="10" Foreground="#9AA5B5"/>
+                    </Button>
+                    <Button Command="{Binding DataContext.AdvanceStageCommand,
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Background="Transparent" BorderThickness="1" BorderBrush="#262C39"
+                            Padding="16,7" Cursor="Hand">
+                        <TextBlock Text="FECHAR CHECK-IN E GERAR CHAVE" FontFamily="Segoe UI"
+                                   FontWeight="Bold" FontSize="10" Foreground="#9AA5B5"/>
+                    </Button>
+                </StackPanel>
             </Border>
 
             <!-- STATS STRIP -->
@@ -398,84 +492,49 @@
             <Border Grid.Row="7" Margin="0,14,0,0"
                     CornerRadius="10" Background="#0F1218"
                     BorderBrush="#1E232E" BorderThickness="1" Padding="24">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Disabled">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="14"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                <StackPanel>
+                    <!-- Chave superior (única chave em eliminação simples) -->
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding DataContext.UpperColumns, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      ItemTemplate="{StaticResource BracketColumnTpl}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
 
-                        <Grid Grid.Row="0" Width="840">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="240"/>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="240"/>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="240"/>
-                                <ColumnDefinition Width="40"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="QUARTAS"  FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577"/>
-                            <TextBlock Grid.Column="2" Text="SEMIFINAIS" FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577"/>
-                            <TextBlock Grid.Column="4" Text="FINAL"    FontFamily="Segoe UI" FontWeight="Black" FontSize="10" Foreground="#5A6577"/>
-                        </Grid>
+                    <!-- Chave inferior (só em eliminação dupla) -->
+                    <StackPanel Margin="0,28,0,0"
+                                Visibility="{Binding DataContext.HasLowerBracket, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="CHAVE INFERIOR" FontFamily="Segoe UI" FontWeight="Black"
+                                   FontSize="11" Foreground="#FF6A1A" Margin="0,0,0,14"/>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding DataContext.LowerColumns, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                          ItemTemplate="{StaticResource BracketColumnTpl}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
 
-                        <Canvas Grid.Row="2" Width="840" Height="384">
-
-                            <Path Stroke="#262C39" StrokeThickness="1"
-                                  Data="M 240,40 L 260,40 L 260,136 L 240,136 M 260,88 L 280,88
-                                        M 240,232 L 260,232 L 260,328 L 240,328 M 260,280 L 280,280
-                                        M 520,88 L 540,88 L 540,280 L 520,280 M 540,184 L 560,184"/>
-
-                            <Border Canvas.Left="0"   Canvas.Top="0"   Width="240" Height="80"
-                                    Style="{StaticResource MatchCard}">
-                                <ContentControl Content="{Binding Bracket[0].Matches[0]}"
-                                                ContentTemplate="{StaticResource MatchInnerTpl}"/>
-                            </Border>
-                            <Border Canvas.Left="0"   Canvas.Top="96"  Width="240" Height="80"
-                                    Style="{StaticResource MatchCard}">
-                                <ContentControl Content="{Binding Bracket[0].Matches[1]}"
-                                                ContentTemplate="{StaticResource MatchInnerTpl}"/>
-                            </Border>
-                            <Border Canvas.Left="0"   Canvas.Top="192" Width="240" Height="80"
-                                    Style="{StaticResource MatchCard}">
-                                <ContentControl Content="{Binding Bracket[0].Matches[2]}"
-                                                ContentTemplate="{StaticResource MatchInnerTpl}"/>
-                            </Border>
-                            <Border Canvas.Left="0"   Canvas.Top="288" Width="240" Height="80"
-                                    Style="{StaticResource MatchCard}">
-                                <ContentControl Content="{Binding Bracket[0].Matches[3]}"
-                                                ContentTemplate="{StaticResource MatchInnerTpl}"/>
-                            </Border>
-
-                            <Border Canvas.Left="280" Canvas.Top="48"  Width="240" Height="80"
-                                    Style="{StaticResource MatchCard}">
-                                <ContentControl Content="{Binding Bracket[1].Matches[0]}"
-                                                ContentTemplate="{StaticResource MatchInnerTpl}"/>
-                            </Border>
-                            <Border Canvas.Left="280" Canvas.Top="240" Width="240" Height="80"
-                                    Style="{StaticResource MatchCard}">
-                                <ContentControl Content="{Binding Bracket[1].Matches[1]}"
-                                                ContentTemplate="{StaticResource MatchInnerTpl}"/>
-                            </Border>
-
-                            <Border Canvas.Left="560" Canvas.Top="144" Width="240" Height="80"
-                                    Style="{StaticResource MatchCard}"
-                                    BorderThickness="1.5">
-                                <Border.BorderBrush>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#FFD700" Offset="0"/>
-                                        <GradientStop Color="#FF6A1A" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.BorderBrush>
-                                <ContentControl Content="{Binding Bracket[2].Matches[0]}"
-                                                ContentTemplate="{StaticResource MatchInnerTpl}"/>
-                            </Border>
-
-                        </Canvas>
-                    </Grid>
-                </ScrollViewer>
+                    <!-- Grande final (só em eliminação dupla) -->
+                    <StackPanel Margin="0,28,0,0"
+                                Visibility="{Binding DataContext.HasLowerBracket, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisibility}}">
+                        <ItemsControl ItemsSource="{Binding DataContext.GrandFinalColumns, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      ItemTemplate="{StaticResource BracketColumnTpl}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
             </Border>
 
             <!-- SECTION TITLE: TIMES INSCRITOS -->

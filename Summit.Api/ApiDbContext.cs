@@ -24,6 +24,9 @@ public class ApiDbContext : DbContext
     public DbSet<VetoSession>      VetoSessions     => Set<VetoSession>();
     public DbSet<VetoStep>         VetoSteps        => Set<VetoStep>();
     public DbSet<AuditLog>         AuditLogs        => Set<AuditLog>();
+    public DbSet<PoolServer>       PoolServers      => Set<PoolServer>();
+    public DbSet<Notification>     Notifications    => Set<Notification>();
+    public DbSet<Report>           Reports          => Set<Report>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -91,6 +94,11 @@ public class ApiDbContext : DbContext
         tour.Property(t => t.Status).HasConversion<int>();
         tour.Property(t => t.Name).HasMaxLength(128);
         tour.Ignore(t => t.IsRegistered);
+        tour.Ignore(t => t.MyTeamId);
+        tour.Ignore(t => t.HasCheckedIn);
+        tour.Ignore(t => t.CanCheckIn);
+        tour.Ignore(t => t.IsOrganizer);
+        tour.Ignore(t => t.CanEdit);
         tour.Ignore(t => t.MapPool);
         tour.Ignore(t => t.Teams);
         tour.Ignore(t => t.RegisteredTeams);
@@ -127,6 +135,7 @@ public class ApiDbContext : DbContext
         // ───── BRACKET ROUND ─────
         var round = b.Entity<BracketRound>();
         round.HasKey(r => r.Id);
+        round.Property(r => r.Side).HasConversion<int>();
         round.HasOne(r => r.Tournament)
             .WithMany(t => t.Bracket)
             .HasForeignKey(r => r.TournamentId)
@@ -240,11 +249,28 @@ public class ApiDbContext : DbContext
             .HasForeignKey(x => x.SessionId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // ───── POOL SERVER ─────
+        var pool = b.Entity<PoolServer>();
+        pool.HasKey(x => x.Id);
+        pool.Property(x => x.State).HasConversion<int>();
+
         // ───── AUDIT LOG ─────
         var al = b.Entity<AuditLog>();
         al.HasKey(x => x.Id);
         al.HasIndex(x => x.TeamId);
         al.HasIndex(x => x.TournamentId);
         al.HasIndex(x => x.CreatedAt);
+
+        // ───── NOTIFICATION (fase pós-partida) ─────
+        var ntf = b.Entity<Notification>();
+        ntf.HasKey(x => x.Id);
+        ntf.Property(x => x.Type).HasConversion<int>();
+        ntf.HasIndex(x => new { x.UserId, x.IsRead });
+
+        // ───── REPORT (denúncia — fase pós-partida) ─────
+        var rpt = b.Entity<Report>();
+        rpt.HasKey(x => x.Id);
+        rpt.Property(x => x.Status).HasConversion<int>();
+        rpt.HasIndex(x => x.Status);
     }
 }

@@ -2,27 +2,27 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- ═══ SUMMIT brand palette ═══
-         Tema: fogo Summit — degradê laranja→vermelho sobre dark azulado premium. -->
+         Tema: fogo Summit — degradê laranja→vermelho sobre preto neutro premium. -->
     <Color x:Key="AccentGold">#FF6A1A</Color>
     <Color x:Key="AccentAmber">#FF6A1A</Color>
     <Color x:Key="AccentEmber">#FF3B30</Color>
     <Color x:Key="AccentDeep">#FF3B30</Color>
 
-    <!-- Backgrounds (cool charcoal) -->
-    <Color x:Key="BgDark">#0A0C10</Color>
-    <Color x:Key="BgMid">#12151B</Color>
-    <Color x:Key="BgCard">#171B22</Color>
-    <Color x:Key="BgCardHover">#1E232E</Color>
-    <Color x:Key="BgSidebar">#0C0E13</Color>
-    <Color x:Key="BgInput">#1C2028</Color>
+    <!-- Backgrounds (preto neutro, sem tom azulado) -->
+    <Color x:Key="BgDark">#0A0A0A</Color>
+    <Color x:Key="BgMid">#131313</Color>
+    <Color x:Key="BgCard">#181818</Color>
+    <Color x:Key="BgCardHover">#212121</Color>
+    <Color x:Key="BgSidebar">#0D0D0D</Color>
+    <Color x:Key="BgInput">#1E1E1E</Color>
 
     <!-- Text -->
     <Color x:Key="TextPrimary">#F2F5FA</Color>
-    <Color x:Key="TextSecondary">#9AA5B5</Color>
-    <Color x:Key="TextMuted">#5A6577</Color>
+    <Color x:Key="TextSecondary">#A5A5A5</Color>
+    <Color x:Key="TextMuted">#666666</Color>
 
     <!-- UI accents -->
-    <Color x:Key="BorderSubtle">#262C39</Color>
+    <Color x:Key="BorderSubtle">#2A2A2A</Color>
     <Color x:Key="BorderAccent">#FF6A1A</Color>
     <Color x:Key="Success">#2EDE8D</Color>
     <Color x:Key="Warning">#FACC15</Color>

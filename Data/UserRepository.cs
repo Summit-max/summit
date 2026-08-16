@@ -9,9 +9,11 @@ public class UserRepository
     public Task<User?> GetBySteamIdAsync(string steamId)
         => ApiClient.GetAsync<User>($"/api/users/by-steam/{WebUtility.UrlEncode(steamId)}");
 
-    public Task<User> UpsertFromSteamAsync(string steamId, string nickname, string avatarUrl)
-        => ApiClient.PostRequiredAsync<User>("/api/users/steam-login",
+    public Task<AuthResult> UpsertFromSteamAsync(string steamId, string nickname, string avatarUrl)
+        => ApiClient.PostRequiredAsync<AuthResult>("/api/users/steam-login",
             new { steamId, nickname, avatarUrl });
+
+    public Task<User?> GetMeAsync() => ApiClient.GetAsync<User>("/api/users/me");
 
     public async Task UpdateAsync(User user)
         => await ApiClient.PutAsync<User>($"/api/users/{user.Id}", user);

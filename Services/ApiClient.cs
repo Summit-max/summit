@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -26,6 +27,14 @@ public static class ApiClient
         BaseAddress = new Uri(BaseUrl),
         Timeout = TimeSpan.FromSeconds(15)
     };
+
+    /// <summary>Anexa (ou limpa, com null) o Bearer token em toda requisição futura —
+    /// chamado depois do login/restauro de sessão e no logout.</summary>
+    public static void SetAuthToken(string? token)
+    {
+        Http.DefaultRequestHeaders.Authorization =
+            string.IsNullOrEmpty(token) ? null : new AuthenticationHeaderValue("Bearer", token);
+    }
 
     /// <summary>GET tolerante: retorna default se a API estiver fora ou responder erro.</summary>
     public static async Task<T?> GetAsync<T>(string path)
@@ -111,6 +120,43 @@ public static class ApiClient
         }
     }
 
+    /// <summary>PUT cujo erro precisa ser mostrado ao usuário (a API retorna BadRequest(string) com o motivo).</summary>
+    public static async Task<(bool Ok, string? Message)> PutWithMessageAsync(string path, object? body)
+    {
+        try
+        {
+            using var resp = await Http.PutAsJsonAsync(path, body, Json);
+            var text = await resp.Content.ReadAsStringAsync();
+            if (resp.IsSuccessStatusCode) return (true, null);
+            return (false, string.IsNullOrWhiteSpace(text) ? null : text.Trim().Trim('"'));
+        }
+        catch
+        {
+            return (false, "Erro de conexão.");
+        }
+    }
+
+    /// <summary>POST cujo erro precisa ser mostrado ao usuário (mesma ideia de PutWithMessageAsync),
+    /// mas devolve também o objeto criado quando dá certo — usado na criação de campeonato (RF-09).</summary>
+    public static async Task<(bool Ok, T? Result, string? Message)> PostWithMessageAsync<T>(string path, object? body)
+    {
+        try
+        {
+            using var resp = await Http.PostAsJsonAsync(path, body, Json);
+            if (resp.IsSuccessStatusCode)
+            {
+                var result = await resp.Content.ReadFromJsonAsync<T>(Json);
+                return (true, result, null);
+            }
+            var text = await resp.Content.ReadAsStringAsync();
+            return (false, default, string.IsNullOrWhiteSpace(text) ? null : text.Trim().Trim('"'));
+        }
+        catch
+        {
+            return (false, default, "Erro de conexão.");
+        }
+    }
+
     public static async Task<bool> DeleteBoolAsync(string path)
     {
         try
@@ -124,6 +170,22 @@ public static class ApiClient
         catch
         {
             return false;
+        }
+    }
+
+    /// <summary>DELETE cujo erro precisa ser mostrado ao usuário (mesma ideia de PutWithMessageAsync).</summary>
+    public static async Task<(bool Ok, string? Message)> DeleteWithMessageAsync(string path)
+    {
+        try
+        {
+            using var resp = await Http.DeleteAsync(path);
+            var text = await resp.Content.ReadAsStringAsync();
+            if (resp.IsSuccessStatusCode) return (true, null);
+            return (false, string.IsNullOrWhiteSpace(text) ? null : text.Trim().Trim('"'));
+        }
+        catch
+        {
+            return (false, "Erro de conexão.");
         }
     }
 }

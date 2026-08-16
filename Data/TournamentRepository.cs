@@ -19,4 +19,30 @@ public class TournamentRepository
 
     public Task<bool> CheckInAsync(string tournamentId, string teamId, string byUserId)
         => ApiClient.PostBoolAsync($"/api/tournaments/{tournamentId}/checkin", new { teamId, byUserId });
+
+    public Task<(bool Ok, string? Message)> UpdateLineupAsync(string tournamentId, string teamId,
+        string byUserId, List<string> playerIds, string? captainUserId)
+        => ApiClient.PutWithMessageAsync($"/api/tournaments/{tournamentId}/lineup",
+            new { teamId, byUserId, playerIds, captainUserId });
+
+    public Task<(bool Ok, Tournament? Tournament, string? Message)> CreateTournamentAsync(
+        string name, string? description, string? region, DateTime startDate,
+        TournamentFormat formatType, SeriesFormat series, SeriesFormat finalSeries, string mapPoolCsv,
+        int minTeams, int maxTeams, string? prize, bool isPaidEntry, string? entryFee,
+        string organizerUserId, string? organizerName)
+        => ApiClient.PostWithMessageAsync<Tournament>("/api/tournaments", new
+        {
+            name, description, region, startDate, formatType, series, finalSeries, mapPoolCsv,
+            minTeams, maxTeams, prize, isPaidEntry, entryFee, organizerUserId, organizerName
+        });
+
+    public Task<(bool Ok, string? Message)> UpdateTournamentAsync(string tournamentId,
+        string name, string? description, string? region, DateTime startDate,
+        TournamentFormat formatType, SeriesFormat series, SeriesFormat finalSeries, string mapPoolCsv,
+        int minTeams, int maxTeams, string? prize, bool isPaidEntry, string? entryFee, string byUserId)
+        => ApiClient.PutWithMessageAsync($"/api/tournaments/{tournamentId}", new
+        {
+            name, description, region, startDate, formatType, series, finalSeries, mapPoolCsv,
+            minTeams, maxTeams, prize, isPaidEntry, entryFee, byUserId
+        });
 }

@@ -119,6 +119,26 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Command="{Binding OpenAuditLogCommand}" Background="Transparent"
+                            BorderThickness="1" BorderBrush="#262C39" Padding="14,6" Cursor="Hand"
+                            Margin="0,0,8,0">
+                        <TextBlock Text="HISTÓRICO" FontFamily="Segoe UI" FontWeight="Bold"
+                                   FontSize="11" Foreground="#9AA5B5"/>
+                    </Button>
+                    <Button Command="{Binding OpenJoinRequestsCommand}" Background="Transparent"
+                            BorderThickness="1" BorderBrush="#262C39" Padding="14,6" Cursor="Hand"
+                            Visibility="{Binding IsMyTeamCaptain, Converter={StaticResource BoolToVisibility}}"
+                            Margin="0,0,8,0">
+                        <TextBlock Text="SOLICITAÇÕES" FontFamily="Segoe UI" FontWeight="Bold"
+                                   FontSize="11" Foreground="#9AA5B5"/>
+                    </Button>
+                    <Button Command="{Binding OpenEditTeamCommand}" Background="Transparent"
+                            BorderThickness="1" BorderBrush="#262C39" Padding="14,6" Cursor="Hand"
+                            Visibility="{Binding IsMyTeamCaptain, Converter={StaticResource BoolToVisibility}}"
+                            Margin="0,0,8,0">
+                        <TextBlock Text="EDITAR TIME" FontFamily="Segoe UI" FontWeight="Bold"
+                                   FontSize="11" Foreground="#9AA5B5"/>
+                    </Button>
                     <Button Style="{StaticResource SmallButton}"
                             Command="{Binding OpenInviteCommand}"
                             Visibility="{Binding CanInvite, Converter={StaticResource BoolToVisibility}}"
@@ -131,14 +151,81 @@
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding LeaveTeamCommand}" Background="Transparent"
-                            BorderThickness="1" BorderBrush="#3A2A30" Padding="14,6" Cursor="Hand">
+                            BorderThickness="1" BorderBrush="#3A2A30" Padding="14,6" Cursor="Hand"
+                            Margin="0,0,8,0">
                         <TextBlock Text="SAIR DO TIME" FontFamily="Segoe UI" FontWeight="Bold"
+                                   FontSize="11" Foreground="#EF4444"/>
+                    </Button>
+                    <Button Command="{Binding DeleteTeamCommand}" Background="Transparent"
+                            BorderThickness="1" BorderBrush="#3A2A30" Padding="14,6" Cursor="Hand"
+                            Visibility="{Binding IsMyTeamCaptain, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="EXCLUIR TIME" FontFamily="Segoe UI" FontWeight="Bold"
                                    FontSize="11" Foreground="#EF4444"/>
                     </Button>
                 </StackPanel>
             </Grid>
 
             <StackPanel Grid.Row="4">
+
+            <!-- Delete confirm -->
+            <Border Visibility="{Binding ConfirmingDelete, Converter={StaticResource BoolToVisibility}}"
+                    CornerRadius="8" Padding="18,14" Margin="0,0,0,14"
+                    Background="#1F1416" BorderBrush="#50EF4444" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="EXCLUIR O TIME? ESSA AÇÃO NÃO PODE SER DESFEITA." FontFamily="Segoe UI"
+                               FontWeight="Black" FontSize="11" Foreground="#EF4444" Margin="0,0,0,12"/>
+                    <TextBlock Text="{Binding DeleteErrorMessage}" FontFamily="Segoe UI" TextWrapping="Wrap"
+                               FontSize="11" Foreground="#EF4444" Margin="0,0,0,10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{Binding ConfirmDeleteTeamCommand}" Background="#EF4444"
+                                BorderThickness="0" Padding="16,7" Cursor="Hand" Margin="0,0,8,0">
+                            <TextBlock Text="SIM, EXCLUIR" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="11" Foreground="White"/>
+                        </Button>
+                        <Button Command="{Binding CancelDeleteTeamCommand}" Background="Transparent"
+                                BorderThickness="0" Padding="10,0" Cursor="Hand">
+                            <TextBlock Text="CANCELAR" FontFamily="Segoe UI" FontWeight="Bold"
+                                       FontSize="11" Foreground="#9AA5B5"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Edit team panel -->
+            <Border Visibility="{Binding IsEditingTeam, Converter={StaticResource BoolToVisibility}}"
+                    CornerRadius="8" Padding="18,14" Margin="0,0,0,14"
+                    Background="#151A23" BorderBrush="#50FF6A1A" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="EDITAR TIME" FontFamily="Segoe UI" FontWeight="Black"
+                               FontSize="10" Foreground="#FF6A1A" Margin="0,0,0,10"/>
+                    <TextBlock Text="NOME" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                               Foreground="#9AA5B5" Margin="0,0,0,6"/>
+                    <TextBox Style="{StaticResource DarkTextBox}" Margin="0,0,0,10"
+                             Text="{Binding EditTeamName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="DESCRIÇÃO" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                               Foreground="#9AA5B5" Margin="0,0,0,6"/>
+                    <TextBox Style="{StaticResource DarkTextBox}" Margin="0,0,0,10"
+                             Text="{Binding EditTeamDescription, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="PAÍS" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                               Foreground="#9AA5B5" Margin="0,0,0,6"/>
+                    <TextBox Style="{StaticResource DarkTextBox}" Margin="0,0,0,10"
+                             Text="{Binding EditTeamCountry, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="URL DO ESCUDO" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                               Foreground="#9AA5B5" Margin="0,0,0,6"/>
+                    <TextBox Style="{StaticResource DarkTextBox}" Margin="0,0,0,14"
+                             Text="{Binding EditTeamLogoUrl, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource SmallButton}" Command="{Binding SaveTeamEditCommand}" Margin="0,0,8,0">
+                            <TextBlock Text="SALVAR" FontFamily="Segoe UI" FontWeight="Bold" FontSize="11" Foreground="White"/>
+                        </Button>
+                        <Button Command="{Binding CancelTeamEditCommand}" Background="Transparent"
+                                BorderThickness="0" Padding="10,0" Cursor="Hand">
+                            <TextBlock Text="CANCELAR" FontFamily="Segoe UI" FontWeight="Bold"
+                                       FontSize="11" Foreground="#9AA5B5"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
             <!-- Invite panel -->
             <Border Visibility="{Binding IsInviting, Converter={StaticResource BoolToVisibility}}"
@@ -247,6 +334,99 @@
                                                FontSize="11" FontWeight="SemiBold"
                                                Foreground="{StaticResource BrushAccent}"/>
                                 </Border>
+
+                                <!-- Ações de cargo (só visíveis pro capitão, nunca na própria linha dele) -->
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="0,0,10,0">
+                                    <Button Command="{Binding DataContext.PromoteCommand,
+                                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}"
+                                            Background="Transparent" BorderThickness="1" BorderBrush="#262C39"
+                                            Padding="10,4" Cursor="Hand" Margin="0,0,6,0" ToolTip="Promover a sublíder">
+                                        <TextBlock Text="PROMOVER" FontFamily="Segoe UI" FontWeight="Bold"
+                                                   FontSize="9" Foreground="#9AA5B5"/>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding DataContext.IsMyTeamCaptain, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True"/>
+                                                            <Condition Binding="{Binding IsCaptain}" Value="False"/>
+                                                            <Condition Binding="{Binding IsViceCaptain}" Value="False"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button Command="{Binding DataContext.DemoteCommand,
+                                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}"
+                                            Background="Transparent" BorderThickness="1" BorderBrush="#262C39"
+                                            Padding="10,4" Cursor="Hand" Margin="0,0,6,0" ToolTip="Rebaixar a membro">
+                                        <TextBlock Text="REBAIXAR" FontFamily="Segoe UI" FontWeight="Bold"
+                                                   FontSize="9" Foreground="#9AA5B5"/>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding DataContext.IsMyTeamCaptain, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True"/>
+                                                            <Condition Binding="{Binding IsViceCaptain}" Value="True"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button Command="{Binding DataContext.TransferOwnershipCommand,
+                                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}"
+                                            Background="Transparent" BorderThickness="1" BorderBrush="#3A2A30"
+                                            Padding="10,4" Cursor="Hand" Margin="0,0,6,0" ToolTip="Transferir propriedade do time">
+                                        <TextBlock Text="TORNAR DONO" FontFamily="Segoe UI" FontWeight="Bold"
+                                                   FontSize="9" Foreground="#EF4444"/>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding DataContext.IsMyTeamCaptain, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True"/>
+                                                            <Condition Binding="{Binding IsCaptain}" Value="False"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button Command="{Binding DataContext.KickCommand,
+                                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}"
+                                            Background="Transparent" BorderThickness="1" BorderBrush="#3A2A30"
+                                            Padding="10,4" Cursor="Hand" ToolTip="Remover do time">
+                                        <TextBlock Text="REMOVER" FontFamily="Segoe UI" FontWeight="Bold"
+                                                   FontSize="9" Foreground="#EF4444"/>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding DataContext.IsMyTeamCaptain, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True"/>
+                                                            <Condition Binding="{Binding IsCaptain}" Value="False"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
 
                                 <Button Grid.Column="4" Style="{StaticResource IconButton}"
                                         Command="{Binding DataContext.ViewPlayerCommand,

@@ -24,6 +24,10 @@ public class Match
     public string? TournamentName { get; set; }
     public string? BracketMatchId { get; set; }
 
+    // Série (MD1/MD3/MD5): qual mapa desta série este registro representa (1-based).
+    // Vários Match podem compartilhar o mesmo BracketMatchId — um por mapa jogado.
+    public int GameNumber { get; set; } = 1;
+
     // Sala da partida (preenchida quando o veto termina)
     public string ServerIp { get; set; } = string.Empty;
     public string ServerPassword { get; set; } = string.Empty;
@@ -31,6 +35,11 @@ public class Match
     // Provisionamento AWS (efêmero) — instância criada por partida, terminada ao fim
     public string? Ec2InstanceId { get; set; }
     public ServerProvisionState ProvisionState { get; set; } = ServerProvisionState.None;
+
+    // matchzy_loadmatch_url não pode ir na linha de comando do CS2 (dispara cedo demais, antes do
+    // entity system inicializar — "Entity system yet is not initialized") — o ServerProvisionPoller
+    // manda via RCON depois que o servidor confirma Ready; este campo evita re-envio a cada tick.
+    public bool MatchZyConfigLoaded { get; set; }
 
     public List<MatchPlayer> Players { get; set; } = new();
 

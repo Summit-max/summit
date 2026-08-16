@@ -25,6 +25,19 @@ public class ScoreboardRow
     public string RatingText => Rating.ToString("F2");
 }
 
+public class SeriesGameRow
+{
+    public int GameNumber { get; set; }
+    public string Map { get; set; } = string.Empty;
+    public int ScoreA { get; set; }
+    public int ScoreB { get; set; }
+    public string WinnerTag { get; set; } = string.Empty;
+    public bool IsCurrent { get; set; }
+
+    public string ScoreText => $"{ScoreA}-{ScoreB}";
+    public string Label => $"MAPA {GameNumber}: {Map.ToUpperInvariant()}";
+}
+
 public class MatchDetailsViewModel : BaseViewModel
 {
     private readonly MatchRepository _repo = new();
@@ -32,6 +45,8 @@ public class MatchDetailsViewModel : BaseViewModel
     private Match? _match;
     private List<ScoreboardRow> _sideA = new();
     private List<ScoreboardRow> _sideB = new();
+    private List<SeriesGameRow> _seriesGames = new();
+    private string _seriesSummary = string.Empty;
     private bool _isLoading;
 
     public Match? Match { get => _match; set { SetProperty(ref _match, value); OnPropertyChanged(nameof(HasMatch)); OnPropertyChanged(nameof(WinnerLabel)); OnPropertyChanged(nameof(DateLabel)); OnPropertyChanged(nameof(DurationLabel)); OnPropertyChanged(nameof(HasRoom)); OnPropertyChanged(nameof(RoomIp)); OnPropertyChanged(nameof(RoomPassword)); OnPropertyChanged(nameof(RoomMap)); } }
@@ -39,6 +54,11 @@ public class MatchDetailsViewModel : BaseViewModel
     public List<ScoreboardRow> SideA { get => _sideA; set => SetProperty(ref _sideA, value); }
     public List<ScoreboardRow> SideB { get => _sideB; set => SetProperty(ref _sideB, value); }
     public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value); }
+
+    // ───── Série (MD3/MD5): histórico de todos os mapas do confronto ─────
+    public List<SeriesGameRow> SeriesGames { get => _seriesGames; set { SetProperty(ref _seriesGames, value); OnPropertyChanged(nameof(HasSeries)); } }
+    public bool HasSeries => _seriesGames.Count > 1;
+    public string SeriesSummary { get => _seriesSummary; set => SetProperty(ref _seriesSummary, value); }
 
     public string WinnerLabel => _match == null ? "" : (_match.TeamAWon ? $"{_match.TeamATag} VENCEU" : (_match.TeamBWon ? $"{_match.TeamBTag} VENCEU" : "EMPATE"));
     public string DateLabel => _match?.PlayedAt.ToString("dd/MM/yyyy HH:mm") ?? "";
@@ -98,8 +118,38 @@ public class MatchDetailsViewModel : BaseViewModel
             SideB = Match.Players.Where(p => p.TeamSide == "B")
                                  .OrderByDescending(p => p.Rating)
                                  .Select(ToRow).ToList();
+
+            if (!string.IsNullOrEmpty(Match.BracketMatchId))
+                await LoadSeriesAsync(Match.BracketMatchId, id);
         }
         IsLoading = false;
+    }
+
+    private async Task LoadSeriesAsync(string bracketMatchId, string currentMatchId)
+    {
+        var games = await _repo.GetSeriesAsync(bracketMatchId);
+        if (games.Count <= 1) return;
+
+        SeriesGames = games.Select(g => new SeriesGameRow
+        {
+            GameNumber = g.GameNumber,
+            Map = g.Map,
+            ScoreA = g.ScoreA,
+            ScoreB = g.ScoreB,
+            WinnerTag = g.WinnerTag,
+            IsCurrent = g.Id == currentMatchId
+        }).ToList();
+
+        var teamAId = games[0].TeamAId;
+        var teamATag = games[0].TeamATag;
+        var teamBTag = games[0].TeamBTag;
+        var winsA = games.Count(g => (g.TeamAWon && g.TeamAId == teamAId) || (g.TeamBWon && g.TeamBId == teamAId));
+        var winsB = games.Count - winsA - games.Count(g => !g.TeamAWon && !g.TeamBWon);
+        SeriesSummary = winsA == winsB
+            ? $"SÉRIE {winsA}-{winsB}"
+            : winsA > winsB
+                ? $"{teamATag} VENCEU A SÉRIE {winsA}-{winsB}"
+                : $"{teamBTag} VENCEU A SÉRIE {winsB}-{winsA}";
     }
 
     private static ScoreboardRow ToRow(MatchPlayer p) => new()

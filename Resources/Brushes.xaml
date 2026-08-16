@@ -26,21 +26,24 @@
     <SolidColorBrush x:Key="BrushRankGold"      Color="{StaticResource RankGold}"/>
     <SolidColorBrush x:Key="BrushTransparent"   Color="Transparent"/>
 
-    <!-- Brand gradient (horizontal) — laranja→vermelho -->
+    <!-- Brand gradient (horizontal) — laranja dominante, vermelho só como acento final -->
     <LinearGradientBrush x:Key="BrushGradientBrand" StartPoint="0,0" EndPoint="1,0">
         <GradientStop Color="{StaticResource AccentAmber}" Offset="0"/>
+        <GradientStop Color="{StaticResource AccentAmber}" Offset="0.7"/>
         <GradientStop Color="{StaticResource AccentDeep}"  Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Brand gradient (vertical) -->
     <LinearGradientBrush x:Key="BrushGradientBrandV" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="{StaticResource AccentAmber}" Offset="0"/>
+        <GradientStop Color="{StaticResource AccentAmber}" Offset="0.7"/>
         <GradientStop Color="{StaticResource AccentDeep}"  Offset="1"/>
     </LinearGradientBrush>
 
     <!-- Brand gradient (diagonal) -->
     <LinearGradientBrush x:Key="BrushGradientBrandD" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="{StaticResource AccentAmber}" Offset="0"/>
+        <GradientStop Color="{StaticResource AccentAmber}" Offset="0.7"/>
         <GradientStop Color="{StaticResource AccentDeep}"  Offset="1"/>
     </LinearGradientBrush>
 
@@ -57,8 +60,8 @@
         <GradientStop Color="#171B22" Offset="1"/>
     </LinearGradientBrush>
 
-    <!-- Item ativo sem fundo: ícone laranja + texto branco marcam a aba -->
-    <SolidColorBrush x:Key="BrushSidebarActive" Color="Transparent"/>
+    <!-- Item ativo: realce laranja translúcido cobrindo a linha inteira do item -->
+    <SolidColorBrush x:Key="BrushSidebarActive" Color="#40FF6A1A"/>
 
     <!-- Login panel gradient -->
     <LinearGradientBrush x:Key="BrushLoginPanel" StartPoint="0,0" EndPoint="0,1">

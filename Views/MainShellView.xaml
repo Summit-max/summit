@@ -2,15 +2,27 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:Summit.ViewModels"
+        xmlns:h="clr-namespace:Summit.Helpers"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="Summit"
         Width="1360" Height="850"
         MinWidth="1140" MinHeight="700"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent">
+        ResizeMode="CanResize"
+        Background="{StaticResource BrushBgDark}">
+
+    <shell:WindowChrome.WindowChrome>
+        <!-- CaptionHeight=0: nada vira "área de título" nativa automaticamente — o drag continua
+             sendo feito à mão (TitleBar_MouseLeftButtonDown) na faixa fina do topo e na topbar.
+             ResizeBorderThickness é o que realmente destrava redimensionar puxando a borda —
+             AllowsTransparency=True (removido acima) bloqueava isso por limitação do WPF. -->
+        <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="0"
+                             UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
 
     <Window.Resources>
+        <h:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
         <!-- Sidebar nav item -->
         <DataTemplate x:Key="NavItemTemplate" DataType="{x:Type vm:SidebarItem}">
             <Button Command="{Binding Command}" Style="{StaticResource SidebarNavButton}">
@@ -30,10 +42,10 @@
                     </Border>
 
                     <!-- Icon + label -->
-                    <StackPanel Orientation="Horizontal" Margin="12,0">
-                        <TextBlock Text="{Binding Icon}"
+                    <StackPanel Orientation="Horizontal" Margin="14,0">
+                        <TextBlock Text="{Binding Icon}" Width="26"
                                    FontFamily="Segoe MDL2 Assets" FontSize="16"
-                                   VerticalAlignment="Center" Margin="0,0,12,0">
+                                   VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Foreground" Value="{StaticResource BrushTextMuted}"/>
@@ -75,6 +87,37 @@
 
     <Border CornerRadius="12" ClipToBounds="True" Background="{StaticResource BrushBgDark}">
         <Grid>
+            <Grid.RowDefinitions>
+                <!-- Faixa fina do título (drag + minimizar/maximizar/fechar), estilo FACEIT -->
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- ═══════════════════════════════════════════ FAIXA DE TÍTULO -->
+            <Border Grid.Row="0" Background="{StaticResource BrushBgSidebar}"
+                    CornerRadius="12,12,0,0" BorderBrush="#141414" BorderThickness="0,0,0,1"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid Margin="16,0,8,0">
+                    <TextBlock Text="SUMMIT" FontFamily="Segoe UI" FontWeight="Black" FontSize="11"
+                               Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Style="{StaticResource TitleBarButton}" Command="{Binding MinimizeCommand}">
+                            <TextBlock Text="&#xE921;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="10" Foreground="#9AA5B5"/>
+                        </Button>
+                        <Button Style="{StaticResource TitleBarButton}" Command="{Binding MaximizeCommand}">
+                            <TextBlock Text="&#xE922;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="10" Foreground="#9AA5B5"/>
+                        </Button>
+                        <Button Style="{StaticResource TitleBarButtonClose}" Command="{Binding CloseCommand}">
+                            <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ═══════════════════════════════════════════ CORPO (sidebar + conteúdo) -->
+            <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <!-- Sidebar -->
                 <ColumnDefinition Width="236"/>
@@ -84,8 +127,8 @@
 
             <!-- ═══════════════════════════════════════════ SIDEBAR -->
             <Border Grid.Column="0" Background="{StaticResource BrushBgSidebar}"
-                    CornerRadius="12,0,0,12"
-                    BorderBrush="#141821" BorderThickness="0,0,1,0">
+                    CornerRadius="0,0,0,12"
+                    BorderBrush="#141414" BorderThickness="0,0,1,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="88"/>
@@ -94,7 +137,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Logo -->
-                    <Border Grid.Row="0" Padding="14,0" BorderBrush="#141821" BorderThickness="0,0,0,1">
+                    <Border Grid.Row="0" Padding="14,0" BorderBrush="#141414" BorderThickness="0,0,0,1">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Image Source="/Assets/logo.png" Height="58" Margin="0,0,8,0"
                                    VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality">
@@ -118,8 +161,6 @@
                             <TextBlock Text="COMPETIR" Style="{StaticResource NavSectionHeader}"/>
                             <ItemsControl ItemsSource="{Binding NavCompete}"
                                           ItemTemplate="{StaticResource NavItemTemplate}"/>
-
-                            <TextBlock Text="COMUNIDADE" Style="{StaticResource NavSectionHeader}"/>
                             <ItemsControl ItemsSource="{Binding NavCommunity}"
                                           ItemTemplate="{StaticResource NavItemTemplate}"/>
 
@@ -131,69 +172,48 @@
 
                     <!-- User card at bottom (clicável → perfil) -->
                     <StackPanel Grid.Row="2">
-                        <Button Command="{Binding OpenProfileCommand}" Cursor="Hand"
-                                Margin="12,0,12,6" Padding="0" Background="Transparent">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border x:Name="Root" CornerRadius="8" Padding="12"
-                                            Background="#141821" BorderBrush="#1E232E" BorderThickness="1">
-                                        <ContentPresenter/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Root" Property="Background" Value="#181D26"/>
-                                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Button.Template>
+                        <!-- Card de temporada (placeholder — sem sistema de temporada no backend) -->
+                        <Border Margin="12,0,12,10" CornerRadius="10" Padding="14,14,14,12"
+                                ClipToBounds="True">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#1A0F08" Offset="0"/>
+                                    <GradientStop Color="#131313" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Avatar: foto Steam se existir, senão inicial -->
-                                <Grid Width="38" Height="38" Margin="0,0,10,0" VerticalAlignment="Center">
-                                    <Border CornerRadius="19" Background="{StaticResource BrushGradientBrandD}">
-                                        <TextBlock Text="{Binding UserNickname[0]}"
-                                                   FontFamily="Segoe UI" FontWeight="Black" FontSize="15"
-                                                   Foreground="White" HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-                                    </Border>
-                                    <Ellipse>
-                                        <Ellipse.Style>
-                                            <Style TargetType="Ellipse">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding HasAvatar}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Ellipse.Style>
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="{Binding UserAvatarUrl}" Stretch="UniformToFill"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                </Grid>
-
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding UserNickname}" FontFamily="Segoe UI"
-                                               FontWeight="Bold" FontSize="13"
-                                               Foreground="{StaticResource BrushTextPrimary}"
-                                               TextTrimming="CharacterEllipsis"/>
-                                    <TextBlock Text="{Binding UserRank}" FontFamily="Segoe UI"
-                                               FontSize="10" Foreground="{StaticResource BrushTextMuted}"
-                                               TextTrimming="CharacterEllipsis"/>
+                                <Ellipse Width="180" Height="180" HorizontalAlignment="Right"
+                                         VerticalAlignment="Top" Margin="0,-60,-70,0" IsHitTestVisible="False">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush>
+                                            <GradientStop Color="#33FF6A1A" Offset="0"/>
+                                            <GradientStop Color="#00FF6A1A" Offset="1"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <StackPanel>
+                                    <TextBlock Text="TEMPORADA 9" FontFamily="Segoe UI" FontWeight="Black"
+                                               FontSize="9" Foreground="{StaticResource BrushAccent}"/>
+                                    <TextBlock Text="RELOADED" FontFamily="Segoe UI" FontWeight="Black"
+                                               FontSize="17" Foreground="{StaticResource BrushTextPrimary}"
+                                               Margin="0,1,0,4"/>
+                                    <TextBlock Text="A nova temporada está no ar!" FontFamily="Segoe UI"
+                                               FontSize="10" Foreground="{StaticResource BrushTextSecondary}"
+                                               TextWrapping="Wrap" Margin="0,0,0,10"/>
+                                    <Button HorizontalAlignment="Left" Padding="0" Background="Transparent"
+                                            BorderThickness="0" Cursor="Hand">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="SAIBA MAIS" FontFamily="Segoe UI" FontWeight="Black"
+                                                       FontSize="10" Foreground="{StaticResource BrushAccent}"/>
+                                            <TextBlock Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" FontSize="9"
+                                                       Foreground="{StaticResource BrushAccent}"
+                                                       Margin="6,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
                                 </StackPanel>
-
-                                <TextBlock Grid.Column="2" Text="&#xE76C;" FontFamily="Segoe MDL2 Assets"
-                                           FontSize="10" VerticalAlignment="Center"
-                                           Foreground="{StaticResource BrushTextMuted}"/>
                             </Grid>
-                        </Button>
+                        </Border>
+
                         <TextBlock Text="SUMMIT ALPHA · v0.2" FontFamily="Segoe UI" FontSize="9"
                                    Foreground="#3A4252" HorizontalAlignment="Center" Margin="0,2,0,12"/>
                     </StackPanel>
@@ -203,37 +223,117 @@
             <!-- ═══════════════════════════════════════════ CONTENT AREA -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="52"/>
+                    <RowDefinition Height="64"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <!-- Topbar -->
                 <Border Grid.Row="0" Background="{StaticResource BrushBgSidebar}"
-                        CornerRadius="0,12,0,0"
-                        BorderBrush="#141821" BorderThickness="0,0,0,1"
+                        BorderBrush="#141414" BorderThickness="0,0,0,1"
                         MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-                    <Grid Margin="24,0,0,0">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border Width="6" Height="6" CornerRadius="3" Margin="0,1,10,0"
-                                    Background="{StaticResource BrushAccent}"/>
-                            <TextBlock Text="{Binding PageTitle}" VerticalAlignment="Center"
-                                       FontFamily="Segoe UI" FontWeight="Black" FontSize="13"
-                                       Foreground="{StaticResource BrushTextPrimary}"/>
-                        </StackPanel>
+                    <Grid Margin="24,0,16,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" MaxWidth="420"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                        <!-- Window controls -->
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                                    VerticalAlignment="Center">
-                            <Button Style="{StaticResource TitleBarButton}" Command="{Binding MinimizeCommand}">
-                                <TextBlock Text="&#xE921;" FontFamily="Segoe MDL2 Assets"
-                                           FontSize="10" Foreground="#9AA5B5"/>
+                        <!-- Busca (visual — sem lógica de busca ainda) -->
+                        <Border Grid.Column="0" CornerRadius="6" Height="36"
+                                Background="{StaticResource BrushBgInput}"
+                                BorderBrush="{StaticResource BrushBorderSubtle}" BorderThickness="1">
+                            <Grid Margin="12,0,8,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets"
+                                           FontSize="12" Foreground="{StaticResource BrushTextMuted}"
+                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Grid.Column="1" Text="Buscar jogadores, times, campeonatos..."
+                                           FontFamily="Segoe UI" FontSize="12"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                <Border Grid.Column="2" CornerRadius="4" Padding="6,2"
+                                        Background="{StaticResource BrushBgCard}"
+                                        BorderBrush="{StaticResource BrushBorderSubtle}" BorderThickness="1"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="Ctrl+K" FontFamily="Segoe UI" FontWeight="Bold"
+                                               FontSize="9" Foreground="{StaticResource BrushTextMuted}"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Ícones + usuário -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                       Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center"
+                                       Margin="0,0,18,0" ToolTip="Novidades"/>
+
+                            <Button Command="{Binding OpenNotificationsCommand}" Cursor="Hand"
+                                    Background="Transparent" BorderThickness="0" Padding="0"
+                                    Margin="0,0,18,0" ToolTip="Notificações">
+                                <Grid>
+                                    <TextBlock Text="&#xEA8F;" FontFamily="Segoe MDL2 Assets"
+                                               FontSize="15" Foreground="#9AA5B5"/>
+                                    <Border MinWidth="14" Height="14" CornerRadius="7"
+                                            Background="{StaticResource BrushAccentDeep}"
+                                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Margin="0,-6,-6,0" Padding="3,0"
+                                            Visibility="{Binding HasUnreadNotifications,
+                                                Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{Binding UnreadNotificationCount}"
+                                                   FontFamily="Segoe UI" FontWeight="Black" FontSize="9"
+                                                   Foreground="White" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </Grid>
                             </Button>
-                            <Button Style="{StaticResource TitleBarButton}" Command="{Binding MaximizeCommand}">
-                                <TextBlock Text="&#xE922;" FontFamily="Segoe MDL2 Assets"
-                                           FontSize="10" Foreground="#9AA5B5"/>
+
+                            <TextBlock Text="&#xE715;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                       Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center"
+                                       Margin="0,0,18,0" ToolTip="Mensagens (em breve)"/>
+
+                            <Button Command="{Binding OpenFriendsCommand}" Cursor="Hand"
+                                    Background="Transparent" BorderThickness="0" Padding="0"
+                                    Margin="0,0,20,0" ToolTip="Amigos">
+                                <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
                             </Button>
-                            <Button Style="{StaticResource TitleBarButtonClose}" Command="{Binding CloseCommand}">
-                                <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10"/>
+
+                            <Rectangle Width="1" Height="24" Fill="#212121" Margin="0,0,16,0"/>
+
+                            <Button Command="{Binding OpenProfileCommand}" Cursor="Hand"
+                                    Background="Transparent" BorderThickness="0" Padding="0"
+                                    Margin="0,0,14,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid Width="30" Height="30" Margin="0,0,8,0">
+                                        <Border CornerRadius="15" Background="{StaticResource BrushGradientBrandD}">
+                                            <TextBlock Text="{Binding UserNickname[0]}" FontFamily="Segoe UI"
+                                                       FontWeight="Black" FontSize="12" Foreground="White"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <Ellipse Visibility="{Binding HasAvatar, Converter={StaticResource BoolToVisibility}}">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding UserAvatarUrl}" Stretch="UniformToFill"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                    </Grid>
+                                    <StackPanel VerticalAlignment="Center" Margin="0,0,8,0">
+                                        <TextBlock Text="{Binding UserNickname}" FontFamily="Segoe UI"
+                                                   FontWeight="Bold" FontSize="12"
+                                                   Foreground="{StaticResource BrushTextPrimary}"
+                                                   TextTrimming="CharacterEllipsis" MaxWidth="140"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Width="6" Height="6" Fill="{StaticResource BrushSuccess}"
+                                                     Margin="0,0,4,0"/>
+                                            <TextBlock Text="Online" FontFamily="Segoe UI" FontSize="9"
+                                                       Foreground="{StaticResource BrushTextMuted}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="9"
+                                               Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -243,6 +343,7 @@
                 <ContentControl Grid.Row="1" Content="{Binding CurrentView}" Focusable="False"/>
             </Grid>
 
+            </Grid>
         </Grid>
     </Border>
 </Window>

@@ -26,24 +26,94 @@
         <h:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
     </UserControl.Resources>
 
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
     <Grid Margin="40,32,40,32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="8"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="24"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="24"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="TORNEIOS" FontFamily="Segoe UI" FontWeight="Black"
-                   FontSize="36" Foreground="{StaticResource BrushTextPrimary}"/>
-        <TextBlock Grid.Row="2" Text="Encontre um campeonato, inscreva seu time e compita."
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="CAMPEONATOS" FontFamily="Segoe UI" FontWeight="Black"
+                       FontSize="36" Foreground="{StaticResource BrushTextPrimary}"/>
+            <Button Grid.Column="1" Style="{StaticResource SmallButton}" VerticalAlignment="Bottom"
+                    Command="{Binding CreateTournamentCommand}">
+                <TextBlock Text="CRIAR CAMPEONATO" FontFamily="Segoe UI" FontWeight="Bold"
+                           FontSize="11" Foreground="White"/>
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="2" Text="Encontre, inscreva-se e compita nos melhores campeonatos da comunidade."
                    FontFamily="Segoe UI" FontSize="13" Foreground="#9AA5B5"/>
 
-        <!-- Filter pills -->
-        <ItemsControl Grid.Row="4" ItemsSource="{Binding Filters}">
+        <!-- ═══ BANNER DE TEMPORADA (placeholder, sem sistema de temporada no backend) ═══ -->
+        <Border Grid.Row="4" CornerRadius="12" Padding="28,20" ClipToBounds="True">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#2A1408" Offset="0"/>
+                    <GradientStop Color="#131313" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <Ellipse Width="360" Height="360" HorizontalAlignment="Right" VerticalAlignment="Center"
+                         Margin="0,0,-120,0" IsHitTestVisible="False">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#28FF6A1A" Offset="0"/>
+                            <GradientStop Color="#00FF6A1A" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="TEMPORADA ATUAL" FontFamily="Segoe UI" FontWeight="Black"
+                                   FontSize="10" Foreground="{StaticResource BrushAccent}"/>
+                        <TextBlock Text="SEASON 9 — RELOADED" FontFamily="Segoe UI" FontWeight="Black"
+                                   FontSize="20" Foreground="{StaticResource BrushTextPrimary}" Margin="0,2,0,0"/>
+                        <TextBlock Text="Novos torneios, mais prêmios, mais competição."
+                                   FontFamily="Segoe UI" FontSize="11" Foreground="{StaticResource BrushTextSecondary}"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Height="36" Padding="20,0" VerticalAlignment="Center"
+                            Cursor="Hand" BorderThickness="0" Background="Transparent"
+                            BorderBrush="{StaticResource BrushBorderSubtle}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border CornerRadius="6" Background="Transparent"
+                                        BorderBrush="{StaticResource BrushBorderSubtle}" BorderThickness="1">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="VER NOVIDADES" FontFamily="Segoe UI" FontWeight="Black"
+                                   FontSize="10" Foreground="{StaticResource BrushTextPrimary}"/>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Filtros + controles de exibição (dropdowns/toggle são só visuais por ora) -->
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ItemsControl Grid.Column="0" ItemsSource="{Binding Filters}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -61,8 +131,8 @@
                                         SnapsToDevicePixels="True">
                                     <Border.Style>
                                         <Style TargetType="Border">
-                                            <Setter Property="Background" Value="#12151B"/>
-                                            <Setter Property="BorderBrush" Value="#1E232E"/>
+                                            <Setter Property="Background" Value="#131313"/>
+                                            <Setter Property="BorderBrush" Value="#212121"/>
                                             <Setter Property="BorderThickness" Value="1"/>
                                         </Style>
                                     </Border.Style>
@@ -101,25 +171,60 @@
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ItemsControl>
+
+            <!-- Dropdowns e toggle grid/lista — visuais por ora, sem lógica nova -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border CornerRadius="6" Padding="12,7" Margin="0,0,8,0" Cursor="Hand"
+                        Background="#131313" BorderBrush="#212121" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="CS2" FontFamily="Segoe UI" FontWeight="Bold" FontSize="11"
+                                   Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,8,0"/>
+                        <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="8"
+                                   Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Border CornerRadius="6" Padding="12,7" Margin="0,0,8,0" Cursor="Hand"
+                        Background="#131313" BorderBrush="#212121" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Mais recentes" FontFamily="Segoe UI" FontWeight="Bold" FontSize="11"
+                                   Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,8,0"/>
+                        <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="8"
+                                   Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Border CornerRadius="6" Background="#131313" BorderBrush="#212121" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Border CornerRadius="5,0,0,5" Padding="9,7" Background="{StaticResource BrushSidebarActive}" Cursor="Hand">
+                            <TextBlock Text="&#xE80A;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                       Foreground="{StaticResource BrushAccent}"/>
+                        </Border>
+                        <Rectangle Width="1" Fill="#212121"/>
+                        <Border CornerRadius="0,5,5,0" Padding="9,7" Cursor="Hand">
+                            <TextBlock Text="&#xE71D;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                       Foreground="{StaticResource BrushTextMuted}"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
 
         <!-- Tournament cards -->
-        <ScrollViewer Grid.Row="6" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Filtered}">
+            <ItemsControl Grid.Row="8" ItemsSource="{Binding Filtered}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="2"/>
+                        <UniformGrid Columns="3"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,20,20" CornerRadius="12"
-                                Background="#12151B" ClipToBounds="True"
+                                Background="#131313" ClipToBounds="True"
                                 Cursor="Hand" RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform><ScaleTransform/></Border.RenderTransform>
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="BorderBrush" Value="#1E232E"/>
+                                    <Setter Property="BorderBrush" Value="#212121"/>
                                     <Setter Property="BorderThickness" Value="1"/>
                                     <Setter Property="Effect">
                                         <Setter.Value>
@@ -199,7 +304,7 @@
                                         <Rectangle.Fill>
                                             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                                 <GradientStop Color="#0012151B" Offset="0"/>
-                                                <GradientStop Color="#12151B" Offset="1"/>
+                                                <GradientStop Color="#131313" Offset="1"/>
                                             </LinearGradientBrush>
                                         </Rectangle.Fill>
                                     </Rectangle>
@@ -223,7 +328,7 @@
                                                         <Setter Property="BorderBrush" Value="#6038BDF8"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding Status}" Value="Finished">
-                                                        <Setter Property="Background" Value="#141821"/>
+                                                        <Setter Property="Background" Value="#141414"/>
                                                         <Setter Property="BorderBrush" Value="#434D5F"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -273,7 +378,7 @@
 
                                     <!-- Game tag -->
                                     <Border CornerRadius="4" Padding="8,4"
-                                            Background="#0B0D12" BorderBrush="#262C39" BorderThickness="1"
+                                            Background="#0B0B0B" BorderBrush="#2A2A2A" BorderThickness="1"
                                             HorizontalAlignment="Right" VerticalAlignment="Top"
                                             Margin="0,16,16,0">
                                         <TextBlock Text="{Binding Game}" FontFamily="Segoe UI"
@@ -330,7 +435,7 @@
                                                        FontWeight="Black" FontSize="20" Foreground="#FF6A1A"/>
                                         </StackPanel>
 
-                                        <Rectangle Grid.Column="2" Fill="#1E232E" VerticalAlignment="Stretch"/>
+                                        <Rectangle Grid.Column="2" Fill="#212121" VerticalAlignment="Stretch"/>
 
                                         <StackPanel Grid.Column="4">
                                             <Grid Margin="0,0,0,6">
@@ -350,7 +455,7 @@
                                             </Grid>
 
                                             <Grid Height="6">
-                                                <Border CornerRadius="3" Background="#141821"/>
+                                                <Border CornerRadius="3" Background="#141414"/>
                                                 <ProgressBar Value="{Binding RegisteredTeams, Mode=OneWay}"
                                                              Maximum="{Binding MaxTeams, Mode=OneWay}"
                                                              BorderThickness="0" Background="Transparent"
@@ -363,10 +468,7 @@
                                                                 <Border x:Name="PART_Indicator" CornerRadius="3"
                                                                         HorizontalAlignment="Left">
                                                                     <Border.Background>
-                                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                                            <GradientStop Color="#FF6A1A" Offset="0"/>
-                                                                            <GradientStop Color="#FF3B30" Offset="1"/>
-                                                                        </LinearGradientBrush>
+                                                                        <StaticResource ResourceKey="BrushGradientBrand"/>
                                                                     </Border.Background>
                                                                 </Border>
                                                             </Grid>
@@ -409,7 +511,7 @@
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">
                                                     <Border x:Name="Root" CornerRadius="6"
-                                                            Background="Transparent" BorderBrush="#262C39"
+                                                            Background="Transparent" BorderBrush="#2A2A2A"
                                                             BorderThickness="1">
                                                         <TextBlock Text="DETALHES" FontFamily="Segoe UI"
                                                                    FontWeight="Black" FontSize="11"
@@ -454,13 +556,8 @@
                                             </Button.Style>
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">
-                                                    <Border x:Name="Root" CornerRadius="6">
-                                                        <Border.Background>
-                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                                <GradientStop Color="#FF6A1A" Offset="0"/>
-                                                                <GradientStop Color="#FF3B30" Offset="1"/>
-                                                            </LinearGradientBrush>
-                                                        </Border.Background>
+                                                    <Border x:Name="Root" CornerRadius="6"
+                                                            Background="{StaticResource BrushGradientBrand}">
                                                         <Border.Effect>
                                                             <DropShadowEffect Color="#FF5024" BlurRadius="18"
                                                                               ShadowDepth="0" Opacity="0.45"/>
@@ -564,6 +661,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
     </Grid>
+    </ScrollViewer>
 </UserControl>

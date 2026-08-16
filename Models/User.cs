@@ -34,7 +34,13 @@ public class User
 
     public List<UserBadge> Badges { get; set; } = new();
 
+    // Flag manual (setado direto no banco) — sem fluxo de concessão pelo produto, ver
+    // docs/spec/summit-fase-final/plan.md RF-08.
+    public bool IsModerator { get; set; }
+
     public bool IsCaptain => TeamRole == TeamRole.Captain;
     public bool IsViceCaptain => TeamRole == TeamRole.ViceCaptain;
-    public bool CanInvite => TeamId != null && (IsCaptain || IsViceCaptain);
+    // Só o capitão convida (espec-times §3.1/§7) — API já era captain-only, o client permitia
+    // vice-líder também até essa correção (Fase 11, docs/spec/summit-fase-final/tasks.md).
+    public bool CanInvite => TeamId != null && IsCaptain;
 }

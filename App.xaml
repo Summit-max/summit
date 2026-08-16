@@ -20,6 +20,9 @@
             <DataTemplate DataType="{x:Type vm:HomeViewModel}">
                 <views:HomeView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:OnboardingViewModel}">
+                <views:OnboardingView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:ProfileViewModel}">
                 <views:ProfileView/>
             </DataTemplate>
@@ -53,6 +56,15 @@
             <DataTemplate DataType="{x:Type vm:TeamProfileViewModel}">
                 <views:TeamProfileView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:JoinRequestsViewModel}">
+                <views:JoinRequestsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AuditLogViewModel}">
+                <views:AuditLogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:LineupViewModel}">
+                <views:LineupView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:MatchRoomViewModel}">
                 <views:MatchRoomView/>
             </DataTemplate>
@@ -61,6 +73,12 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:MatchDetailsViewModel}">
                 <views:MatchDetailsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:NotificationsViewModel}">
+                <views:NotificationsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:CreateTournamentViewModel}">
+                <views:CreateTournamentView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

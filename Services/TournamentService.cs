@@ -29,11 +29,16 @@ public class TournamentService : Interfaces.ITournamentService
 
     private async Task MarkRegisteredAsync(List<Tournament> list)
     {
-        var teamId = App.UserService.CurrentUser?.TeamId;
+        var me = App.UserService.CurrentUser;
+        foreach (var t in list)
+            t.IsOrganizer = me != null && t.OrganizerUserId == me.Id;
+
+        var teamId = me?.TeamId;
         if (string.IsNullOrEmpty(teamId)) return;
         foreach (var t in list)
         {
             t.IsRegistered = await _repo.IsTeamRegisteredAsync(t.Id, teamId);
+            t.MyTeamId = teamId;
         }
     }
 }

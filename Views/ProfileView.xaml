@@ -38,135 +38,162 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- â”€â”€ PROFILE HEADER CARD â”€â”€ -->
-            <Border Grid.Row="0" CornerRadius="12" ClipToBounds="True">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="#1E1208" Offset="0"/>
-                        <GradientStop Color="#141821" Offset="0.4"/>
-                        <GradientStop Color="#141821" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Border.BorderBrush>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="#50FF6A1A" Offset="0"/>
-                        <GradientStop Color="#262C39" Offset="0.5"/>
-                    </LinearGradientBrush>
-                </Border.BorderBrush>
-                <Border.BorderThickness>1</Border.BorderThickness>
-                <Border.Effect>
-                    <DropShadowEffect Color="#000000" BlurRadius="20" ShadowDepth="4" Opacity="0.4" Direction="270"/>
-                </Border.Effect>
+            <!-- ── CARTÃO DE PERFIL (estilo cartão de crédito) + badge de nível ao lado ── -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="28"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                <!-- Decorative glow -->
-                <Grid>
-                    <Ellipse Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Center"
-                             Margin="-50,0,0,0">
-                        <Ellipse.Fill>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#10FF6A1A" Offset="0"/>
-                                <GradientStop Color="#00FF6A1A" Offset="1"/>
-                            </RadialGradientBrush>
-                        </Ellipse.Fill>
-                    </Ellipse>
+                <Border Grid.Column="0" x:Name="ProfileCard" CornerRadius="16" Width="420" Height="240" ClipToBounds="True"
+                        MouseMove="ProfileCard_MouseMove" MouseLeave="ProfileCard_MouseLeave"
+                        RenderTransformOrigin="0.5,0.5">
+                    <!-- Sem Projection/PlaneProjection real (não existe no runtime WPF do .NET 8) —
+                         "tilt" falso via Skew+Scale 2D, reforçado por um brilho que segue o mouse. -->
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="CardScale" ScaleX="1" ScaleY="1"/>
+                            <SkewTransform x:Name="CardSkew" AngleX="0" AngleY="0"/>
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#80FF6A1A" Offset="0"/>
+                            <GradientStop Color="#30402A1E" Offset="0.5"/>
+                            <GradientStop Color="#60FF6A1A" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <Border.BorderThickness>1.5</Border.BorderThickness>
+                    <Border.Effect>
+                        <DropShadowEffect Color="#000000" BlurRadius="26" ShadowDepth="10" Opacity="0.5" Direction="270"/>
+                    </Border.Effect>
 
-                    <Grid Margin="32,28">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Grid>
+                        <!-- Base do "material" do cartão — não é só a foto, é a superfície -->
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#1C1008" Offset="0"/>
+                                    <GradientStop Color="#141414" Offset="0.55"/>
+                                    <GradientStop Color="#100D0A" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
 
-                        <!-- Avatar -->
-                        <Grid Grid.Column="0" Width="84" Height="84"
-                              Margin="0,0,24,0" VerticalAlignment="Top">
-                            <Grid.Effect>
-                                <DropShadowEffect Color="#FF6A1A" BlurRadius="18" ShadowDepth="0" Opacity="0.45"/>
-                            </Grid.Effect>
+                        <!-- Friso diagonal (textura de "cartão" — like um selo holográfico sutil) -->
+                        <Rectangle Width="70" Opacity="0.06" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#00FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#FFFFFFFF" Offset="0.5"/>
+                                    <GradientStop Color="#00FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="24"/>
+                            </Rectangle.RenderTransform>
+                            <Rectangle.Margin>
+                                <Thickness Left="260" Top="-140" Right="0" Bottom="-140"/>
+                            </Rectangle.Margin>
+                        </Rectangle>
 
-                            <!-- Steam avatar -->
-                            <Ellipse Visibility="{Binding HasAvatar, Converter={StaticResource BoolToVisibility}}">
-                                <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding AvatarUrl}" Stretch="UniformToFill"/>
-                                </Ellipse.Fill>
-                            </Ellipse>
+                        <!-- Brilho que acompanha o cursor -->
+                        <Border x:Name="Glint" IsHitTestVisible="False" Opacity="0">
+                            <Border.Background>
+                                <RadialGradientBrush x:Name="GlintBrush" GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.6" RadiusY="0.6">
+                                    <GradientStop Color="#50FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#00FFFFFF" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Border.Background>
+                        </Border>
 
-                            <!-- Fallback (inicial) -->
-                            <Border CornerRadius="42"
-                                    Visibility="{Binding HasAvatar, Converter={StaticResource InverseBoolToVisibility}}">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#FF6A1A" Offset="0"/>
-                                        <GradientStop Color="#FF3B30" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <TextBlock Text="{Binding NicknameInitial}" FontFamily="Segoe UI"
-                                           FontWeight="Black" FontSize="36" Foreground="White"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
+                        <Grid Margin="28,24">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                            <!-- Ring -->
-                            <Ellipse Stroke="#FF6A1A" StrokeThickness="2" Opacity="0.65"
-                                     IsHitTestVisible="False"/>
-                        </Grid>
+                            <!-- Esquerda: avatar + nome + role/time, ancorados embaixo (estilo "titular do cartão") -->
+                            <StackPanel Grid.Column="0" VerticalAlignment="Bottom">
+                                <Grid Width="72" Height="72" Margin="0,0,0,14">
+                                    <Grid.Effect>
+                                        <DropShadowEffect Color="#FF6A1A" BlurRadius="16" ShadowDepth="0" Opacity="0.5"/>
+                                    </Grid.Effect>
+                                    <Ellipse Visibility="{Binding HasAvatar, Converter={StaticResource BoolToVisibility}}">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding AvatarUrl}" Stretch="UniformToFill"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <Border CornerRadius="36"
+                                            Visibility="{Binding HasAvatar, Converter={StaticResource InverseBoolToVisibility}}"
+                                            Background="{StaticResource BrushGradientBrandD}">
+                                        <TextBlock Text="{Binding NicknameInitial}" FontFamily="Segoe UI"
+                                                   FontWeight="Black" FontSize="30" Foreground="White"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <Ellipse Stroke="White" StrokeThickness="2" Opacity="0.85" IsHitTestVisible="False"/>
+                                </Grid>
 
-                        <!-- Info -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                 <TextBlock Text="{Binding Nickname}" FontFamily="Segoe UI"
-                                           FontWeight="Black" FontSize="30"
-                                           Foreground="{StaticResource BrushTextPrimary}"/>
-                                <Border CornerRadius="4" Padding="8,3" Margin="14,0,0,0"
-                                        VerticalAlignment="Center">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#25FF6A1A" Offset="0"/>
-                                            <GradientStop Color="#25FF3B30" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <TextBlock Text="{Binding Rank}" FontFamily="Segoe UI"
-                                               FontWeight="Bold" FontSize="11" Foreground="#FF6A1A"/>
-                                </Border>
-                            </StackPanel>
-
-                            <TextBlock FontFamily="Segoe UI" FontSize="12" Foreground="#9AA5B5" Margin="0,0,0,10">
-                                <Run Text="Steam ID: "/>
-                                <Run Text="{Binding SteamId, Mode=OneWay}" FontFamily="Consolas" FontWeight="SemiBold" Foreground="#5A6577"/>
-                            </TextBlock>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Border CornerRadius="4" Padding="10,4" Background="#1E232E"
-                                        BorderBrush="#262C39" BorderThickness="1" Margin="0,0,8,0">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets"
-                                                   FontSize="12" Foreground="#9AA5B5" Margin="0,0,6,0"
-                                                   VerticalAlignment="Center"/>
-                                        <TextBlock Text="{Binding PrimaryRole}"
-                                                   FontFamily="Segoe UI" FontSize="12"
-                                                   Foreground="{StaticResource BrushTextPrimary}"/>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <!-- LevelBadge + Edit button -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top">
-                            <c:LevelBadge Level="{Binding Level}" Size="76" ShowTier="True"
-                                          Margin="0,0,18,0" VerticalAlignment="Top"/>
-                            <Button Style="{StaticResource SmallButton}"
-                                    Command="{Binding EditCommand}" VerticalAlignment="Top"
-                                    Visibility="{Binding IsNotEditing, Converter={StaticResource BoolToVisibility}}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets"
-                                               FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="White"/>
-                                    <TextBlock Text="EDITAR" FontFamily="Segoe UI" FontWeight="Bold"
-                                               FontSize="12" Foreground="White"/>
+                                           FontWeight="Black" FontSize="24" Foreground="White"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                    <Border CornerRadius="4" Padding="7,2" Background="#33FF6A1A" Margin="0,0,8,0">
+                                        <TextBlock Text="{Binding Rank}" FontFamily="Segoe UI"
+                                                   FontWeight="Bold" FontSize="10" Foreground="{StaticResource BrushAccent}"/>
+                                    </Border>
+                                    <TextBlock FontFamily="Segoe UI" FontSize="11" Foreground="#D8DADF" VerticalAlignment="Center">
+                                        <Run Text="{Binding PrimaryRole, Mode=OneWay}"/>
+                                        <Run Text=" · "/>
+                                        <Run Text="{Binding TeamName, Mode=OneWay}"/>
+                                    </TextBlock>
                                 </StackPanel>
-                            </Button>
-                        </StackPanel>
+                            </StackPanel>
+
+                            <!-- Direita: badges no topo (estilo bandeira do cartão) + editar no rodapé -->
+                            <Grid Grid.Column="1">
+                                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <ItemsControl ItemsSource="{Binding Badges}" HorizontalAlignment="Right">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate><StackPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="32" Height="32" CornerRadius="16" Margin="6,0,0,0"
+                                                        Background="#992A1408" BorderBrush="{StaticResource BrushAccent}" BorderThickness="1"
+                                                        ToolTip="{Binding Name}">
+                                                    <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                                                               Foreground="{StaticResource BrushAccent}"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <Border Height="1" Width="200" Background="#40FF6A1A" Margin="0,10,0,4" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="BADGES" FontFamily="Segoe UI" FontWeight="Bold" FontSize="9"
+                                               Foreground="#B5BAC2" HorizontalAlignment="Right"/>
+                                </StackPanel>
+
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                        Style="{StaticResource SmallButton}" Command="{Binding EditCommand}"
+                                        Visibility="{Binding IsNotEditing, Converter={StaticResource BoolToVisibility}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="White"/>
+                                        <TextBlock Text="EDITAR" FontFamily="Segoe UI" FontWeight="Bold"
+                                                   FontSize="12" Foreground="White"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Border>
+                </Border>
+
+                <!-- Badge de nível, fora do cartão -->
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                    <c:LevelBadge Level="{Binding Level}" Size="100" ShowTier="True"/>
+                </StackPanel>
+            </Grid>
 
             <!-- â”€â”€ STATS GRID â”€â”€ -->
             <Grid Grid.Row="2">
@@ -270,6 +297,16 @@
                                        FontSize="8" Foreground="#9AA5B5"
                                        Margin="0,0,0,6"/>
                             <TextBox Text="{Binding EditRole, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,16"/>
+                            <TextBlock Text="PAÍS" FontFamily="Segoe UI" FontWeight="Bold"
+                                       FontSize="8" Foreground="#9AA5B5"
+                                       Margin="0,0,0,6"/>
+                            <TextBox Text="{Binding EditCountry, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,16"/>
+                            <TextBlock Text="URL DO AVATAR" FontFamily="Segoe UI" FontWeight="Bold"
+                                       FontSize="8" Foreground="#9AA5B5"
+                                       Margin="0,0,0,6"/>
+                            <TextBox Text="{Binding EditAvatarUrl, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource DarkTextBox}" Margin="0,0,0,16"/>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="SALVAR" Style="{StaticResource SmallButton}"

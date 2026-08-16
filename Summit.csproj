@@ -16,6 +16,9 @@
 
   <ItemGroup>
     <Resource Include="Assets/logo.png" />
+    <Resource Include="Assets/hero-banner.png" />
+    <Resource Include="Assets/season-banner.png" />
+    <Resource Include="Assets/soldier-art.png" />
   </ItemGroup>
 
   <!-- O projeto da API vive em subpasta; excluir do glob do client -->

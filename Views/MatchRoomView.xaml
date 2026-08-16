@@ -212,6 +212,35 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- DEV: ferramentas de teste local (sempre visíveis — as duas ações são
+                         seguras de repetir mesmo depois que o veto/resultado já terminou) -->
+                    <Border CornerRadius="12" Padding="18" Margin="0,16,0,0"
+                            Background="#0F1116" BorderBrush="#3A2A1E" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="DEV — SIMULAÇÃO LOCAL" FontFamily="Segoe UI" FontWeight="Black"
+                                       FontSize="10" Foreground="#FF9A3C" Margin="0,0,0,10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Command="{Binding SimulateVetoCommand}" Background="Transparent"
+                                        BorderThickness="1" BorderBrush="#262C39" Padding="14,7" Cursor="Hand"
+                                        Margin="0,0,8,0">
+                                    <TextBlock Text="SIMULAR VETO INTEIRO" FontFamily="Segoe UI" FontWeight="Bold"
+                                               FontSize="10" Foreground="#9AA5B5"/>
+                                </Button>
+                                <Button Command="{Binding ForceWinACommand}" Background="Transparent"
+                                        BorderThickness="1" BorderBrush="#262C39" Padding="14,7" Cursor="Hand"
+                                        Margin="0,0,8,0">
+                                    <TextBlock Text="{Binding TeamATag, StringFormat='FORÇAR VITÓRIA {0}'}"
+                                               FontFamily="Segoe UI" FontWeight="Bold" FontSize="10" Foreground="#9AA5B5"/>
+                                </Button>
+                                <Button Command="{Binding ForceWinBCommand}" Background="Transparent"
+                                        BorderThickness="1" BorderBrush="#262C39" Padding="14,7" Cursor="Hand">
+                                    <TextBlock Text="{Binding TeamBTag, StringFormat='FORÇAR VITÓRIA {0}'}"
+                                               FontFamily="Segoe UI" FontWeight="Bold" FontSize="10" Foreground="#9AA5B5"/>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
                     <!-- SERVIDOR PRONTO -->
                     <Border CornerRadius="12" Padding="24" Margin="0,16,0,0"
                             Background="#150F0C" BorderBrush="#60FF6A1A" BorderThickness="1"
