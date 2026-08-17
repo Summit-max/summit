@@ -9,13 +9,14 @@ namespace Summit.Services;
 /// <summary>
 /// Cliente HTTP central da Summit API.
 /// Base URL configurável via variável de ambiente SUMMIT_API_URL
-/// (padrão: http://localhost:5180).
+/// (padrão: instância de produção na AWS; setar SUMMIT_API_URL=http://localhost:5180
+/// pra voltar a testar contra a API local).
 /// </summary>
 public static class ApiClient
 {
     public static readonly string BaseUrl =
         Environment.GetEnvironmentVariable("SUMMIT_API_URL")?.TrimEnd('/')
-        ?? "http://localhost:5180";
+        ?? "http://18.231.129.187";
 
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web)
     {
