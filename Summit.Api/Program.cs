@@ -658,6 +658,92 @@ app.MapPost("/api/debug/force-match-result/{bracketMatchId}", async (ApiDbContex
     return Results.Ok(new { matchId = match.Id, forced = true });
 });
 
+// dev: lista usuários reais (login Steam de verdade). Real e seed usam o MESMO prefixo
+// "usr_" — a diferença é o resto do id: login real gera "usr_" + GUID (36 chars no total,
+// ex. usr_3f9a...), seed usa um apelido curto (usr_ghost, usr_niko...). Distingue pelo tamanho.
+app.MapGet("/api/debug/real-users", async (ApiDbContext db) =>
+{
+    var users = await db.Users.Where(u => u.Id.Length == 36).ToListAsync();
+    return Results.Ok(users.Select(u => new { u.Id, u.SteamId, u.Nickname, u.TeamId }));
+});
+
+// dev: apaga TODO campeonato/time/jogador fake e monta 4 times fixos (Geucius/NAVI/Spirit/
+// Vitality, 5 jogadores cada) pra teste manual do fluxo completo — preserva só o usuário real
+// passado em captainUserId (vira capitão do Geucius).
+app.MapPost("/api/debug/reset-test-teams/{captainUserId}", async (ApiDbContext db, string captainUserId) =>
+{
+    var captain = await db.Users.FindAsync(captainUserId);
+    if (captain == null) return Results.NotFound($"captainUserId {captainUserId} não encontrado.");
+
+    db.Notifications.RemoveRange(db.Notifications);
+    db.Reports.RemoveRange(db.Reports);
+    db.AuditLogs.RemoveRange(db.AuditLogs);
+    db.VetoSteps.RemoveRange(db.VetoSteps);
+    db.VetoSessions.RemoveRange(db.VetoSessions);
+    db.MatchPlayers.RemoveRange(db.MatchPlayers);
+    db.Matches.RemoveRange(db.Matches);
+    db.BracketMatches.RemoveRange(db.BracketMatches);
+    db.BracketRounds.RemoveRange(db.BracketRounds);
+    db.TournamentLineupPlayers.RemoveRange(db.TournamentLineupPlayers);
+    db.TournamentTeams.RemoveRange(db.TournamentTeams);
+    db.Tournaments.RemoveRange(db.Tournaments);
+    db.TeamJoinRequests.RemoveRange(db.TeamJoinRequests);
+    db.TeamInvitations.RemoveRange(db.TeamInvitations);
+    db.Friendships.RemoveRange(db.Friendships);
+    db.UserBadges.RemoveRange(db.UserBadges);
+    db.PoolServers.RemoveRange(db.PoolServers);
+    await db.SaveChangesAsync();
+
+    db.Teams.RemoveRange(db.Teams);
+    await db.SaveChangesAsync();
+
+    // só apaga os fakes de seed (id curto tipo "usr_ghost") — usuários reais (id = "usr_" +
+    // GUID, 36 chars) ficam intactos mesmo que não sejam o captain.
+    var fakeUsers = await db.Users.Where(u => u.Id.Length != 36).ToListAsync();
+    db.Users.RemoveRange(fakeUsers);
+    await db.SaveChangesAsync();
+
+    var now = DateTime.UtcNow;
+    User MakeUser(string id, string nick) => new()
+    {
+        Id = id, SteamId = "test_" + id, Nickname = nick, Country = "🇧🇷", Rank = "Global Elite",
+        Level = 50, Elo = 2500, WinRate = 0.6, KD = 1.2, HeadshotPercent = 0.5, AvgDamagePerRound = 75,
+        CreatedAt = now, LastLoginAt = now
+    };
+    Team MakeTeam(string id, string name, string tag, string capId) => new()
+    { Id = id, Name = name, Tag = tag, CaptainId = capId, Elo = 2600, CreatedAt = now };
+
+    var geuTeam = MakeTeam("team_geucius", "The Geucius", "GEUCIUS", captainUserId);
+    captain.TeamId = geuTeam.Id;
+    captain.TeamRole = TeamRole.Captain;
+    var geuMembers = new[] { MakeUser("usr_divi", "divi"), MakeUser("usr_hiosyin", "hiosyin"), MakeUser("usr_jarro", "jarro"), MakeUser("usr_leandro", "leandro") };
+    foreach (var u in geuMembers) { u.TeamId = geuTeam.Id; u.TeamRole = TeamRole.Member; }
+
+    var naviTeam = MakeTeam("team_navi", "Natus Vincere", "NAVI", "usr_aleksib");
+    var navi = new[] { MakeUser("usr_aleksib", "Aleksib"), MakeUser("usr_im", "iM"), MakeUser("usr_b1t", "b1t"), MakeUser("usr_wonderful", "w0nderful"), MakeUser("usr_makaze", "Makaze") };
+    navi[0].TeamRole = TeamRole.Captain;
+    foreach (var u in navi) u.TeamId = naviTeam.Id;
+
+    var spiritTeam = MakeTeam("team_spirit", "Team Spirit", "SPIRIT", "usr_donk");
+    var spirit = new[] { MakeUser("usr_donk", "donk"), MakeUser("usr_tn1r", "tn1r"), MakeUser("usr_magix", "magix"), MakeUser("usr_zontix", "zontix"), MakeUser("usr_sh1ro", "sh1ro") };
+    spirit[0].TeamRole = TeamRole.Captain;
+    foreach (var u in spirit) u.TeamId = spiritTeam.Id;
+
+    var vitTeam = MakeTeam("team_vitality", "Vitality", "VITALITY", "usr_zywoo");
+    var vit = new[] { MakeUser("usr_zywoo", "ZywOo"), MakeUser("usr_ropz", "ropz"), MakeUser("usr_apex", "apex"), MakeUser("usr_mezzi", "mezzi"), MakeUser("usr_flamez", "flamez") };
+    vit[0].TeamRole = TeamRole.Captain;
+    foreach (var u in vit) u.TeamId = vitTeam.Id;
+
+    await db.Teams.AddRangeAsync(geuTeam, naviTeam, spiritTeam, vitTeam);
+    await db.Users.AddRangeAsync(geuMembers);
+    await db.Users.AddRangeAsync(navi);
+    await db.Users.AddRangeAsync(spirit);
+    await db.Users.AddRangeAsync(vit);
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { teams = new[] { geuTeam.Id, naviTeam.Id, spiritTeam.Id, vitTeam.Id } });
+});
+
 // dev: registra N times "fantasma" (com 5 jogadores fake cada, escalação e check-in já
 // confirmados) direto num campeonato — pra testar chave/avanço sem precisar de times reais.
 app.MapPost("/api/debug/add-ghost-teams/{tournamentId}", async (ApiDbContext db, string tournamentId, int? count) =>
