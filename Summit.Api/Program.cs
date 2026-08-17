@@ -142,7 +142,7 @@ app.MapGet("/api/debug/instances", async () =>
     {
         Filters = new List<Amazon.EC2.Model.Filter>
         {
-            new() { Name = "tag-key", Values = new List<string> { "summit:matchId", "summit:pool", "summit:manual" } }
+            new() { Name = "tag-key", Values = new List<string> { "summit:matchId", "summit:pool", "summit:manual", "summit:apihost" } }
         }
     });
     var list = resp.Reservations.SelectMany(r => r.Instances)
@@ -302,6 +302,142 @@ app.MapPost("/api/debug/launch-build-instance/{amiId}", async (string amiId, int
             }
         }
     };
+    var subnetId = Environment.GetEnvironmentVariable("SUMMIT_SUBNET_ID");
+    if (!string.IsNullOrWhiteSpace(subnetId)) request.SubnetId = subnetId;
+
+    var response = await ec2.RunInstancesAsync(request);
+    return Results.Ok(new { instanceId = response.Reservation.Instances.First().InstanceId });
+});
+
+// infra (App Runner descontinuado -> EC2 direto pra hospedar a API): cria a IAM role + instance
+// profile pra API rodar sem colar chaves AWS estáticas dentro do servidor. Policy gerenciada
+// EC2FullAccess por ora (mesmo escopo que as chaves pessoais já tinham) — apertar depois.
+app.MapPost("/api/debug/create-api-instance-role", async () =>
+{
+    using var iam = new Amazon.IdentityManagement.AmazonIdentityManagementServiceClient(Amazon.RegionEndpoint.USEast1);
+    const string roleName = "summit-api-role";
+    const string profileName = "summit-api-profile";
+    const string trustPolicy = """
+    {
+      "Version": "2012-10-17",
+      "Statement": [{ "Effect": "Allow", "Principal": { "Service": "ec2.amazonaws.com" }, "Action": "sts:AssumeRole" }]
+    }
+    """;
+
+    try
+    {
+        await iam.CreateRoleAsync(new Amazon.IdentityManagement.Model.CreateRoleRequest
+        {
+            RoleName = roleName,
+            AssumeRolePolicyDocument = trustPolicy
+        });
+    }
+    catch (Amazon.IdentityManagement.Model.EntityAlreadyExistsException) { }
+
+    await iam.AttachRolePolicyAsync(new Amazon.IdentityManagement.Model.AttachRolePolicyRequest
+    {
+        RoleName = roleName,
+        PolicyArn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+    });
+
+    var createdNew = true;
+    try
+    {
+        await iam.CreateInstanceProfileAsync(new Amazon.IdentityManagement.Model.CreateInstanceProfileRequest
+        {
+            InstanceProfileName = profileName
+        });
+    }
+    catch (Amazon.IdentityManagement.Model.EntityAlreadyExistsException) { createdNew = false; }
+
+    if (createdNew)
+    {
+        await iam.AddRoleToInstanceProfileAsync(new Amazon.IdentityManagement.Model.AddRoleToInstanceProfileRequest
+        {
+            InstanceProfileName = profileName,
+            RoleName = roleName
+        });
+        // instance profiles novos levam alguns segundos pra propagar antes de poderem ser usados no RunInstances
+        await Task.Delay(10000);
+    }
+
+    return Results.Ok(new { roleName, profileName, createdNew });
+});
+
+// infra: cria um security group dedicado (reusa a VPC do SG do CS2 já existente)
+app.MapPost("/api/debug/create-security-group/{name}", async (string name, string? description) =>
+{
+    var region = Environment.GetEnvironmentVariable("AWS_REGION") ?? "sa-east-1";
+    using var ec2 = new Amazon.EC2.AmazonEC2Client(Amazon.RegionEndpoint.GetBySystemName(region));
+
+    var existingSgId = Environment.GetEnvironmentVariable("SUMMIT_SECURITY_GROUP_ID")
+        ?? throw new InvalidOperationException("SUMMIT_SECURITY_GROUP_ID não configurada.");
+    var vpcResp = await ec2.DescribeSecurityGroupsAsync(new Amazon.EC2.Model.DescribeSecurityGroupsRequest
+    {
+        GroupIds = new List<string> { existingSgId }
+    });
+    var vpcId = vpcResp.SecurityGroups.First().VpcId;
+
+    try
+    {
+        var resp = await ec2.CreateSecurityGroupAsync(new Amazon.EC2.Model.CreateSecurityGroupRequest
+        {
+            GroupName = name,
+            Description = description ?? $"Summit - {name}",
+            VpcId = vpcId
+        });
+        return Results.Ok(new { groupId = resp.GroupId, vpcId, existed = false });
+    }
+    catch (Amazon.EC2.AmazonEC2Exception ex) when (ex.ErrorCode == "InvalidGroup.Duplicate")
+    {
+        var existing = await ec2.DescribeSecurityGroupsAsync(new Amazon.EC2.Model.DescribeSecurityGroupsRequest
+        {
+            Filters = new List<Amazon.EC2.Model.Filter> { new() { Name = "group-name", Values = new List<string> { name } } }
+        });
+        return Results.Ok(new { groupId = existing.SecurityGroups.First().GroupId, vpcId, existed = true });
+    }
+});
+
+// infra: sobe a instância que vai hospedar a Summit.Api de verdade (t3.micro — leve, barata,
+// suficiente pro estágio atual). UserData só prepara o SO (.NET SDK + git); o deploy de
+// verdade (clone do repo privado + env vars de produção) é feito depois via SSH.
+app.MapPost("/api/debug/launch-api-instance/{amiId}", async (string amiId, string sgId, string? instanceProfile) =>
+{
+    var region = Environment.GetEnvironmentVariable("AWS_REGION") ?? "sa-east-1";
+    using var ec2 = new Amazon.EC2.AmazonEC2Client(Amazon.RegionEndpoint.GetBySystemName(region));
+
+    const string userData = """
+    #!/bin/bash
+    set -e
+    apt-get update -y
+    apt-get install -y dotnet-sdk-8.0 git
+    mkdir -p /opt/summit-api
+    chown ubuntu:ubuntu /opt/summit-api
+    """;
+
+    var request = new Amazon.EC2.Model.RunInstancesRequest
+    {
+        ImageId = amiId,
+        InstanceType = Amazon.EC2.InstanceType.T3Micro,
+        MinCount = 1,
+        MaxCount = 1,
+        KeyName = Environment.GetEnvironmentVariable("SUMMIT_KEY_PAIR_NAME"),
+        SecurityGroupIds = new List<string> { sgId },
+        UserData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(userData)),
+        TagSpecifications = new List<Amazon.EC2.Model.TagSpecification>
+        {
+            new()
+            {
+                ResourceType = Amazon.EC2.ResourceType.Instance,
+                Tags = new List<Amazon.EC2.Model.Tag> { new() { Key = "Name", Value = "summit-api-1" }, new() { Key = "summit:apihost", Value = "true" } }
+            }
+        }
+    };
+    // sem role IAM própria por ora (usuário summit-api não tem permissão de criar roles, de
+    // propósito — ver memória do projeto); a instância usa as chaves estáticas via env var em
+    // vez de instance profile. Trocar assim que a role for criada manualmente no console.
+    if (!string.IsNullOrWhiteSpace(instanceProfile))
+        request.IamInstanceProfile = new Amazon.EC2.Model.IamInstanceProfileSpecification { Name = instanceProfile };
     var subnetId = Environment.GetEnvironmentVariable("SUMMIT_SUBNET_ID");
     if (!string.IsNullOrWhiteSpace(subnetId)) request.SubnetId = subnetId;
 

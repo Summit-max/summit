@@ -1,0 +1,36 @@
+name: Deploy Summit API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Summit.Api/**"
+      - "Models/**"
+      - ".github/workflows/deploy-api.yml"
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish
+        run: dotnet publish Summit.Api/Summit.Api.csproj -c Release -o publish
+
+      - name: Deploy via SSH
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key" publish/ "ubuntu@$HOST:/opt/summit-api/publish/"
+          ssh -i ~/.ssh/deploy_key "ubuntu@$HOST" "sudo systemctl restart summit-api"
