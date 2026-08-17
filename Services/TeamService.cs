@@ -14,10 +14,12 @@ public class TeamService : Interfaces.ITeamService
 
     public Task<List<Team>> GetAllAsync() => _repo.GetAllAsync();
 
-    public Task<Team> CreateTeamAsync(string name, string tag)
+    public async Task<Team> CreateTeamAsync(string name, string tag)
     {
         var captainId = App.UserService.CurrentUser?.Id ?? string.Empty;
-        return _repo.CreateAsync(name, tag, captainId);
+        var team = await _repo.CreateAsync(name, tag, captainId);
+        await ReloadCurrentUserAsync();
+        return team;
     }
 
     public async Task<(bool Ok, string? Message)> InviteByNicknameAsync(string nickname)
