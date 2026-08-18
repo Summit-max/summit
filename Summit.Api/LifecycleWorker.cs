@@ -187,7 +187,10 @@ public class LifecycleWorker : BackgroundService
             await CompetitionEndpoints.GrantBadgeAsync(db, userId, "bd_loyal");
     }
 
-    private static readonly HttpClient Http = new() { BaseAddress = new Uri("http://localhost:5180") };
+    // porta precisa bater com a que o Kestrel realmente escuta (PORT em produção, 5180 local —
+    // ver app.Run em Program.cs); hardcoded 5180 aqui quebrava as auto-chamadas em produção.
+    private static readonly HttpClient Http = new()
+    { BaseAddress = new Uri($"http://localhost:{Environment.GetEnvironmentVariable("PORT") ?? "5180"}") };
 
     /// <summary>
     /// Bots do seed (capitães com id curto, ex. usr_ghost) jogam o veto sozinhos —

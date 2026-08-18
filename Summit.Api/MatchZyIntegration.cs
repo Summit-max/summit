@@ -87,7 +87,8 @@ public static class MatchZyIntegration
 
             // reusa o endpoint de resultado já testado (mesmo padrão de auto-chamada do
             // /api/debug/simulate-veto) em vez de duplicar a lógica de avanço de chave aqui.
-            using var http = new HttpClient { BaseAddress = new Uri("http://localhost:5180") };
+            using var http = new HttpClient
+            { BaseAddress = new Uri($"http://localhost:{Environment.GetEnvironmentVariable("PORT") ?? "5180"}") };
             await http.PostAsJsonAsync($"/api/matches/{matchId}/result", resultBody);
             return Results.Ok();
         });

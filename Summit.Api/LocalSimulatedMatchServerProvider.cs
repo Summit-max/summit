@@ -112,7 +112,8 @@ public class LocalSimulatedMatchServerProvider : IMatchServerProvider
                 PlayersB = BuildSimulatedRoster(teamB, !aWins)
             };
 
-            using var http = new HttpClient { BaseAddress = new Uri("http://localhost:5180") };
+            using var http = new HttpClient
+            { BaseAddress = new Uri($"http://localhost:{Environment.GetEnvironmentVariable("PORT") ?? "5180"}") };
             var resp = await http.PostAsJsonAsync($"/api/matches/{matchId}/result", body);
             _log.LogInformation("[sim] Resultado simulado enviado pra {MatchId}: {A}x{B} — status {Status}",
                 matchId, scoreA, scoreB, resp.StatusCode);

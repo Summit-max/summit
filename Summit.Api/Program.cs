@@ -90,6 +90,25 @@ app.MapGet("/", () => Results.Ok(new
 if (enableDebugEndpoints)
 {
 
+// diagnostico: lista as AMIs próprias da conta — usado quando SUMMIT_AMI_ID configurada
+// não existe mais (foi trocada/deregistrada) e precisa achar a atual.
+app.MapGet("/api/debug/my-amis", async () =>
+{
+    var region = Environment.GetEnvironmentVariable("AWS_REGION") ?? "sa-east-1";
+    using var ec2 = new Amazon.EC2.AmazonEC2Client(Amazon.RegionEndpoint.GetBySystemName(region));
+    var resp = await ec2.DescribeImagesAsync(new Amazon.EC2.Model.DescribeImagesRequest
+    {
+        Owners = new List<string> { "self" }
+    });
+    return Results.Ok(resp.Images.OrderByDescending(i => i.CreationDate).Select(i => new
+    {
+        i.ImageId,
+        i.Name,
+        i.CreationDate,
+        State = i.State.Value
+    }));
+});
+
 // diagnostico: confere se a AMI configurada ja esta pronta pra uso (evita ficar
 // checando manualmente no console da AWS enquanto ela empacota o disco)
 app.MapGet("/api/debug/ami-status", async () =>
@@ -610,7 +629,8 @@ app.MapPost("/api/debug/force-register/{tournamentId}/{teamId}", async (ApiDbCon
 // duplica a regra de sequência/validação de turno.
 app.MapPost("/api/debug/simulate-veto/{bracketMatchId}", async (string bracketMatchId) =>
 {
-    using var http = new HttpClient { BaseAddress = new Uri("http://localhost:5180") };
+    using var http = new HttpClient
+    { BaseAddress = new Uri($"http://localhost:{Environment.GetEnvironmentVariable("PORT") ?? "5180"}") };
 
     var startResp = await http.PostAsync($"/api/veto/{bracketMatchId}/start", null);
     if (!startResp.IsSuccessStatusCode)
