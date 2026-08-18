@@ -16,7 +16,7 @@ public static class ApiClient
 {
     public static readonly string BaseUrl =
         Environment.GetEnvironmentVariable("SUMMIT_API_URL")?.TrimEnd('/')
-        ?? "http://18.231.129.187";
+        ?? "http://177.71.147.61";
 
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web)
     {
