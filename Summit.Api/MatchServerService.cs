@@ -137,7 +137,7 @@ public class MatchServerService
         try
         {
             using var rcon = new RconClient();
-            if (!await rcon.ConnectAndAuthAsync(poolServer.PublicIp, 27015, poolServer.RconPassword))
+            if (!await rcon.ConnectAndAuthAsync(poolServer.PrivateIp, 27015, poolServer.RconPassword))
             {
                 _log.LogWarning("RCON falhou ao autenticar no servidor de pool {PoolServerId} — marcando Unhealthy", poolServer.Id);
                 poolServer.State = PoolServerState.Unhealthy;
@@ -175,7 +175,7 @@ public class MatchServerService
         try
         {
             using var rcon = new RconClient();
-            if (await rcon.ConnectAndAuthAsync(poolServer.PublicIp, 27015, poolServer.RconPassword))
+            if (await rcon.ConnectAndAuthAsync(poolServer.PrivateIp, 27015, poolServer.RconPassword))
             {
                 await rcon.ExecCommandAsync("sv_password \"\"");
                 await rcon.ExecCommandAsync("changelevel de_dust2");
@@ -198,7 +198,7 @@ public class MatchServerService
         try
         {
             using var rcon = new RconClient();
-            if (!await rcon.ConnectAndAuthAsync(poolServer.PublicIp, 27015, poolServer.RconPassword, timeoutMs: 4000))
+            if (!await rcon.ConnectAndAuthAsync(poolServer.PrivateIp, 27015, poolServer.RconPassword, timeoutMs: 4000))
                 return false;
             await rcon.ExecCommandAsync("status");
             return true;
@@ -216,7 +216,7 @@ public class MatchServerService
         try
         {
             using var rcon = new RconClient();
-            if (!await rcon.ConnectAndAuthAsync(poolServer.PublicIp, 27015, poolServer.RconPassword, timeoutMs: 4000))
+            if (!await rcon.ConnectAndAuthAsync(poolServer.PrivateIp, 27015, poolServer.RconPassword, timeoutMs: 4000))
                 return null;
             var status = await rcon.ExecCommandAsync("status");
             // linha típica: "players : 2 humans, 0 bots (10 max) (not hibernating)"
@@ -287,6 +287,7 @@ public class MatchServerService
         if (instance.State.Name == InstanceStateName.Running && !string.IsNullOrEmpty(instance.PublicIpAddress))
         {
             match.ServerIp = $"{instance.PublicIpAddress}:27015";
+            match.ServerPrivateIp = instance.PrivateIpAddress ?? string.Empty;
             match.ProvisionState = ServerProvisionState.Ready;
             match.Status = MatchStatus.Live;
             _log.LogInformation("Servidor pronto para {MatchId}: {Ip}", match.Id, match.ServerIp);
@@ -311,7 +312,7 @@ public class MatchServerService
         var publicApiUrl = Environment.GetEnvironmentVariable("SUMMIT_PUBLIC_API_URL")?.TrimEnd('/');
         if (string.IsNullOrWhiteSpace(publicApiUrl) || string.IsNullOrEmpty(match.ServerIp)) return false;
 
-        var ip = match.ServerIp.Split(':')[0];
+        var ip = string.IsNullOrEmpty(match.ServerPrivateIp) ? match.ServerIp.Split(':')[0] : match.ServerPrivateIp;
         try
         {
             using var rcon = new RconClient();
@@ -347,6 +348,7 @@ public class MatchServerService
         if (instance.State.Name == InstanceStateName.Running && !string.IsNullOrEmpty(instance.PublicIpAddress))
         {
             poolServer.PublicIp = instance.PublicIpAddress;
+            poolServer.PrivateIp = instance.PrivateIpAddress ?? string.Empty;
             return true;
         }
         if (instance.State.Name == InstanceStateName.Terminated || instance.State.Name == InstanceStateName.ShuttingDown)

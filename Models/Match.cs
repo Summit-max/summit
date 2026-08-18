@@ -31,6 +31,10 @@ public class Match
     // Sala da partida (preenchida quando o veto termina)
     public string ServerIp { get; set; } = string.Empty;
     public string ServerPassword { get; set; } = string.Empty;
+    // IP privado da instância — usado só pro RCON interno (API e servidor CS2 na mesma VPC,
+    // conectar via ServerIp/público de dentro da VPC não funciona). ServerIp continua sendo
+    // o certo pro connect string do jogador.
+    public string ServerPrivateIp { get; set; } = string.Empty;
 
     // Provisionamento AWS (efêmero) — instância criada por partida, terminada ao fim
     public string? Ec2InstanceId { get; set; }

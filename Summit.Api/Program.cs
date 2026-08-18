@@ -224,6 +224,21 @@ app.MapGet("/api/debug/security-group", async () =>
     });
 });
 
+// diagnostico: lista a chave (rounds + matches com id) sem mexer em nada — pra achar o
+// bracketMatchId de uma partida sem precisar regenerar a chave (o que orfanaria o veto em curso).
+app.MapGet("/api/debug/bracket/{tournamentId}", async (ApiDbContext db, string tournamentId) =>
+{
+    var rounds = await db.BracketRounds.Include(r => r.Matches)
+        .Where(r => r.TournamentId == tournamentId).OrderBy(r => r.RoundNumber).ToListAsync();
+    return Results.Ok(rounds.Select(r => new
+    {
+        r.Name,
+        Side = r.Side.ToString(),
+        r.RoundNumber,
+        Matches = r.Matches.Select(m => new { m.Id, m.Position, m.TeamATag, m.TeamBTag, Status = m.Status.ToString() })
+    }));
+});
+
 // diagnostico: gera a chave na hora, sem esperar T-30min/T-0 (teste do bracket flexível/dupla elim.)
 app.MapPost("/api/debug/generate-bracket/{tournamentId}", async (ApiDbContext db, string tournamentId) =>
 {
@@ -657,6 +672,25 @@ app.MapPost("/api/debug/simulate-veto/{bracketMatchId}", async (string bracketMa
     using var finalState = JsonDocument.Parse(await finalResp.Content.ReadAsStringAsync());
     var complete = finalState.RootElement.GetProperty("session").GetProperty("isComplete").GetBoolean();
     return Results.Ok(new { bracketMatchId, complete });
+});
+
+// dev: reinicia o provisionamento de uma sala que ficou presa em Failed (ex: AMI errada na
+// hora do veto, já corrigida) — tenta o pool de novo, senão cai pro provisionamento direto,
+// igual ProvisionRoomAsync faz na hora que o veto fecha.
+app.MapPost("/api/debug/retry-provision/{bracketMatchId}", async (ApiDbContext db, IMatchServerProvider provider, string bracketMatchId) =>
+{
+    var match = await db.Matches.Where(m => m.BracketMatchId == bracketMatchId)
+        .OrderByDescending(m => m.GameNumber).FirstOrDefaultAsync();
+    if (match == null) return Results.NotFound("Sala da partida ainda não existe — o veto já terminou?");
+
+    match.ProvisionState = Summit.Models.ServerProvisionState.None;
+    await db.SaveChangesAsync();
+
+    var assignedFromPool = await provider.TryAssignFromPoolAsync(match.Id, match.Map, match.ServerPassword);
+    if (!assignedFromPool)
+        _ = provider.ProvisionAsync(match.Id);
+
+    return Results.Ok(new { matchId = match.Id, assignedFromPool });
 });
 
 // dev: força o resultado de uma partida AGORA, sem esperar o delay do provider local — pra
