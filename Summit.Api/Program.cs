@@ -109,6 +109,45 @@ app.MapGet("/api/debug/my-amis", async () =>
     }));
 });
 
+// diagnostico: custo real do RDS/Aurora dia a dia, quebrado por tipo de uso (storage,
+// ACU-hora, I/O, etc.) — pra responder "por que gastou X" com dado de verdade, não chute.
+app.MapGet("/api/debug/rds-cost", async (int? days) =>
+{
+    using var ce = new Amazon.CostExplorer.AmazonCostExplorerClient(Amazon.RegionEndpoint.USEast1);
+    var n = days ?? 3;
+    var end = DateTime.UtcNow.Date.AddDays(1); // CE end é exclusivo
+    var start = end.AddDays(-n - 1);
+    var resp = await ce.GetCostAndUsageAsync(new Amazon.CostExplorer.Model.GetCostAndUsageRequest
+    {
+        TimePeriod = new Amazon.CostExplorer.Model.DateInterval
+        { Start = start.ToString("yyyy-MM-dd"), End = end.ToString("yyyy-MM-dd") },
+        Granularity = Amazon.CostExplorer.Granularity.DAILY,
+        Metrics = new List<string> { "UnblendedCost" },
+        Filter = new Amazon.CostExplorer.Model.Expression
+        {
+            Dimensions = new Amazon.CostExplorer.Model.DimensionValues
+            {
+                Key = Amazon.CostExplorer.Dimension.SERVICE,
+                Values = new List<string> { "Amazon Relational Database Service" }
+            }
+        },
+        GroupBy = new List<Amazon.CostExplorer.Model.GroupDefinition>
+        {
+            new() { Type = Amazon.CostExplorer.GroupDefinitionType.DIMENSION, Key = "USAGE_TYPE" }
+        }
+    });
+    return Results.Ok(resp.ResultsByTime.Select(r => new
+    {
+        r.TimePeriod.Start,
+        r.TimePeriod.End,
+        Total = r.Total.TryGetValue("UnblendedCost", out var t) ? t.Amount : null,
+        Groups = r.Groups
+            .Select(g => new { Key = string.Join(",", g.Keys), Amount = g.Metrics["UnblendedCost"].Amount })
+            .Where(g => double.TryParse(g.Amount, out var a) && a > 0)
+            .OrderByDescending(g => double.Parse(g.Amount))
+    }));
+});
+
 // diagnostico: confere se a AMI configurada ja esta pronta pra uso (evita ficar
 // checando manualmente no console da AWS enquanto ela empacota o disco)
 app.MapGet("/api/debug/ami-status", async () =>
@@ -237,6 +276,36 @@ app.MapGet("/api/debug/bracket/{tournamentId}", async (ApiDbContext db, string t
         r.RoundNumber,
         Matches = r.Matches.Select(m => new { m.Id, m.Position, m.TeamATag, m.TeamBTag, Status = m.Status.ToString() })
     }));
+});
+
+// dev: reabre o veto de uma partida do zero — apaga sessão/steps antigos e a sala (Match) que
+// tinha ficado presa a um servidor já encerrado, volta o BracketMatch pra Pending e chama
+// OpenVetoForMatchAsync de novo. Pra retestar sem precisar recriar o campeonato inteiro.
+app.MapPost("/api/debug/restart-veto/{bracketMatchId}", async (ApiDbContext db, string bracketMatchId) =>
+{
+    var bm = await db.BracketMatches.Include(m => m.Round).FirstOrDefaultAsync(m => m.Id == bracketMatchId);
+    if (bm == null) return Results.NotFound("BracketMatch não encontrado.");
+
+    var oldMatches = await db.Matches.Where(m => m.BracketMatchId == bracketMatchId).ToListAsync();
+    db.Matches.RemoveRange(oldMatches);
+
+    var oldSession = await db.VetoSessions.Include(s => s.Steps).FirstOrDefaultAsync(s => s.BracketMatchId == bracketMatchId);
+    if (oldSession != null)
+    {
+        db.VetoSteps.RemoveRange(oldSession.Steps);
+        db.VetoSessions.Remove(oldSession);
+    }
+
+    bm.Status = Summit.Models.BracketMatchStatus.Pending;
+    bm.ScoreA = null;
+    bm.ScoreB = null;
+    bm.MatchId = null;
+    await db.SaveChangesAsync();
+
+    await CompetitionEndpoints.OpenVetoForMatchAsync(db, bm.Round?.TournamentId, bm);
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { bracketMatchId, restarted = true });
 });
 
 // diagnostico: gera a chave na hora, sem esperar T-30min/T-0 (teste do bracket flexível/dupla elim.)
