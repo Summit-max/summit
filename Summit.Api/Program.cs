@@ -85,6 +85,19 @@ app.MapGet("/", () => Results.Ok(new
     database = string.IsNullOrWhiteSpace(mysql) ? "sqlite (dev)" : "mysql",
 }));
 
+// kill-switch remoto pra builds distribuídas (ex: teste com times externos) — o client confere
+// isso na tela de abertura antes de logar; ativado por padrão. Pra desligar depois de um teste,
+// atualiza a linha 'singleton' de AppConfigs direto no banco (não precisa de redeploy).
+app.MapGet("/api/app/status", async (ApiDbContext db) =>
+{
+    var cfg = await db.AppConfigs.FindAsync("singleton");
+    return Results.Ok(new AppStatus
+    {
+        Active = cfg?.TestActive ?? true,
+        Message = cfg?.Message ?? ""
+    });
+});
+
 // Endpoints de debug (Fase A do plano de produção) — só existem com SUMMIT_ENABLE_DEBUG=true,
 // senão nem são mapeados (404, não só bloqueados). Nunca vão pra um deploy real com essa env var.
 if (enableDebugEndpoints)

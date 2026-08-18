@@ -27,6 +27,7 @@ public class ApiDbContext : DbContext
     public DbSet<PoolServer>       PoolServers      => Set<PoolServer>();
     public DbSet<Notification>     Notifications    => Set<Notification>();
     public DbSet<Report>           Reports          => Set<Report>();
+    public DbSet<AppConfig>        AppConfigs       => Set<AppConfig>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -272,5 +273,8 @@ public class ApiDbContext : DbContext
         rpt.HasKey(x => x.Id);
         rpt.Property(x => x.Status).HasConversion<int>();
         rpt.HasIndex(x => x.Status);
+
+        // ───── APP CONFIG (kill-switch remoto pra builds de teste distribuídas) ─────
+        b.Entity<AppConfig>().HasKey(x => x.Id);
     }
 }
