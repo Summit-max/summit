@@ -955,7 +955,7 @@ app.MapPost("/api/debug/create-test-tournament", async (ApiDbContext db) =>
 // times/usuários — diferente do reset-test-teams, que zera tudo. Depois monta UM campeonato
 // novo com nome e times escolhidos (teamIds separado por vírgula), já registrado/check-in/
 // chave gerada/veto aberto.
-app.MapPost("/api/debug/setup-tournament", async (ApiDbContext db, string name, string teamIds) =>
+app.MapPost("/api/debug/setup-tournament", async (ApiDbContext db, string name, string teamIds, string? startAtUtc) =>
 {
     db.AuditLogs.RemoveRange(db.AuditLogs.Where(a => a.TournamentId != null));
     db.VetoSteps.RemoveRange(db.VetoSteps);
@@ -975,6 +975,14 @@ app.MapPost("/api/debug/setup-tournament", async (ApiDbContext db, string name, 
 
     var organizerId = teams.First().CaptainId;
     var now = DateTime.UtcNow;
+    // se startAtUtc vier no futuro, deixa o LifecycleWorker abrir a chave/veto sozinho na hora
+    // certa (T-30min/T-0) em vez de forçar tudo aberto na hora — precisa do check-in já
+    // confirmado pra não ficar esperando ninguém clicar.
+    var startDate = !string.IsNullOrWhiteSpace(startAtUtc) && DateTime.TryParse(startAtUtc, null,
+        System.Globalization.DateTimeStyles.AdjustToUniversal | System.Globalization.DateTimeStyles.AssumeUniversal, out var parsed)
+        ? parsed
+        : now;
+    var scheduled = startDate > now;
     var tour = new Tournament
     {
         Id = $"trn_test_{Guid.NewGuid():N}"[..20],
@@ -983,7 +991,7 @@ app.MapPost("/api/debug/setup-tournament", async (ApiDbContext db, string name, 
         Status = TournamentStatus.Open,
         Prize = "Teste",
         MaxTeams = teams.Count,
-        StartDate = now,
+        StartDate = startDate,
         Description = "Campeonato de teste gerado via debug.",
         Rules = "MD1.",
         Organizer = "Summit Staff",
@@ -1019,6 +1027,18 @@ app.MapPost("/api/debug/setup-tournament", async (ApiDbContext db, string name, 
     }
     await db.SaveChangesAsync();
 
+    if (scheduled)
+    {
+        // check-in já confirmado; a chave sai em StartDate-30min e o veto abre em StartDate
+        // sozinho, pelo tick normal do LifecycleWorker — nada mais a fazer aqui.
+        return Results.Ok(new
+        {
+            tournamentId = tour.Id, name = tour.Name, teams = teams.Select(t => t.Tag),
+            startDateUtc = tour.StartDate, checkInClosesAtUtc = tour.CheckInClosesAt,
+            scheduled = true
+        });
+    }
+
     var ttWithTeam = await db.TournamentTeams.Include(x => x.Team)
         .Where(x => x.TournamentId == tour.Id).OrderBy(x => x.Seed).ToListAsync();
     await LifecycleWorker.GenerateBracket(db, tour, ttWithTeam);
@@ -1032,7 +1052,7 @@ app.MapPost("/api/debug/setup-tournament", async (ApiDbContext db, string name, 
         await CompetitionEndpoints.OpenVetoForMatchAsync(db, tour.Id, bm);
     await db.SaveChangesAsync();
 
-    return Results.Ok(new { tournamentId = tour.Id, name = tour.Name, teams = teams.Select(t => t.Tag) });
+    return Results.Ok(new { tournamentId = tour.Id, name = tour.Name, teams = teams.Select(t => t.Tag), scheduled = false });
 });
 
 // dev: registra N times "fantasma" (com 5 jogadores fake cada, escalação e check-in já
