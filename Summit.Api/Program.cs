@@ -951,6 +951,90 @@ app.MapPost("/api/debug/create-test-tournament", async (ApiDbContext db) =>
     return Results.Ok(new { tournamentId = tour.Id, name = tour.Name });
 });
 
+// dev: apaga TODOS os campeonatos (e chave/veto/salas ligados a eles) mas preserva
+// times/usuários — diferente do reset-test-teams, que zera tudo. Depois monta UM campeonato
+// novo com nome e times escolhidos (teamIds separado por vírgula), já registrado/check-in/
+// chave gerada/veto aberto.
+app.MapPost("/api/debug/setup-tournament", async (ApiDbContext db, string name, string teamIds) =>
+{
+    db.AuditLogs.RemoveRange(db.AuditLogs.Where(a => a.TournamentId != null));
+    db.VetoSteps.RemoveRange(db.VetoSteps);
+    db.VetoSessions.RemoveRange(db.VetoSessions);
+    db.MatchPlayers.RemoveRange(db.MatchPlayers);
+    db.Matches.RemoveRange(db.Matches);
+    db.BracketMatches.RemoveRange(db.BracketMatches);
+    db.BracketRounds.RemoveRange(db.BracketRounds);
+    db.TournamentLineupPlayers.RemoveRange(db.TournamentLineupPlayers);
+    db.TournamentTeams.RemoveRange(db.TournamentTeams);
+    db.Tournaments.RemoveRange(db.Tournaments);
+    await db.SaveChangesAsync();
+
+    var ids = teamIds.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    var teams = await db.Teams.Include(t => t.Members).Where(t => ids.Contains(t.Id)).ToListAsync();
+    if (teams.Count != ids.Length) return Results.BadRequest("Nem todos os teamIds foram encontrados.");
+
+    var organizerId = teams.First().CaptainId;
+    var now = DateTime.UtcNow;
+    var tour = new Tournament
+    {
+        Id = $"trn_test_{Guid.NewGuid():N}"[..20],
+        Name = name,
+        Format = "5v5 • Eliminação Simples • MD1",
+        Status = TournamentStatus.Open,
+        Prize = "Teste",
+        MaxTeams = teams.Count,
+        StartDate = now,
+        Description = "Campeonato de teste gerado via debug.",
+        Rules = "MD1.",
+        Organizer = "Summit Staff",
+        OrganizerUserId = organizerId,
+        MapPoolCsv = "Mirage, Inferno, Nuke, Ancient, Anubis, Dust2, Vertigo",
+        FormatType = TournamentFormat.SingleElimination,
+        Series = SeriesFormat.MD1,
+        FinalSeries = SeriesFormat.MD1
+    };
+    db.Tournaments.Add(tour);
+    await db.SaveChangesAsync();
+
+    var seed = 1;
+    foreach (var team in teams)
+    {
+        var required = Math.Min(5, team.Members.Count);
+        var playerIds = team.Members.Take(required).Select(m => m.Id).ToList();
+        var captainId = playerIds.Contains(team.CaptainId) ? team.CaptainId : playerIds.FirstOrDefault();
+        var tt = new TournamentTeam
+        {
+            Id = $"tt_{Guid.NewGuid():N}",
+            TournamentId = tour.Id,
+            TeamId = team.Id,
+            Seed = seed++,
+            RegisteredAt = now,
+            CaptainUserId = captainId,
+            CheckIn = CheckInStatus.Confirmed,
+            CheckedInAt = now
+        };
+        db.TournamentTeams.Add(tt);
+        foreach (var pid in playerIds)
+            db.TournamentLineupPlayers.Add(new TournamentLineupPlayer { Id = $"lp_{Guid.NewGuid():N}", TournamentTeamId = tt.Id, UserId = pid });
+    }
+    await db.SaveChangesAsync();
+
+    var ttWithTeam = await db.TournamentTeams.Include(x => x.Team)
+        .Where(x => x.TournamentId == tour.Id).OrderBy(x => x.Seed).ToListAsync();
+    await LifecycleWorker.GenerateBracket(db, tour, ttWithTeam);
+    tour.Status = TournamentStatus.InProgress;
+    await db.SaveChangesAsync();
+
+    var freshTour = await db.Tournaments.Include(t => t.Bracket).ThenInclude(r => r.Matches)
+        .FirstAsync(t => t.Id == tour.Id);
+    var r1 = freshTour.Bracket.OrderBy(r => r.RoundNumber).First();
+    foreach (var bm in r1.Matches)
+        await CompetitionEndpoints.OpenVetoForMatchAsync(db, tour.Id, bm);
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { tournamentId = tour.Id, name = tour.Name, teams = teams.Select(t => t.Tag) });
+});
+
 // dev: registra N times "fantasma" (com 5 jogadores fake cada, escalação e check-in já
 // confirmados) direto num campeonato — pra testar chave/avanço sem precisar de times reais.
 app.MapPost("/api/debug/add-ghost-teams/{tournamentId}", async (ApiDbContext db, string tournamentId, int? count) =>
