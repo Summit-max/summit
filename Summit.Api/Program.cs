@@ -803,6 +803,27 @@ app.MapGet("/api/debug/real-users", async (ApiDbContext db) =>
     return Results.Ok(users.Select(u => new { u.Id, u.SteamId, u.Nickname, u.TeamId }));
 });
 
+// dev: bota um usuário real como capitão de um time — tira ele de onde estava (se tinha
+// time) e vira dono do novo. Usado pra trocar um capitão de seed fake por um jogador real
+// depois que o time já foi montado.
+app.MapPost("/api/debug/set-team-captain/{teamId}/{userId}", async (ApiDbContext db, string teamId, string userId) =>
+{
+    var team = await db.Teams.FindAsync(teamId);
+    if (team == null) return Results.NotFound("Time não encontrado.");
+    var user = await db.Users.FindAsync(userId);
+    if (user == null) return Results.NotFound("Usuário não encontrado.");
+
+    team.CaptainId = userId;
+    user.TeamId = teamId;
+    user.TeamRole = TeamRole.Captain;
+
+    var tt = await db.TournamentTeams.FirstOrDefaultAsync(x => x.TeamId == teamId);
+    if (tt != null) tt.CaptainUserId = userId;
+
+    await db.SaveChangesAsync();
+    return Results.Ok(new { teamId, newCaptainId = userId, nickname = user.Nickname });
+});
+
 // dev: apaga TODO campeonato/time/jogador fake e monta 4 times fixos (Geucius/NAVI/Spirit/
 // Vitality, 5 jogadores cada) pra teste manual do fluxo completo — preserva só o usuário real
 // passado em captainUserId (vira capitão do Geucius).
