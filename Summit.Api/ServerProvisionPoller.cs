@@ -15,10 +15,16 @@ public class ServerProvisionPoller : BackgroundService
         _log = log;
     }
 
+    // sem sala esperando IP/config, não tem nada urgente — o cleanup de sobra ainda roda em
+    // todo tick, só que bem mais espaçado (o teto é de 3h, checar a cada poucos minutos sobra).
+    private static readonly TimeSpan ActiveInterval = TimeSpan.FromSeconds(10);
+    private static readonly TimeSpan IdleInterval = TimeSpan.FromMinutes(3);
+
     protected override async Task ExecuteAsync(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested)
         {
+            var hadWork = false;
             if (MatchServerService.IsConfigured)
             {
                 try
@@ -34,6 +40,7 @@ public class ServerProvisionPoller : BackgroundService
                                  && (m.ProvisionState == ServerProvisionState.Booting
                                      || (m.ProvisionState == ServerProvisionState.Ready && !m.MatchZyConfigLoaded)))
                         .ToListAsync(ct);
+                    hadWork = pending.Count > 0;
 
                     foreach (var m in pending)
                     {
@@ -48,7 +55,7 @@ public class ServerProvisionPoller : BackgroundService
                     _log.LogError(ex, "Erro no ServerProvisionPoller");
                 }
             }
-            await Task.Delay(TimeSpan.FromSeconds(10), ct);
+            await Task.Delay(hadWork ? ActiveInterval : IdleInterval, ct);
         }
     }
 

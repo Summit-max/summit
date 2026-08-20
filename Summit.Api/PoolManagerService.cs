@@ -21,13 +21,23 @@ public class PoolManagerService : BackgroundService
         _log = log;
     }
 
+    // default 0 (sem servidor "quente" ligado à toa) — um c5.large parado custa muito mais que a
+    // espera extra do provisionamento direto. Setar SUMMIT_POOL_SIZE=1+ só quando latência de
+    // início de partida importar mais que custo (ex: dia de campeonato com jogadores de verdade).
     private static int PoolSize =>
-        int.TryParse(Environment.GetEnvironmentVariable("SUMMIT_POOL_SIZE"), out var n) && n >= 0 ? n : 1;
+        int.TryParse(Environment.GetEnvironmentVariable("SUMMIT_POOL_SIZE"), out var n) && n >= 0 ? n : 0;
+
+    // com PoolSize=0 (padrão) e nenhum PoolServer pendente, não tem nada mesmo pra checar — recuar
+    // bastante evita segurar o Aurora acordado 24h por um worker sem trabalho real (ver memória
+    // do projeto: isso sozinho já foi ~US$3/dia de ACU-hora sem nenhum uso real por trás).
+    private static readonly TimeSpan ActiveInterval = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan IdleInterval = TimeSpan.FromMinutes(5);
 
     protected override async Task ExecuteAsync(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested)
         {
+            var hadWork = false;
             if (MatchServerService.IsConfigured)
             {
                 try
@@ -36,16 +46,22 @@ public class PoolManagerService : BackgroundService
                     var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
                     var server = scope.ServiceProvider.GetRequiredService<MatchServerService>();
 
-                    await TopUpAsync(db, server, ct);
-                    await ConfirmBootingAsync(db, server, ct);
-                    await ReleaseEmptyAsync(db, server, ct);
+                    var anyPoolServers = await db.PoolServers.AnyAsync(ct);
+                    hadWork = PoolSize > 0 || anyPoolServers;
+
+                    if (hadWork)
+                    {
+                        await TopUpAsync(db, server, ct);
+                        await ConfirmBootingAsync(db, server, ct);
+                        await ReleaseEmptyAsync(db, server, ct);
+                    }
                 }
                 catch (Exception ex)
                 {
                     _log.LogError(ex, "Erro no PoolManagerService");
                 }
             }
-            await Task.Delay(TimeSpan.FromSeconds(30), ct);
+            await Task.Delay(hadWork ? ActiveInterval : IdleInterval, ct);
         }
     }
 

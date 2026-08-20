@@ -16,22 +16,30 @@ public class LifecycleWorker : BackgroundService
 
     public LifecycleWorker(IServiceScopeFactory scopes) => _scopes = scopes;
 
+    // sem campeonato Open/Upcoming e sem veto pendente, não tem nada dependente de tempo real
+    // pra checar — recuar poupa o Aurora de ficar acordado o dia inteiro à toa (ver memória do
+    // projeto). Atraso de até 3min pra notar um campeonato novo é aceitável; nada disso afeta
+    // partida já em andamento (isso sempre conta como "teve trabalho").
+    private static readonly TimeSpan ActiveInterval = TimeSpan.FromSeconds(20);
+    private static readonly TimeSpan IdleInterval = TimeSpan.FromMinutes(3);
+
     protected override async Task ExecuteAsync(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested)
         {
+            var hadWork = false;
             try
             {
                 using var scope = _scopes.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-                await TickAsync(db);
+                hadWork = await TickAsync(db);
             }
             catch { /* nunca derruba o worker */ }
-            await Task.Delay(TimeSpan.FromSeconds(20), ct);
+            await Task.Delay(hadWork ? ActiveInterval : IdleInterval, ct);
         }
     }
 
-    private static async Task TickAsync(ApiDbContext db)
+    private static async Task<bool> TickAsync(ApiDbContext db)
     {
         var now = DateTime.UtcNow;
         var tours = await db.Tournaments
@@ -39,6 +47,11 @@ public class LifecycleWorker : BackgroundService
             .Include(t => t.Bracket).ThenInclude(r => r.Matches)
             .Where(t => t.Status == TournamentStatus.Open || t.Status == TournamentStatus.Upcoming)
             .ToListAsync();
+
+        // sem campeonato aberto/agendado E sem veto pendente, não tem nada dependente de tempo
+        // real acontecendo — nem badge de fidelidade teria algo novo pra detectar nesse caso.
+        if (tours.Count == 0 && !await db.VetoSessions.AnyAsync(s => !s.IsComplete))
+            return false;
 
         foreach (var t in tours)
         {
@@ -119,6 +132,7 @@ public class LifecycleWorker : BackgroundService
 
         await db.SaveChangesAsync();
         await AutoVetoBotsAsync(db);
+        return true;
     }
 
     /// <summary>W.O. por não comparecer ao veto (Tournament.NoShowMinutes). MD3/MD5 escolhe TODOS
