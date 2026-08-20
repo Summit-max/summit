@@ -457,6 +457,14 @@ public static class CompetitionEndpoints
             if (!string.IsNullOrEmpty(match.BracketMatchId))
                 await AdvanceSeriesAsync(db, server, match.BracketMatchId!, match);
 
+            // cada mapa provisiona um servidor NOVO e dedicado (não reaproveita entre mapas de
+            // uma série) — sem isso, cada mapa jogado ficava uma EC2 ligada pra sempre, sem
+            // nenhum jeito automático de derrubar (só servidor de pool tem esse ciclo, via
+            // ReleaseEmptyAsync). Ec2InstanceId só vem preenchido no provisionamento direto —
+            // servidor vindo do pool nunca seta esse campo, então não é afetado aqui.
+            if (!string.IsNullOrEmpty(match.Ec2InstanceId))
+                _ = server.TerminateAsync(match.Ec2InstanceId);
+
             await db.SaveChangesAsync();
             return Results.Ok(true);
         });
@@ -495,7 +503,7 @@ public static class CompetitionEndpoints
     /// abre o próximo mapa sozinho, sem veto novo; série decidida → só aí chama
     /// <see cref="AdvanceBracketAsync"/>, com o vencedor sendo quem ganhou mais MAPAS na série,
     /// não quem ganhou o mapa que acabou de terminar.</summary>
-    private static async Task AdvanceSeriesAsync(ApiDbContext db, IMatchServerProvider server, string bracketMatchId, Match justFinished)
+    internal static async Task AdvanceSeriesAsync(ApiDbContext db, IMatchServerProvider server, string bracketMatchId, Match justFinished)
     {
         // flush antes de ler o histórico: "justFinished" (o mapa que acabou de fechar a série)
         // só existe como Finished no change tracker até aqui — a query abaixo roda SQL de

@@ -59,6 +59,8 @@ public class LocalSimulatedMatchServerProvider : IMatchServerProvider
         _ = ScheduleSimulatedResultAsync(matchId);
     }
 
+    public Task TerminateAsync(string ec2InstanceId) => Task.CompletedTask; // nada real pra derrubar
+
     public async Task<bool> TryAssignFromPoolAsync(string matchId, string map, string password)
     {
         using var scope = _scopes.CreateScope();

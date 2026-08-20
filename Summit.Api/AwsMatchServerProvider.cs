@@ -16,4 +16,6 @@ public class AwsMatchServerProvider : IMatchServerProvider
 
     public Task<bool> TryAssignFromPoolAsync(string matchId, string map, string password)
         => _inner.TryAssignFromPoolAsync(matchId, map, password);
+
+    public Task TerminateAsync(string ec2InstanceId) => _inner.TerminateAsync(ec2InstanceId);
 }

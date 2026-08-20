@@ -11,4 +11,5 @@ public interface IMatchServerProvider
 {
     Task ProvisionAsync(string matchId);
     Task<bool> TryAssignFromPoolAsync(string matchId, string map, string password);
+    Task TerminateAsync(string ec2InstanceId);
 }

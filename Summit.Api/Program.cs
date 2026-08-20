@@ -775,6 +775,32 @@ app.MapPost("/api/debug/retry-provision/{bracketMatchId}", async (ApiDbContext d
     return Results.Ok(new { matchId = match.Id, assignedFromPool });
 });
 
+// dev: força o resultado de uma partida direto (13-5), avança a chave — funciona com
+// qualquer provider (diferente do force-match-result, que só funciona com SUMMIT_MATCH_
+// PROVIDER=local). winner é "A" ou "B" (default "A").
+app.MapPost("/api/debug/force-real-result/{bracketMatchId}", async (ApiDbContext db, IMatchServerProvider provider, string bracketMatchId, string? winner) =>
+{
+    var match = await db.Matches.Where(m => m.BracketMatchId == bracketMatchId)
+        .OrderByDescending(m => m.GameNumber).FirstOrDefaultAsync();
+    if (match == null) return Results.NotFound("Sala da partida ainda não existe — o veto já terminou?");
+    if (match.Status == Summit.Models.MatchStatus.Finished) return Results.Ok(new { alreadyFinished = true });
+
+    var aWon = !string.Equals(winner, "B", StringComparison.OrdinalIgnoreCase);
+    match.Status = Summit.Models.MatchStatus.Finished;
+    match.ScoreA = aWon ? 13 : 5;
+    match.ScoreB = aWon ? 5 : 13;
+    match.DurationMinutes = 35;
+
+    if (!string.IsNullOrEmpty(match.BracketMatchId))
+        await CompetitionEndpoints.AdvanceSeriesAsync(db, provider, match.BracketMatchId!, match);
+
+    if (!string.IsNullOrEmpty(match.Ec2InstanceId))
+        _ = provider.TerminateAsync(match.Ec2InstanceId);
+
+    await db.SaveChangesAsync();
+    return Results.Ok(new { matchId = match.Id, aWon, scoreA = match.ScoreA, scoreB = match.ScoreB });
+});
+
 // dev: força o resultado de uma partida AGORA, sem esperar o delay do provider local — pra
 // "bypassar" uma partida manualmente durante teste. winner é opcional ("A"|"B"); sem winner,
 // sorteia. Só funciona com SUMMIT_MATCH_PROVIDER=local (padrão).
