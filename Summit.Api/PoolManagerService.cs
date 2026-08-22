@@ -65,12 +65,34 @@ public class PoolManagerService : BackgroundService
         }
     }
 
+    /// <summary>Repõe até PoolSize (cria os que faltam) e, se PoolSize caiu ou tiver sobra
+    /// (ex: uma tick anterior já tinha criado antes de um deploy trocar o alvo pra menos —
+    /// foi exatamente o que vazou ~2 dias de c5.large em 20/ago/2026), encolhe de volta: derruba
+    /// o excedente dentre os que estão Idle/Booting, NUNCA um InUse com partida real rolando.</summary>
     private async Task TopUpAsync(ApiDbContext db, MatchServerService server, CancellationToken ct)
     {
-        var alive = await db.PoolServers.CountAsync(p => p.State != PoolServerState.Unhealthy, ct);
-        var missing = PoolSize - alive;
-        for (var i = 0; i < missing; i++)
-            await server.ProvisionPoolServerAsync();
+        var alive = await db.PoolServers.Where(p => p.State != PoolServerState.Unhealthy).ToListAsync(ct);
+        var missing = PoolSize - alive.Count;
+
+        if (missing > 0)
+        {
+            for (var i = 0; i < missing; i++)
+                await server.ProvisionPoolServerAsync();
+            return;
+        }
+
+        if (missing < 0)
+        {
+            var excess = alive.Where(p => p.State != PoolServerState.InUse).Take(-missing);
+            foreach (var p in excess)
+            {
+                if (!string.IsNullOrEmpty(p.Ec2InstanceId))
+                    await server.TerminateAsync(p.Ec2InstanceId);
+                db.PoolServers.Remove(p);
+                _log.LogInformation("Servidor de pool {PoolServerId} encolhido (acima de SUMMIT_POOL_SIZE)", p.Id);
+            }
+            await db.SaveChangesAsync(ct);
+        }
     }
 
     private async Task ConfirmBootingAsync(ApiDbContext db, MatchServerService server, CancellationToken ct)

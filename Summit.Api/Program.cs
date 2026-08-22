@@ -161,6 +161,38 @@ app.MapGet("/api/debug/rds-cost", async (int? days) =>
     }));
 });
 
+// diagnostico: custo real do dia, TODOS os serviços (sem filtro), quebrado por serviço +
+// tipo de uso — pra achar rápido onde um gasto inesperado veio quando não é óbvio que é RDS.
+app.MapGet("/api/debug/all-cost", async (int? days) =>
+{
+    using var ce = new Amazon.CostExplorer.AmazonCostExplorerClient(Amazon.RegionEndpoint.USEast1);
+    var n = days ?? 2;
+    var end = DateTime.UtcNow.Date.AddDays(1);
+    var start = end.AddDays(-n - 1);
+    var resp = await ce.GetCostAndUsageAsync(new Amazon.CostExplorer.Model.GetCostAndUsageRequest
+    {
+        TimePeriod = new Amazon.CostExplorer.Model.DateInterval
+        { Start = start.ToString("yyyy-MM-dd"), End = end.ToString("yyyy-MM-dd") },
+        Granularity = Amazon.CostExplorer.Granularity.DAILY,
+        Metrics = new List<string> { "UnblendedCost" },
+        GroupBy = new List<Amazon.CostExplorer.Model.GroupDefinition>
+        {
+            new() { Type = Amazon.CostExplorer.GroupDefinitionType.DIMENSION, Key = "SERVICE" },
+            new() { Type = Amazon.CostExplorer.GroupDefinitionType.DIMENSION, Key = "USAGE_TYPE" }
+        }
+    });
+    return Results.Ok(resp.ResultsByTime.Select(r => new
+    {
+        r.TimePeriod.Start,
+        r.TimePeriod.End,
+        Total = r.Total.TryGetValue("UnblendedCost", out var t) ? t.Amount : null,
+        Groups = r.Groups
+            .Select(g => new { Key = string.Join(" | ", g.Keys), Amount = g.Metrics["UnblendedCost"].Amount })
+            .Where(g => double.TryParse(g.Amount, out var a) && a > 0)
+            .OrderByDescending(g => double.Parse(g.Amount))
+    }));
+});
+
 // diagnostico: confere se a AMI configurada ja esta pronta pra uso (evita ficar
 // checando manualmente no console da AWS enquanto ela empacota o disco)
 app.MapGet("/api/debug/ami-status", async () =>
